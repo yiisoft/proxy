@@ -16,7 +16,7 @@ final class ClassCache
         if ($this->cachePath === null) {
             return;
         }
-        file_put_contents($this->getClassPath($className, $classParent), "<?php\n\n" . $classDeclaration);
+        file_put_contents($this->getClassPath($className, $classParent), "<?php\n\n" . $classDeclaration, LOCK_EX);
     }
 
     public function get(string $className, string $classParent): ?string
@@ -34,19 +34,17 @@ final class ClassCache
     public function getClassPath(string $className, string $classParent): string
     {
         [$classFileName, $classFilePath] = $this->getClassFileNameAndPath($className, $classParent);
-        if (!is_dir($classFilePath)) {
-            mkdir($classFilePath, 0777, true);
+        if (!is_dir($classFilePath) && !mkdir($classFilePath, 0777, true) && !is_dir($classFilePath)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $classFilePath));
         }
-        $path = $classFilePath . DIRECTORY_SEPARATOR . $classFileName;
-
-        return $path;
+        return $classFilePath . DIRECTORY_SEPARATOR . $classFileName;
     }
 
     public function getClassFileNameAndPath(string $className, string $classParent): array
     {
         $classParts = explode('\\', $className);
         $parentClassParts = explode('\\', $classParent);
-        $classFileName = array_pop($classParts) . '.' . array_pop($parentClassParts) . ".php";
+        $classFileName = array_pop($classParts) . '.' . array_pop($parentClassParts) . '.php';
         $classFilePath = $this->cachePath . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $classParts);
 
         return [$classFileName, $classFilePath];

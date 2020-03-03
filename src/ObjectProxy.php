@@ -16,9 +16,9 @@ abstract class ObjectProxy
     protected function call(string $methodName, array $arguments)
     {
         $this->resetCurrentError();
+        $result = null;
+        $timeStart = microtime(true);
         try {
-            $result = null;
-            $timeStart = microtime(true);
             $result = $this->callInternal($methodName, $arguments);
         } catch (\Exception $e) {
             $this->repeatError($e);
