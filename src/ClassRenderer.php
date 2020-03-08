@@ -31,7 +31,7 @@ final class ClassRenderer
         return $interfaces !== [] ? ' implements '  . implode(' ', $interfaces) : '';
     }
 
-    private function renderModifiers(array $modifiers)
+    private function renderModifiers(array $modifiers): string
     {
         return implode(' ', $modifiers);
     }
@@ -126,8 +126,6 @@ final class ClassRenderer
                 $output = $var ? 'true' : 'false';
                 break;
             case 'integer':
-                $output = (string)$var;
-                break;
             case 'double':
                 $output = (string)$var;
                 break;

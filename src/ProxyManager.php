@@ -8,7 +8,7 @@ final class ProxyManager
 
     private ClassRenderer $classRenderer;
 
-    private ClassConfigurator $classConfigurtor;
+    private ClassConfigurator $classConfigurator;
 
     private ClassCache $classCache;
 
@@ -17,7 +17,7 @@ final class ProxyManager
         $this->cachePath = $cachePath;
         $this->classCache = new ClassCache($cachePath);
         $this->classRenderer = new ClassRenderer();
-        $this->classConfigurtor = new ClassConfigurator();
+        $this->classConfigurator = new ClassConfigurator();
     }
 
     public function createObjectProxyFromInterface(string $interface, string $parentProxyClass, array $constructorArguments = null): ?object
@@ -27,7 +27,7 @@ final class ProxyManager
         $shortClassName = substr($classFileName, 0, strpos($classFileName, '.'));
 
         if (!($classDeclaration = $this->classCache->get($className, $parentProxyClass))) {
-            $classConfig = $this->generateInterfaceProxyClassConfig($this->classConfigurtor->getInterfaceConfig($interface), $parentProxyClass);
+            $classConfig = $this->generateInterfaceProxyClassConfig($this->classConfigurator->getInterfaceConfig($interface), $parentProxyClass);
             $classDeclaration = $this->classRenderer->render($classConfig);
             $this->classCache->set($className, $parentProxyClass, $classDeclaration);
         }
@@ -37,9 +37,7 @@ final class ProxyManager
             $path = $this->classCache->getClassPath($className, $parentProxyClass);
             require $path;
         }
-        $proxy = new $shortClassName(...$constructorArguments);
-
-        return $proxy;
+        return new $shortClassName(...$constructorArguments);
     }
 
     private function generateInterfaceProxyClassConfig(ClassConfig $interfaceConfig, string $parentProxyClass): ClassConfig
@@ -51,7 +49,7 @@ final class ProxyManager
         $interfaceConfig->name .= 'Proxy';
         foreach ($interfaceConfig->methods as $methodIndex => $method) {
             foreach ($method->modifiers as $index => $modifier) {
-                if ($modifier == 'abstract') {
+                if ($modifier === 'abstract') {
                     unset($interfaceConfig->methods[$methodIndex]->modifiers[$index]);
                 }
             }

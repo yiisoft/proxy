@@ -10,9 +10,7 @@ final class ClassConfigurator
         if (!$reflection->isInterface()) {
             throw new \InvalidArgumentException("$interface is not an interface");
         }
-        $config = $this->getReflectionConfig($reflection);
-
-        return $config;
+        return $this->getReflectionConfig($reflection);
     }
 
     public function getClassConfig(string $class): ClassConfig
@@ -21,9 +19,7 @@ final class ClassConfigurator
         if ($reflection->isInterface()) {
             throw new \InvalidArgumentException("$class is not a class");
         }
-        $config = $this->getReflectionConfig($reflection);
-
-        return $config;
+        return $this->getReflectionConfig($reflection);
     }
 
     public function getReflectionConfig(\ReflectionClass $reflection): ClassConfig
