@@ -4,9 +4,9 @@ namespace Yiisoft\Proxy;
 
 abstract class ObjectProxy
 {
-    private object $instance;
+    use ProxyTrait;
 
-    private ?object $currentError = null;
+    private object $instance;
 
     public function __construct(object $instance)
     {
@@ -31,16 +31,6 @@ abstract class ObjectProxy
 
     abstract protected function executeMethodProxy(string $methodName, array $arguments, $result, float $timeStart);
 
-    protected function getCurrentError(): ?object
-    {
-        return $this->currentError;
-    }
-
-    protected function getCurrentResultStatus(): string
-    {
-        return $this->currentError === null ? 'success' : 'failed';
-    }
-
     protected function getNewStaticInstance(object $instance): self
     {
         return new static($instance);
@@ -63,17 +53,5 @@ abstract class ObjectProxy
         }
 
         return $result;
-    }
-
-    private function repeatError(object $error): void
-    {
-        $this->currentError = $error;
-        $errorClass = get_class($error);
-        throw new $errorClass($error->getMessage());
-    }
-
-    private function resetCurrentError(): void
-    {
-        $this->currentError = null;
     }
 }
