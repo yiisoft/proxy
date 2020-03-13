@@ -28,7 +28,7 @@ final class ClassRenderer
 
     private function renderImplements(array $interfaces): string
     {
-        return $interfaces !== [] ? ' implements '  . implode(' ', $interfaces) : '';
+        return $interfaces !== [] ? ' implements ' . implode(' ', $interfaces) : '';
     }
 
     private function renderModifiers(array $modifiers): string
