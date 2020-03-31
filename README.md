@@ -1,10 +1,9 @@
 <p align="center">
-    <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://github.com/yiisoft.png" height="100px">
-    </a>
-
-    <h1 align="center">Yii proxy</h1>
-    <br>
+  <a href="https://github.com/yiisoft" target="_blank">
+      <img src="https://github.com/yiisoft.png" height="100px">
+  </a>
+  <h1 align="center">Yii proxy</h1>
+  <br>
 </p>
 
 The package is able to build generic proxy for a class.
