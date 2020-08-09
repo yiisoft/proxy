@@ -99,7 +99,7 @@ final class ClassRenderer
 
     private function renderReturn(MethodConfig $method): string
     {
-        return $method->hasReturnType ? ($method->returnType->name === 'void' ? '': 'return ') : 'return ';
+        return $method->hasReturnType ? ($method->returnType->name === 'void' ? '' : 'return ') : 'return ';
     }
 
     private function renderReturnType(MethodConfig $method): string
