@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Yiisoft\Proxy;
 
 final class ClassRenderer
@@ -84,17 +86,17 @@ final class ClassRenderer
 
     private function renderParameterDefaultValue(ParameterConfig $parameter): string
     {
-        return ($parameter->isDefaultValueAvailable ? ' = ' .
-            ($parameter->isDefaultValueConstant ? $parameter->defaultValueConstantName : self::varExport($parameter->defaultValue)) : '');
+        return $parameter->isDefaultValueAvailable ? ' = ' .
+            ($parameter->isDefaultValueConstant ? $parameter->defaultValueConstantName : self::varExport($parameter->defaultValue)) : '';
     }
 
     private function renderMethodBody(MethodConfig $method): string
     {
         return "\n" . strtr($this->proxyMethodBodyTemplate, [
-                '{{return}}' => $this->margin(2) . $this->renderReturn($method),
-                '{{methodName}}' => "'" . $method->name . "'",
-                '{{params}}' => $this->renderMethodCallParameters($method->parameters)
-            ]) . "\n";
+            '{{return}}' => $this->margin(2) . $this->renderReturn($method),
+            '{{methodName}}' => "'" . $method->name . "'",
+            '{{params}}' => $this->renderMethodCallParameters($method->parameters),
+        ]) . "\n";
     }
 
     private function renderReturn(MethodConfig $method): string
