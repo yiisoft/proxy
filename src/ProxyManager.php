@@ -25,7 +25,7 @@ final class ProxyManager
     public function createObjectProxyFromInterface(string $interface, string $parentProxyClass, array $constructorArguments = null): ?object
     {
         $className = $interface . 'Proxy';
-        $shortClassName =  $this->getProxyClassName($className);
+        $shortClassName = $this->getProxyClassName($className);
 
         if (!($classDeclaration = $this->classCache->get($className, $parentProxyClass))) {
             $classConfig = $this->generateInterfaceProxyClassConfig($this->classConfigurator->getInterfaceConfig($interface), $parentProxyClass);
