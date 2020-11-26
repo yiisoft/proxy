@@ -25,8 +25,7 @@ final class ProxyManager
     public function createObjectProxyFromInterface(string $interface, string $parentProxyClass, array $constructorArguments = null): ?object
     {
         $className = $interface . 'Proxy';
-        [$classFileName] = $this->classCache->getClassFileNameAndPath($className, $parentProxyClass);
-        $shortClassName = substr($classFileName, 0, strpos($classFileName, '.'));
+        $shortClassName =  $this->getProxyClassName($className);
 
         if (!($classDeclaration = $this->classCache->get($className, $parentProxyClass))) {
             $classConfig = $this->generateInterfaceProxyClassConfig($this->classConfigurator->getInterfaceConfig($interface), $parentProxyClass);
@@ -47,8 +46,9 @@ final class ProxyManager
         $interfaceConfig->isInterface = false;
         $interfaceConfig->parent = $parentProxyClass;
         $interfaceConfig->interfaces = [$interfaceConfig->name];
-        $interfaceConfig->shortName .= 'Proxy';
         $interfaceConfig->name .= 'Proxy';
+        $interfaceConfig->shortName = $this->getProxyClassName($interfaceConfig->name);
+
         foreach ($interfaceConfig->methods as $methodIndex => $method) {
             foreach ($method->modifiers as $index => $modifier) {
                 if ($modifier === 'abstract') {
@@ -58,5 +58,10 @@ final class ProxyManager
         }
 
         return $interfaceConfig;
+    }
+
+    private function getProxyClassName(string $fullClassName)
+    {
+        return str_replace('\\', '_', $fullClassName);
     }
 }

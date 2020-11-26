@@ -19,7 +19,10 @@ final class ClassConfig
 
     public string $shortName;
 
-    public string $parent;
+    /**
+     * @var string|bool
+     */
+    public $parent;
 
     /**
      * @var string[]
