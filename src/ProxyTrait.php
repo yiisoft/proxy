@@ -13,7 +13,7 @@ trait ProxyTrait
         return $this->currentError === null ? 'success' : 'failed';
     }
 
-    protected function repeatError(object $error): void
+    protected function repeatError(\Throwable $error): void
     {
         $this->currentError = $error;
         $errorClass = get_class($error);
