@@ -13,6 +13,7 @@ The package is able to build generic proxy for a class.
 [![Build Status](https://travis-ci.com/yiisoft/proxy.svg?branch=master)](https://travis-ci.com/yiisoft/proxy)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/yiisoft/proxy/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/proxy/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/yiisoft/proxy/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/yiisoft/proxy/?branch=master)
+[![static analysis](https://github.com/yiisoft/proxy/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/proxy/actions?query=workflow%3A%22static+analysis%22)
 
 ## General usage
 
