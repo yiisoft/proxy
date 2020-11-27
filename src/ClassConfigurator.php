@@ -43,7 +43,7 @@ final class ClassConfigurator
         $config->modifiers = \Reflection::getModifierNames($reflection->getModifiers());
         $config->name = $reflection->getName();
         $config->shortName = $reflection->getShortName();
-        $config->parent = $reflection->getParentClass();
+        $config->parent = (string) $reflection->getParentClass();
         $config->parents = $this->getClassParents($reflection);
         $config->interfaces = $reflection->getInterfaceNames();
 
