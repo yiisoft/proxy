@@ -20,8 +20,8 @@ trait ProxyTrait
      */
     protected function repeatError(Throwable $error): void
     {
-        $this->currentError = $error;
-        throw clone $error;
+        $this->currentError = clone $error;
+        throw $error;
     }
 
     protected function resetCurrentError(): void
