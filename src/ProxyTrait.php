@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy;
 
+use Throwable;
+
 trait ProxyTrait
 {
     private ?object $currentError = null;
@@ -13,11 +15,13 @@ trait ProxyTrait
         return $this->currentError === null ? 'success' : 'failed';
     }
 
-    protected function repeatError(\Throwable $error): void
+    /**
+     * @throws Throwable
+     */
+    protected function repeatError(Throwable $error): void
     {
-        $this->currentError = $error;
-        $errorClass = get_class($error);
-        throw new $errorClass($error->getMessage());
+        $this->currentError = clone $error;
+        throw $error;
     }
 
     protected function resetCurrentError(): void
