@@ -16,8 +16,7 @@ trait ProxyTrait
     protected function repeatError(\Throwable $error): void
     {
         $this->currentError = $error;
-        $errorClass = get_class($error);
-        throw new $errorClass($error->getMessage());
+        throw $error;
     }
 
     protected function resetCurrentError(): void
