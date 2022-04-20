@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy;
 
+use Exception;
+use RuntimeException;
+
 final class ClassCache
 {
-    private ?string $cachePath = null;
+    private ?string $cachePath;
 
     public function __construct(string $cachePath = null)
     {
@@ -28,7 +31,7 @@ final class ClassCache
         }
         try {
             return file_get_contents($this->getClassPath($className, $classParent));
-        } catch (\Exception $e) {
+        } catch (Exception) {
             return null;
         }
     }
@@ -37,7 +40,7 @@ final class ClassCache
     {
         [$classFileName, $classFilePath] = $this->getClassFileNameAndPath($className, $classParent);
         if (!is_dir($classFilePath) && !mkdir($classFilePath, 0777, true) && !is_dir($classFilePath)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $classFilePath));
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $classFilePath));
         }
         return $classFilePath . DIRECTORY_SEPARATOR . $classFileName;
     }

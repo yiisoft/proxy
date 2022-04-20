@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy;
 
+use Yiisoft\Proxy\Config\ClassConfig;
+use Yiisoft\Proxy\Config\MethodConfig;
+use Yiisoft\Proxy\Config\ParameterConfig;
+use Yiisoft\Proxy\Config\TypeConfig;
+
 final class ClassRenderer
 {
     private string $classSignatureTemplate = '{{modifiers}} {{classType}} {{name}} extends {{parent}}{{implements}}';

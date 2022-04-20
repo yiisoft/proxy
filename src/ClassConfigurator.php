@@ -4,11 +4,18 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy;
 
+use InvalidArgumentException;
+use ReflectionClass;
+use Yiisoft\Proxy\Config\ClassConfig;
+use Yiisoft\Proxy\Config\MethodConfig;
+use Yiisoft\Proxy\Config\ParameterConfig;
+use Yiisoft\Proxy\Config\TypeConfig;
+
 final class ClassConfigurator
 {
     public function getInterfaceConfig(string $interface): ClassConfig
     {
-        $reflection = new \ReflectionClass($interface);
+        $reflection = new ReflectionClass($interface);
         if (!$reflection->isInterface()) {
             throw new \InvalidArgumentException("$interface is not an interface");
         }
@@ -17,14 +24,14 @@ final class ClassConfigurator
 
     public function getClassConfig(string $class): ClassConfig
     {
-        $reflection = new \ReflectionClass($class);
+        $reflection = new ReflectionClass($class);
         if ($reflection->isInterface()) {
-            throw new \InvalidArgumentException("$class is not a class");
+            throw new InvalidArgumentException("$class is not a class");
         }
         return $this->getReflectionConfig($reflection);
     }
 
-    public function getReflectionConfig(\ReflectionClass $reflection): ClassConfig
+    private function getReflectionConfig(ReflectionClass $reflection): ClassConfig
     {
         $config = $this->getReflectionClassConfig($reflection);
         foreach ($reflection->getMethods() as $method) {
@@ -35,7 +42,7 @@ final class ClassConfigurator
         return $config;
     }
 
-    public function getReflectionClassConfig(\ReflectionClass $reflection): ClassConfig
+    private function getReflectionClassConfig(ReflectionClass $reflection): ClassConfig
     {
         $config = new ClassConfig();
         $config->isInterface = $reflection->isInterface();
