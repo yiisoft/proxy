@@ -57,7 +57,7 @@ final class ClassConfigurator
         return $config;
     }
 
-    public function getClassParents(\ReflectionClass $reflection): array
+    public function getClassParents(ReflectionClass $reflection): array
     {
         $parents = [];
         while ($parent = $reflection->getParentClass()) {

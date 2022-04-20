@@ -28,8 +28,7 @@ final class ProxyManager
         string $interface,
         string $parentProxyClass,
         array $constructorArguments = null
-    ): ?object
-    {
+    ): ?object {
         $className = $interface . 'Proxy';
         $shortClassName = $this->getProxyClassName($className);
 
