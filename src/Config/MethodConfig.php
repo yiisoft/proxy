@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yiisoft\Proxy;
+namespace Yiisoft\Proxy\Config;
 
 final class MethodConfig
 {
