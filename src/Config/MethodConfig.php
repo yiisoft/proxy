@@ -6,19 +6,18 @@ namespace Yiisoft\Proxy\Config;
 
 final class MethodConfig
 {
-    /**
-     * @var string[]
-     */
-    public array $modifiers;
-
-    public string $name;
-
-    /**
-     * @var ParameterConfig[]
-     */
-    public array $parameters;
-
-    public bool $hasReturnType;
-
-    public TypeConfig $returnType;
+    public function __construct(
+        /**
+         * @var string[]
+         */
+        public array $modifiers,
+        public string $name,
+        /**
+         * @var ParameterConfig[]
+         */
+        public array $parameters,
+        public bool $hasReturnType,
+        public ?TypeConfig $returnType,
+    ) {
+    }
 }

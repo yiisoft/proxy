@@ -12,7 +12,7 @@ final class ProxyManager
 
     private ClassRenderer $classRenderer;
 
-    private ClassConfigurator $classConfigurator;
+    private ClassConfigFactory $classConfigFactory;
 
     private ClassCache $classCache;
 
@@ -21,7 +21,7 @@ final class ProxyManager
         $this->cachePath = $cachePath;
         $this->classCache = new ClassCache($cachePath);
         $this->classRenderer = new ClassRenderer();
-        $this->classConfigurator = new ClassConfigurator();
+        $this->classConfigFactory = new ClassConfigFactory();
     }
 
     public function createObjectProxyFromInterface(
@@ -35,7 +35,7 @@ final class ProxyManager
 
         if (!($classDeclaration = $this->classCache->get($className, $parentProxyClass))) {
             $classConfig = $this->generateInterfaceProxyClassConfig(
-                $this->classConfigurator->getInterfaceConfig($interface),
+                $this->classConfigFactory->getIntergaceConfig($interface),
                 $parentProxyClass
             );
             $classDeclaration = $this->classRenderer->render($classConfig);
@@ -50,7 +50,10 @@ final class ProxyManager
         return new $shortClassName(...$constructorArguments);
     }
 
-    private function generateInterfaceProxyClassConfig(ClassConfig $interfaceConfig, string $parentProxyClass): ClassConfig
+    private function generateInterfaceProxyClassConfig(
+        ClassConfig $interfaceConfig,
+        string $parentProxyClass
+    ): ClassConfig
     {
         $interfaceConfig->isInterface = false;
         $interfaceConfig->parent = $parentProxyClass;

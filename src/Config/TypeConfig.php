@@ -6,7 +6,9 @@ namespace Yiisoft\Proxy\Config;
 
 final class TypeConfig
 {
-    public string $name;
-
-    public bool $allowsNull;
+    public function __construct(
+        public string $name,
+        public bool $allowsNull,
+    ) {
+    }
 }
