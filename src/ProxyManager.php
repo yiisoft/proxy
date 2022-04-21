@@ -52,8 +52,7 @@ final class ProxyManager
     private function generateInterfaceProxyClassConfig(
         ClassConfig $interfaceConfig,
         string $parentProxyClass
-    ): ClassConfig
-    {
+    ): ClassConfig {
         $interfaceConfig->isInterface = false;
         $interfaceConfig->parent = $parentProxyClass;
         $interfaceConfig->interfaces = [$interfaceConfig->name];
