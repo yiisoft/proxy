@@ -19,10 +19,6 @@ final class ClassConfig
         /**
          * @var string[]
          */
-        public array $parents,
-        /**
-         * @var string[]
-         */
         public array $interfaces,
         /**
          * @var MethodConfig[]

@@ -36,24 +36,9 @@ final class ClassConfigFactory
             name: $reflection->getName(),
             shortName: $reflection->getShortName(),
             parent: (string) $reflection->getParentClass(),
-            parents: $this->getParents($reflection),
             interfaces: $reflection->getInterfaceNames(),
             methods: $this->getMethodConfigs($reflection),
         );
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getParents(ReflectionClass $reflection): array
-    {
-        $parents = [];
-        while ($parent = $reflection->getParentClass()) {
-            $parents[] = $parent->getName();
-            $reflection = $parent;
-        }
-
-        return $parents;
     }
 
     /**
@@ -101,9 +86,15 @@ final class ClassConfigFactory
             name: $param->getName(),
             allowsNull: $param->allowsNull(),
             isDefaultValueAvailable: $param->isDefaultValueAvailable(),
-            isDefaultValueConstant: $param->isDefaultValueAvailable() ? $param->isDefaultValueConstant() : null,
-            defaultValueConstantName: $param->isOptional() ? $param->getDefaultValueConstantName() : null,
-            defaultValue: $param->isOptional() ? $param->getDefaultValue() : null,
+            isDefaultValueConstant: $param->isDefaultValueAvailable()
+                ? $param->isDefaultValueConstant()
+                : null,
+            defaultValueConstantName: $param->isOptional()
+                ? $param->getDefaultValueConstantName()
+                : null,
+            defaultValue: $param->isOptional()
+                ? $param->getDefaultValue()
+                : null,
         );
     }
 

@@ -10,11 +10,28 @@ use Yiisoft\Proxy\Config\ClassConfig;
 use Yiisoft\Proxy\Config\MethodConfig;
 use Yiisoft\Proxy\Config\ParameterConfig;
 use Yiisoft\Proxy\Config\TypeConfig;
+use Yiisoft\Proxy\Tests\Stub\Node;
 use Yiisoft\Proxy\Tests\Stub\NodeInterface;
 
 class ClassConfigFactoryTest extends TestCase
 {
-    public function testGetClassConfig(): void
+    public function testGetInterfaceConfigOfNonExistingInterface(): void
+    {
+        $this->expectExceptionMessage('NonExistingNodeInterface must exist');
+
+        $classConfigFactory = new ClassConfigFactory();
+        $classConfigFactory->getIntergaceConfig('Yiisoft\Proxy\Tests\Stub\NonExistingNodeInterface');
+    }
+
+    public function testGetInterfaceConfigOfNonInterface(): void
+    {
+        $this->expectExceptionMessage('Node is not an interface');
+
+        $classConfigFactory = new ClassConfigFactory();
+        $classConfigFactory->getIntergaceConfig(Node::class);
+    }
+
+    public function testGetInterfaceConfig(): void
     {
         $classConfigFactory = new ClassConfigFactory();
         $config = $classConfigFactory->getIntergaceConfig(NodeInterface::class);
@@ -25,7 +42,6 @@ class ClassConfigFactoryTest extends TestCase
             name: 'Yiisoft\Proxy\Tests\Stub\NodeInterface',
             shortName: 'NodeInterface',
             parent: '',
-            parents: [],
             interfaces: [
                 'Countable',
                 'Yiisoft\Proxy\Tests\Stub\NodeParentInterface',
@@ -102,7 +118,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValueConstantName: null,
                             defaultValue: null
                         ),
-
                         'param6' => new ParameterConfig(
                             hasType: true,
                             type: new TypeConfig(
