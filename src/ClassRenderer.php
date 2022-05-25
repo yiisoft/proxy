@@ -47,11 +47,9 @@ final class ClassRenderer
 
     private function renderImplements(array $interfaces): string
     {
-        $output = $interfaces !== []
+        return $interfaces !== []
             ? ' implements ' . implode(', ', $interfaces)
             : '';
-
-        return $output;
     }
 
     private function renderModifiers(array $modifiers): string
@@ -66,6 +64,7 @@ final class ClassRenderer
 
     /**
      * @param MethodConfig[] $methods
+     *
      * @return string
      */
     private function renderMethods(array $methods): string
@@ -146,20 +145,16 @@ final class ClassRenderer
 
     private function renderReturn(MethodConfig $method): string
     {
-        $output = $method->returnType?->name === 'void'
+        return $method->returnType?->name === 'void'
             ? ''
             : 'return ';
-
-        return $output;
     }
 
     private function renderReturnType(MethodConfig $method): string
     {
-        $output = $method->hasReturnType
+        return $method->hasReturnType
             ? ': ' . $this->renderType($method->returnType)
             : '';
-
-        return $output;
     }
 
     private function renderType(TypeConfig $type): string
@@ -175,11 +170,9 @@ final class ClassRenderer
     private function renderMethodCallParameters(array $parameters): string
     {
         $keys = array_keys($parameters);
-        $output = $keys !== []
+        return $keys !== []
             ? '$' . implode(', $', $keys)
             : '';
-
-        return $output;
     }
 
     private static function varExport(mixed $var): string
