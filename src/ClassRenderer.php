@@ -47,9 +47,11 @@ final class ClassRenderer
 
     private function renderImplements(array $interfaces): string
     {
-        return $interfaces !== []
-            ? ' implements ' . implode(', ', $interfaces)
-            : '';
+        if ($interfaces === []) {
+            return '';
+        }
+
+        return ' implements ' . implode(', ', $interfaces);
     }
 
     private function renderModifiers(array $modifiers): string
@@ -136,25 +138,31 @@ final class ClassRenderer
 
     private function renderMethodBody(MethodConfig $method): string
     {
-        return "\n" . strtr($this->proxyMethodBodyTemplate, [
+        $output = strtr($this->proxyMethodBodyTemplate, [
             '{{return}}' => $this->margin(2) . $this->renderReturn($method),
             '{{methodName}}' => "'" . $method->name . "'",
             '{{params}}' => $this->renderMethodCallParameters($method->parameters),
-        ]) . "\n";
+        ]);
+
+        return "\n" . $output . "\n";
     }
 
     private function renderReturn(MethodConfig $method): string
     {
-        return $method->returnType?->name === 'void'
-            ? ''
-            : 'return ';
+        if ($method->returnType?->name === 'void') {
+            return '';
+        }
+
+        return 'return ';
     }
 
     private function renderReturnType(MethodConfig $method): string
     {
-        return $method->hasReturnType
-            ? ': ' . $this->renderType($method->returnType)
-            : '';
+        if (!$method->hasReturnType) {
+            return '';
+        }
+
+        return ': ' . $this->renderType($method->returnType);
     }
 
     private function renderType(TypeConfig $type): string
@@ -170,9 +178,11 @@ final class ClassRenderer
     private function renderMethodCallParameters(array $parameters): string
     {
         $keys = array_keys($parameters);
-        return $keys !== []
-            ? '$' . implode(', $', $keys)
-            : '';
+        if ($keys === []) {
+            return '';
+        }
+
+        return '$' . implode(', $', $keys);
     }
 
     private static function varExport(mixed $var): string
