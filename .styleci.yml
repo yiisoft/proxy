@@ -15,6 +15,7 @@ finder:
     - UnionCar.php
     - TimerUnionTypes.php
     - schema1.php
+    - NodeGrandParentInterface.php
 
 enabled:
   - alpha_ordered_traits
