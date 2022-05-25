@@ -19,22 +19,22 @@ class ClassConfigFactoryTest extends TestCase
     {
         $this->expectExceptionMessage('NonExistingNodeInterface must exist');
 
-        $classConfigFactory = new ClassConfigFactory();
-        $classConfigFactory->getIntergaceConfig('Yiisoft\Proxy\Tests\Stub\NonExistingNodeInterface');
+        $factory = new ClassConfigFactory();
+        $factory->getIntergaceConfig('Yiisoft\Proxy\Tests\Stub\NonExistingNodeInterface');
     }
 
     public function testGetInterfaceConfigOfNonInterface(): void
     {
         $this->expectExceptionMessage('Node is not an interface');
 
-        $classConfigFactory = new ClassConfigFactory();
-        $classConfigFactory->getIntergaceConfig(Node::class);
+        $factory = new ClassConfigFactory();
+        $factory->getIntergaceConfig(Node::class);
     }
 
     public function testGetInterfaceConfig(): void
     {
-        $classConfigFactory = new ClassConfigFactory();
-        $config = $classConfigFactory->getIntergaceConfig(NodeInterface::class);
+        $factory = new ClassConfigFactory();
+        $config = $factory->getIntergaceConfig(NodeInterface::class);
         $expectedConfig = new ClassConfig(
             isInterface: true,
             namespace: 'Yiisoft\Proxy\Tests\Stub',
@@ -173,6 +173,85 @@ class ClassConfigFactoryTest extends TestCase
                     parameters: [],
                     hasReturnType: false,
                     returnType: null
+                ),
+                'nodeInterfaceMethod3' => new MethodConfig(
+                    modifiers: [
+                        'abstract',
+                        'public',
+                    ],
+                    name: 'nodeInterfaceMethod3',
+                    parameters: [
+                        'param1' => new ParameterConfig(
+                            hasType: true,
+                            type: new TypeConfig(
+                                name: 'bool',
+                                allowsNull: false
+                            ),
+                            name: 'param1',
+                            allowsNull: false,
+                            isDefaultValueAvailable: true,
+                            isDefaultValueConstant: false,
+                            defaultValueConstantName: null,
+                            defaultValue: false
+                        ),
+                        'param2' => new ParameterConfig(
+                            hasType: true,
+                            type: new TypeConfig(
+                                name: 'bool',
+                                allowsNull: false
+                            ),
+                            name: 'param2',
+                            allowsNull: false,
+                            isDefaultValueAvailable: true,
+                            isDefaultValueConstant: false,
+                            defaultValueConstantName: null,
+                            defaultValue: true
+                        ),
+                        'param3' => new ParameterConfig(
+                            hasType: true,
+                            type: new TypeConfig(
+                                name: 'string',
+                                allowsNull: false
+                            ),
+                            name: 'param3',
+                            allowsNull: false,
+                            isDefaultValueAvailable: true,
+                            isDefaultValueConstant: false,
+                            defaultValueConstantName: null,
+                            defaultValue: 'string'
+                        ),
+                        'param4' => new ParameterConfig(
+                            hasType: true,
+                            type: new TypeConfig(
+                                name: 'string',
+                                allowsNull: true
+                            ),
+                            name: 'param4',
+                            allowsNull: true,
+                            isDefaultValueAvailable: true,
+                            isDefaultValueConstant: false,
+                            defaultValueConstantName: null,
+                            defaultValue: null
+                        ),
+                        'param5' => new ParameterConfig(
+                            hasType: true,
+                            type: new TypeConfig(
+                                name: 'array',
+                                allowsNull: false
+                            ),
+                            name: 'param5',
+                            allowsNull: false,
+                            isDefaultValueAvailable: true,
+                            isDefaultValueConstant: false,
+                            defaultValueConstantName: null,
+                            defaultValue: [1, 'value']
+                        ),
+                    ],
+                    hasReturnType: true,
+                    returnType: new TypeConfig(
+                        name: 'void',
+                        allowsNull: false
+                    )
                 ),
                 'count' => new MethodConfig(
                     modifiers: [

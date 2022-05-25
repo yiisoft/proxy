@@ -23,4 +23,12 @@ interface NodeInterface extends Countable, NodeParentInterface
     ): ?int;
 
     public function nodeInterfaceMethod2();
+
+    public function nodeInterfaceMethod3(
+        bool $param1 = false,
+        bool $param2 = true,
+        string $param3 = 'string',
+        ?string $param4 = null,
+        array $param5 = [1, 'value']
+    ): void;
 }
