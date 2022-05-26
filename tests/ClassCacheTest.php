@@ -88,10 +88,7 @@ EOD;
         $cache->set(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent', $classDeclaration);
 
         $dir = DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, ['Yiisoft', 'Proxy', 'Tests', 'Stub']);
-
-        if (PHP_OS_FAMILY === "Linux") {
-            $this->expectExceptionMessage("Directory \"{$dir}\" was not created");
-        }
+        $this->expectExceptionMessage("Directory \"{$dir}\" was not created");
 
         $cache->getClassPath(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent');
     }
