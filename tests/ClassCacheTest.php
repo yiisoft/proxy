@@ -90,6 +90,9 @@ EOD;
         $dir = DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, ['Yiisoft', 'Proxy', 'Tests', 'Stub']);
         $this->expectExceptionMessage("Directory \"{$dir}\" was not created");
 
+        var_dump(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Yiisoft');
+        var_dump($cache->getClassPath(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent'));
+
         $cache->getClassPath(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent');
     }
 }
