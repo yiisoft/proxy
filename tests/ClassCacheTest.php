@@ -89,7 +89,7 @@ EOD;
 
         $dir = DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, ['Yiisoft', 'Proxy', 'Tests', 'Stub']);
 
-        if (PHP_OS_FAMILY === "Linux") {
+        if (PHP_OS_FAMILY === 'Linux') {
             $this->expectExceptionMessage("Directory \"{$dir}\" was not created");
         }
 
