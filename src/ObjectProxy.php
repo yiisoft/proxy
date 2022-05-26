@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy;
 
+use Exception;
+
 abstract class ObjectProxy
 {
     use ProxyTrait;
@@ -22,7 +24,7 @@ abstract class ObjectProxy
         $timeStart = microtime(true);
         try {
             $result = $this->callInternal($methodName, $arguments);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->repeatError($e);
         } finally {
             $result = $this->executeMethodProxy($methodName, $arguments, $result, $timeStart);

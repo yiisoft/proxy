@@ -167,12 +167,11 @@ final class ClassRenderer
 
     private function renderType(TypeConfig $type): string
     {
-        $output = $type->allowsNull
-            ? '?'
-            : '';
-        $output .= $type->name;
+        if ($type->name === 'mixed' || !$type->allowsNull) {
+            return $type->name;
+        }
 
-        return $output;
+        return '?' . $type->name;
     }
 
     private function renderMethodCallParameters(array $parameters): string
@@ -210,10 +209,14 @@ final class ClassRenderer
                 } else {
                     $keys = array_keys($var);
                     $output .= '[';
-                    foreach ($keys as $key) {
+                    foreach ($keys as $index => $key) {
                         $output .= self::varExport($key);
                         $output .= ' => ';
                         $output .= self::varExport($var[$key]);
+
+                        if ($index !== array_key_last($keys)) {
+                            $output .= ', ';
+                        }
                     }
                     $output .= ']';
                 }

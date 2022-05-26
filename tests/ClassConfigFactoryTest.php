@@ -20,7 +20,7 @@ class ClassConfigFactoryTest extends TestCase
         $this->expectExceptionMessage('NonExistingNodeInterface must exist');
 
         $factory = new ClassConfigFactory();
-        $factory->getIntergaceConfig('Yiisoft\Proxy\Tests\Stub\NonExistingNodeInterface');
+        $factory->getInterfaceConfig('Yiisoft\Proxy\Tests\Stub\NonExistingNodeInterface');
     }
 
     public function testGetInterfaceConfigOfNonInterface(): void
@@ -28,13 +28,13 @@ class ClassConfigFactoryTest extends TestCase
         $this->expectExceptionMessage('Node is not an interface');
 
         $factory = new ClassConfigFactory();
-        $factory->getIntergaceConfig(Node::class);
+        $factory->getInterfaceConfig(Node::class);
     }
 
     public function testGetInterfaceConfig(): void
     {
         $factory = new ClassConfigFactory();
-        $config = $factory->getIntergaceConfig(NodeInterface::class);
+        $config = $factory->getInterfaceConfig(NodeInterface::class);
         $expectedConfig = new ClassConfig(
             isInterface: true,
             namespace: 'Yiisoft\Proxy\Tests\Stub',

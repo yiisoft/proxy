@@ -8,7 +8,7 @@ use Yiisoft\Proxy\Config\ClassConfig;
 
 final class ProxyManager
 {
-    private ?string $cachePath = null;
+    private ?string $cachePath;
 
     private ClassRenderer $classRenderer;
 
@@ -27,14 +27,14 @@ final class ProxyManager
     public function createObjectProxyFromInterface(
         string $interface,
         string $parentProxyClass,
-        array $constructorArguments = null
+        array $constructorArguments
     ): ?object {
         $className = $interface . 'Proxy';
         $shortClassName = $this->getProxyClassName($className);
 
         if (!($classDeclaration = $this->classCache->get($className, $parentProxyClass))) {
             $classConfig = $this->generateInterfaceProxyClassConfig(
-                $this->classConfigFactory->getIntergaceConfig($interface),
+                $this->classConfigFactory->getInterfaceConfig($interface),
                 $parentProxyClass
             );
             $classDeclaration = $this->classRenderer->render($classConfig);

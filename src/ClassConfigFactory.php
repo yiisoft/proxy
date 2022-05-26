@@ -17,7 +17,7 @@ use Yiisoft\Proxy\Config\TypeConfig;
 
 final class ClassConfigFactory
 {
-    public function getIntergaceConfig(string $interfaceName): ClassConfig
+    public function getInterfaceConfig(string $interfaceName): ClassConfig
     {
         try {
             $reflection = new ReflectionClass($interfaceName);

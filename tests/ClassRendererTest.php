@@ -16,14 +16,14 @@ class ClassRendererTest extends TestCase
     public function testRender(): void
     {
         $factory = new ClassConfigFactory();
-        $config = $factory->getIntergaceConfig(NodeInterface::class);
+        $config = $factory->getInterfaceConfig(NodeInterface::class);
 
         $renderer = new ClassRenderer();
         $output = $renderer->render($config);
         $expectedOutput = <<<'EOD'
 interface NodeInterface implements Countable, Yiisoft\Proxy\Tests\Stub\NodeParentInterface, Yiisoft\Proxy\Tests\Stub\NodeGrandParentInterface
 {
-    abstract public static function nodeInterfaceMethod1($param1, int $param2, ArrayIterator $param3, ?mixed $param4, ?bool $param5, float $param6 = 3.5, array $param7 = [], string $param8 = Yiisoft\Proxy\Tests\Stub\CONST1): ?int
+    abstract public static function nodeInterfaceMethod1($param1, int $param2, ArrayIterator $param3, mixed $param4, ?bool $param5, float $param6 = 3.5, array $param7 = [], string $param8 = Yiisoft\Proxy\Tests\Stub\CONST1): ?int
     {
         return $this->call('nodeInterfaceMethod1', [$param1, $param2, $param3, $param4, $param5, $param6, $param7, $param8]);
     }
@@ -33,7 +33,7 @@ interface NodeInterface implements Countable, Yiisoft\Proxy\Tests\Stub\NodeParen
         return $this->call('nodeInterfaceMethod2', []);
     }
 
-    abstract public function nodeInterfaceMethod3(bool $param1 = false, bool $param2 = true, string $param3 = 'string', ?string $param4 = null, array $param5 = [0 => 11 => 'value']): void
+    abstract public function nodeInterfaceMethod3(bool $param1 = false, bool $param2 = true, string $param3 = 'string', ?string $param4 = null, array $param5 = [0 => 1, 1 => 'value']): void
     {
         $this->call('nodeInterfaceMethod3', [$param1, $param2, $param3, $param4, $param5]);
     }
@@ -81,7 +81,7 @@ EOD;
     public function testRenderInterfaceWithoutImplements(): void
     {
         $factory = new ClassConfigFactory();
-        $config = $factory->getIntergaceConfig(NodeGrandParentInterface::class);
+        $config = $factory->getInterfaceConfig(NodeGrandParentInterface::class);
 
         $renderer = new ClassRenderer();
         $output = $renderer->render($config);
