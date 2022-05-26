@@ -70,8 +70,12 @@ class Node
 EOD;
         $cache->set(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent', $classDeclaration);
 
+        $expectedClassPath = implode(
+            DIRECTORY_SEPARATOR,
+            [sys_get_temp_dir(), 'Yiisoft', 'Proxy', 'Tests', 'Stub', 'Node.NodeParent.php']
+        );
         $actualClassPath = $cache->getClassPath(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent');
-        $this->assertEquals('/tmp/Yiisoft/Proxy/Tests/Stub/Node.NodeParent.php', $actualClassPath);
+        $this->assertEquals($expectedClassPath, $actualClassPath);
     }
 
     public function testSetAndGetClassPathWithNullCachePath(): void
