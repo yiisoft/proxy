@@ -83,7 +83,9 @@ class Node
 EOD;
         $cache->set(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent', $classDeclaration);
 
-        $this->expectExceptionMessage('Directory "/Yiisoft/Proxy/Tests/Stub" was not created');
+        $dir = implode(DIRECTORY_SEPARATOR, ['Yiisoft', 'Proxy', 'Tests', 'Stub']);
+        $this->expectExceptionMessage("Directory \"{$dir}\" was not created");
+
         $cache->getClassPath(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent');
     }
 }
