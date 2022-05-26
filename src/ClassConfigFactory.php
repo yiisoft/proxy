@@ -9,6 +9,7 @@ use Reflection;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 use Yiisoft\Proxy\Config\ClassConfig;
 use Yiisoft\Proxy\Config\MethodConfig;
@@ -100,6 +101,7 @@ final class ClassConfigFactory
 
     private function getMethodParameterTypeConfig(ReflectionParameter $param): ?TypeConfig
     {
+        /** @var ReflectionNamedType $type */
         $type = $param->getType();
         if (!$type) {
             return null;
@@ -113,6 +115,7 @@ final class ClassConfigFactory
 
     private function getMethodTypeConfig(ReflectionMethod $method): ?TypeConfig
     {
+        /** @var ReflectionNamedType $returnType */
         $returnType = $method->getReturnType();
         if (!$returnType) {
             return null;
