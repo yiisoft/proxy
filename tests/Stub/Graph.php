@@ -11,13 +11,13 @@ class Graph implements GraphInterface
         return $previousNodesCount + 1;
     }
 
-    public function getGraphInstance(): Graph
+    public function getGraphInstance(): self
     {
         return $this;
     }
 
-    public function makeNewGraph(): Graph
+    public function makeNewGraph(): self
     {
-        return new self;
+        return new self();
     }
 }
