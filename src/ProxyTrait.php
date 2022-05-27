@@ -12,7 +12,11 @@ trait ProxyTrait
 
     protected function getCurrentResultStatus(): string
     {
-        return $this->currentError === null ? 'success' : 'failed';
+        if ($this->currentError === null) {
+            return 'success';
+        }
+
+        return 'failed';
     }
 
     protected function repeatError(Throwable $error): void
