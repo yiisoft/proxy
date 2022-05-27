@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy\Tests\Stub;
 
-use Countable;
-
-class Car implements Countable
+class Car implements CarInterface
 {
-    public function count(): int
+    public function horsepower(): int
     {
         return 1;
     }

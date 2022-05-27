@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy\Tests;
 
-use Countable;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Files\FileHelper;
 use Yiisoft\Proxy\ProxyManager;
 use Yiisoft\Proxy\Tests\Stub\Car;
+use Yiisoft\Proxy\Tests\Stub\CarInterface;
 use Yiisoft\Proxy\Tests\Stub\Graph;
 use Yiisoft\Proxy\Tests\Stub\GraphInterface;
 use Yiisoft\Proxy\Tests\Stub\Proxy;
@@ -38,10 +38,10 @@ class ProxyManagerTest extends TestCase
         $manager = new ProxyManager();
 
         /** @var Car|Proxy $object */
-        $object = $manager->createObjectProxyFromInterface(Countable::class, Proxy::class, [new Car()]);
+        $object = $manager->createObjectProxyFromInterface(CarInterface::class, Proxy::class, [new Car()]);
         $this->assertIsObject($object);
 
-        $this->assertSame(1, $object->count());
+        $this->assertSame(1, $object->horsepower());
     }
 
     public function testMethodReturningInstanceOfSameType(): void
