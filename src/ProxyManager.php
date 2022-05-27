@@ -44,7 +44,7 @@ final class ProxyManager
             eval(str_replace('<?php', '', $classDeclaration));
         } else {
             $path = $this->classCache->getClassPath($className, $parentProxyClass);
-            require $path;
+            require_once $path;
         }
         return new $shortClassName(...$constructorArguments);
     }

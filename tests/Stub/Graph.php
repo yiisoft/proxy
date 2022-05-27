@@ -10,4 +10,14 @@ class Graph implements GraphInterface
     {
         return $previousNodesCount + 1;
     }
+
+    public function getGraphInstance(): Graph
+    {
+        return $this;
+    }
+
+    public function makeNewGraph(): Graph
+    {
+        return new self;
+    }
 }
