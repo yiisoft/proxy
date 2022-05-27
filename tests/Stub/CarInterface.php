@@ -6,5 +6,7 @@ namespace Yiisoft\Proxy\Tests\Stub;
 
 interface CarInterface
 {
-    public function horsepower();
+    public function horsepower(): int;
+
+    public function ride(): void;
 }

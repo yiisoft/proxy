@@ -28,9 +28,14 @@ final class ProxyManager
         string $interface,
         string $parentProxyClass,
         array $constructorArguments
-    ): ?object {
+    ): ?object
+    {
         $className = $interface . 'Proxy';
         $shortClassName = $this->getProxyClassName($className);
+
+        if (class_exists($shortClassName)) {
+            return new $shortClassName(...$constructorArguments);
+        }
 
         if (!($classDeclaration = $this->classCache->get($className, $parentProxyClass))) {
             $classConfig = $this->generateInterfaceProxyClassConfig(
@@ -44,7 +49,7 @@ final class ProxyManager
             eval(str_replace('<?php', '', $classDeclaration));
         } else {
             $path = $this->classCache->getClassPath($className, $parentProxyClass);
-            require_once $path;
+            require $path;
         }
         return new $shortClassName(...$constructorArguments);
     }

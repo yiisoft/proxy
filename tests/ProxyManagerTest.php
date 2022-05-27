@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Proxy\Tests;
 
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Yiisoft\Files\FileHelper;
 use Yiisoft\Proxy\ProxyManager;
 use Yiisoft\Proxy\Tests\Stub\Car;
@@ -57,5 +58,17 @@ class ProxyManagerTest extends TestCase
 
         $this->assertEquals($object, $object->makeNewGraph());
         $this->assertNotSame($object, $object->makeNewGraph());
+    }
+
+    public function testMethodThrowingException(): void
+    {
+        $path = sys_get_temp_dir();
+        $manager = new ProxyManager($path);
+
+        /** @var Car|Proxy $object */
+        $object = $manager->createObjectProxyFromInterface(CarInterface::class, Proxy::class, [new Car()]);
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Not implemented yet.');
+        $object->ride();
     }
 }
