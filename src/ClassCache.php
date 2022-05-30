@@ -31,17 +31,9 @@ final class ClassCache
             return null;
         }
 
-        if (!file_exists($this->getClassPath($className, $classParent))) {
-            return null;
-        }
-
         try {
             $content = file_get_contents($this->getClassPath($className, $classParent));
         } catch (Exception) {
-            return null;
-        }
-
-        if ($content === false) {
             return null;
         }
 
