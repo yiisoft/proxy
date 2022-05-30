@@ -9,4 +9,6 @@ interface CarInterface
     public function horsepower(): int;
 
     public function ride(): void;
+
+    public function park(): void;
 }

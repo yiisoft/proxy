@@ -17,4 +17,9 @@ class Car implements CarInterface
     {
         throw new RuntimeException('Not implemented yet.');
     }
+
+    public function park(): void
+    {
+        throw new RuntimeException('Not working currently.');
+    }
 }

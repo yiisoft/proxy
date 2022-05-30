@@ -17,6 +17,11 @@ abstract class ObjectProxy
         $this->instance = $instance;
     }
 
+    public function getInstance(): object
+    {
+        return $this->instance;
+    }
+
     protected function call(string $methodName, array $arguments)
     {
         $this->resetCurrentError();
@@ -38,11 +43,6 @@ abstract class ObjectProxy
     protected function getNewStaticInstance(object $instance): self
     {
         return new static($instance);
-    }
-
-    protected function getInstance(): object
-    {
-        return $this->instance;
     }
 
     private function callInternal(string $methodName, array $arguments)
