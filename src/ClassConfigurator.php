@@ -69,8 +69,12 @@ final class ClassConfigurator
         $config->hasReturnType = $method->hasReturnType();
         if ($config->hasReturnType) {
             $config->returnType = new TypeConfig();
-            $config->returnType->name = $method->getReturnType()->getName();
-            $config->returnType->allowsNull = $method->getReturnType()->allowsNull();
+            $config->returnType->name = $method
+                ->getReturnType()
+                ->getName();
+            $config->returnType->allowsNull = $method
+                ->getReturnType()
+                ->allowsNull();
         }
         $config->parameters = [];
         foreach ($method->getParameters() as $param) {
@@ -87,8 +91,12 @@ final class ClassConfigurator
         $config->hasType = $param->hasType();
         if ($param->hasType()) {
             $config->type = new TypeConfig();
-            $config->type->name = $param->getType()->getName();
-            $config->type->allowsNull = $param->getType()->allowsNull();
+            $config->type->name = $param
+                ->getType()
+                ->getName();
+            $config->type->allowsNull = $param
+                ->getType()
+                ->allowsNull();
         }
         $config->allowsNull = $param->allowsNull();
         $this->getDefaultValues($param, $config);
