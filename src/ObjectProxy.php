@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy;
 
+use Exception;
+
 abstract class ObjectProxy
 {
     use ProxyTrait;
@@ -15,6 +17,11 @@ abstract class ObjectProxy
         $this->instance = $instance;
     }
 
+    public function getInstance(): object
+    {
+        return $this->instance;
+    }
+
     protected function call(string $methodName, array $arguments)
     {
         $this->resetCurrentError();
@@ -22,7 +29,7 @@ abstract class ObjectProxy
         $timeStart = microtime(true);
         try {
             $result = $this->callInternal($methodName, $arguments);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->repeatError($e);
         } finally {
             $result = $this->executeMethodProxy($methodName, $arguments, $result, $timeStart);
@@ -36,11 +43,6 @@ abstract class ObjectProxy
     protected function getNewStaticInstance(object $instance): self
     {
         return new static($instance);
-    }
-
-    protected function getInstance(): object
-    {
-        return $this->instance;
     }
 
     private function callInternal(string $methodName, array $arguments)

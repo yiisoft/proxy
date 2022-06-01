@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy;
 
+use Exception;
+use RuntimeException;
+use Yiisoft\Files\FileHelper;
+
 final class ClassCache
 {
-    private ?string $cachePath = null;
+    private ?string $cachePath;
 
     public function __construct(string $cachePath = null)
     {
@@ -23,26 +27,33 @@ final class ClassCache
 
     public function get(string $className, string $classParent): ?string
     {
-        if (!file_exists($this->getClassPath($className, $classParent))) {
+        if ($this->cachePath === null) {
             return null;
         }
+
         try {
-            return file_get_contents($this->getClassPath($className, $classParent));
-        } catch (\Exception $e) {
+            $content = file_get_contents($this->getClassPath($className, $classParent));
+        } catch (Exception) {
             return null;
         }
+
+        return $content;
     }
 
     public function getClassPath(string $className, string $classParent): string
     {
         [$classFileName, $classFilePath] = $this->getClassFileNameAndPath($className, $classParent);
-        if (!is_dir($classFilePath) && !mkdir($classFilePath, 0777, true) && !is_dir($classFilePath)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $classFilePath));
+
+        try {
+            FileHelper::ensureDirectory($classFilePath, 0777);
+        } catch (RuntimeException) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $classFilePath));
         }
+
         return $classFilePath . DIRECTORY_SEPARATOR . $classFileName;
     }
 
-    public function getClassFileNameAndPath(string $className, string $classParent): array
+    private function getClassFileNameAndPath(string $className, string $classParent): array
     {
         $classParts = explode('\\', $className);
         $parentClassParts = explode('\\', $classParent);

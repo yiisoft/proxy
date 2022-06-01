@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy;
 
+use Yiisoft\Proxy\Config\ClassConfig;
+
 final class ProxyManager
 {
-    private ?string $cachePath = null;
+    private ?string $cachePath;
 
     private ClassRenderer $classRenderer;
 
-    private ClassConfigurator $classConfigurator;
+    private ClassConfigFactory $classConfigFactory;
 
     private ClassCache $classCache;
 
@@ -19,16 +21,26 @@ final class ProxyManager
         $this->cachePath = $cachePath;
         $this->classCache = new ClassCache($cachePath);
         $this->classRenderer = new ClassRenderer();
-        $this->classConfigurator = new ClassConfigurator();
+        $this->classConfigFactory = new ClassConfigFactory();
     }
 
-    public function createObjectProxyFromInterface(string $interface, string $parentProxyClass, array $constructorArguments = null): ?object
-    {
+    public function createObjectProxyFromInterface(
+        string $interface,
+        string $parentProxyClass,
+        array $constructorArguments
+    ): ?object {
         $className = $interface . 'Proxy';
         $shortClassName = $this->getProxyClassName($className);
 
+        if (class_exists($shortClassName)) {
+            return new $shortClassName(...$constructorArguments);
+        }
+
         if (!($classDeclaration = $this->classCache->get($className, $parentProxyClass))) {
-            $classConfig = $this->generateInterfaceProxyClassConfig($this->classConfigurator->getInterfaceConfig($interface), $parentProxyClass);
+            $classConfig = $this->generateInterfaceProxyClassConfig(
+                $this->classConfigFactory->getInterfaceConfig($interface),
+                $parentProxyClass
+            );
             $classDeclaration = $this->classRenderer->render($classConfig);
             $this->classCache->set($className, $parentProxyClass, $classDeclaration);
         }
@@ -41,8 +53,10 @@ final class ProxyManager
         return new $shortClassName(...$constructorArguments);
     }
 
-    private function generateInterfaceProxyClassConfig(ClassConfig $interfaceConfig, string $parentProxyClass): ClassConfig
-    {
+    private function generateInterfaceProxyClassConfig(
+        ClassConfig $interfaceConfig,
+        string $parentProxyClass
+    ): ClassConfig {
         $interfaceConfig->isInterface = false;
         $interfaceConfig->parent = $parentProxyClass;
         $interfaceConfig->interfaces = [$interfaceConfig->name];

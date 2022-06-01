@@ -4,16 +4,23 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy;
 
+use Throwable;
+
 trait ProxyTrait
 {
     private ?object $currentError = null;
 
-    protected function getCurrentResultStatus(): string
+    public function getCurrentError(): ?object
     {
-        return $this->currentError === null ? 'success' : 'failed';
+        return $this->currentError;
     }
 
-    protected function repeatError(\Throwable $error): void
+    public function hasCurrentError(): bool
+    {
+        return $this->currentError !== null;
+    }
+
+    protected function repeatError(Throwable $error): void
     {
         $this->currentError = $error;
         throw $error;
@@ -22,10 +29,5 @@ trait ProxyTrait
     protected function resetCurrentError(): void
     {
         $this->currentError = null;
-    }
-
-    protected function getCurrentError(): ?object
-    {
-        return $this->currentError;
     }
 }

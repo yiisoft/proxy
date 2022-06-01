@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy;
 
+use Yiisoft\Proxy\Config\ClassConfig;
+use Yiisoft\Proxy\Config\MethodConfig;
+use Yiisoft\Proxy\Config\ParameterConfig;
+use Yiisoft\Proxy\Config\TypeConfig;
+
 final class ClassRenderer
 {
-    private string $classSignatureTemplate = '{{modifiers}} {{classType}} {{name}} extends {{parent}}{{implements}}';
+    private string $classSignatureTemplate = '{{modifiers}} {{classType}} {{name}}{{extends}}{{parent}}{{implements}}';
 
     private string $proxyMethodSignatureTemplate = '{{modifiers}} function {{name}}({{params}}){{returnType}}';
 
@@ -14,15 +19,27 @@ final class ClassRenderer
 
     public function render(ClassConfig $classConfig): string
     {
-        return trim($this->renderClassSignature($classConfig)) . "\n" . '{' . $this->renderClassBody($classConfig) . '}';
+        return trim($this->renderClassSignature($classConfig))
+            . "\n"
+            . '{'
+            . $this->renderClassBody($classConfig)
+            . '}';
     }
 
     private function renderClassSignature(ClassConfig $classConfig): string
     {
+        $classType = $classConfig->isInterface
+            ? 'interface'
+            : 'class';
+        $extends = $classConfig->parent
+            ? ' extends '
+            : '';
+
         return strtr($this->classSignatureTemplate, [
             '{{modifiers}}' => $this->renderModifiers($classConfig->modifiers),
-            '{{classType}}' => $classConfig->isInterface ? 'interface' : 'class',
+            '{{classType}}' => $classType,
             '{{name}}' => $classConfig->shortName,
+            '{{extends}}' => $extends,
             '{{parent}}' => $classConfig->parent,
             '{{implements}}' => $this->renderImplements($classConfig->interfaces),
         ]);
@@ -30,7 +47,11 @@ final class ClassRenderer
 
     private function renderImplements(array $interfaces): string
     {
-        return $interfaces !== [] ? ' implements ' . implode(' ', $interfaces) : '';
+        if ($interfaces === []) {
+            return '';
+        }
+
+        return ' implements ' . implode(', ', $interfaces);
     }
 
     private function renderModifiers(array $modifiers): string
@@ -43,6 +64,11 @@ final class ClassRenderer
         return $this->renderMethods($classConfig->methods);
     }
 
+    /**
+     * @param MethodConfig[] $methods
+     *
+     * @return string
+     */
     private function renderMethods(array $methods): string
     {
         $methodsCode = '';
@@ -55,7 +81,13 @@ final class ClassRenderer
 
     private function renderMethod(MethodConfig $method): string
     {
-        return $this->renderMethodSignature($method) . "\n" . $this->margin() . '{' . $this->renderMethodBody($method) . $this->margin() . '}' . "\n";
+        return $this->renderMethodSignature($method)
+            . "\n" . $this->margin()
+            . '{'
+            . $this->renderMethodBody($method)
+            . $this->margin()
+            . '}'
+            . "\n";
     }
 
     private function renderMethodSignature(MethodConfig $method): string
@@ -80,52 +112,86 @@ final class ClassRenderer
 
     private function renderMethodParameter(ParameterConfig $parameter): string
     {
-        return ltrim(($parameter->hasType ? $this->renderType($parameter->type) : '') . ' $' . $parameter->name .
-            $this->renderParameterDefaultValue($parameter));
+        $type = $parameter->hasType
+            ? $this->renderType($parameter->type)
+            : '';
+        $output = $type
+            . ' $'
+            . $parameter->name
+            . $this->renderParameterDefaultValue($parameter);
+
+        return ltrim($output);
     }
 
     private function renderParameterDefaultValue(ParameterConfig $parameter): string
     {
-        return $parameter->isDefaultValueAvailable ? ' = ' .
-            ($parameter->isDefaultValueConstant ? $parameter->defaultValueConstantName : self::varExport($parameter->defaultValue)) : '';
+        if (!$parameter->isDefaultValueAvailable) {
+            return '';
+        }
+
+        $value = $parameter->isDefaultValueConstant
+            ? $parameter->defaultValueConstantName
+            : self::varExport($parameter->defaultValue);
+
+        return ' = ' . $value;
     }
 
     private function renderMethodBody(MethodConfig $method): string
     {
-        return "\n" . strtr($this->proxyMethodBodyTemplate, [
+        $output = strtr($this->proxyMethodBodyTemplate, [
             '{{return}}' => $this->margin(2) . $this->renderReturn($method),
             '{{methodName}}' => "'" . $method->name . "'",
             '{{params}}' => $this->renderMethodCallParameters($method->parameters),
-        ]) . "\n";
+        ]);
+
+        return "\n" . $output . "\n";
     }
 
     private function renderReturn(MethodConfig $method): string
     {
-        return $method->hasReturnType ? ($method->returnType->name === 'void' ? '' : 'return ') : 'return ';
+        if ($method->returnType?->name === 'void') {
+            return '';
+        }
+
+        return 'return ';
     }
 
     private function renderReturnType(MethodConfig $method): string
     {
-        return $method->hasReturnType ? ': ' . $this->renderType($method->returnType) : '';
+        if (!$method->hasReturnType) {
+            return '';
+        }
+
+        return ': ' . $this->renderType($method->returnType);
     }
 
     private function renderType(TypeConfig $type): string
     {
-        return ($type->allowsNull ? '?' : '') . $type->name;
+        if ($type->name === 'mixed' || !$type->allowsNull) {
+            return $type->name;
+        }
+
+        return '?' . $type->name;
     }
 
     private function renderMethodCallParameters(array $parameters): string
     {
-        $params = array_keys($parameters);
-        return $params !== [] ? '$' . implode(', $', $params) : '';
+        $keys = array_keys($parameters);
+        if ($keys === []) {
+            return '';
+        }
+
+        return '$' . implode(', $', $keys);
     }
 
-    private static function varExport($var): string
+    private static function varExport(mixed $var): string
     {
         $output = '';
         switch (gettype($var)) {
             case 'boolean':
-                $output = $var ? 'true' : 'false';
+                $output = $var
+                    ? 'true'
+                    : 'false';
                 break;
             case 'integer':
             case 'double':
@@ -143,10 +209,14 @@ final class ClassRenderer
                 } else {
                     $keys = array_keys($var);
                     $output .= '[';
-                    foreach ($keys as $key) {
+                    foreach ($keys as $index => $key) {
                         $output .= self::varExport($key);
                         $output .= ' => ';
                         $output .= self::varExport($var[$key]);
+
+                        if ($index !== array_key_last($keys)) {
+                            $output .= ', ';
+                        }
                     }
                     $output .= ']';
                 }
