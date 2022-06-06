@@ -16,8 +16,12 @@ final class MethodConfig
          * @var ParameterConfig[]
          */
         public array $parameters,
-        public bool $hasReturnType,
         public ?TypeConfig $returnType,
     ) {
+    }
+
+    public function hasReturnType(): bool
+    {
+        return $this->returnType !== null;
     }
 }

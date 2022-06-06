@@ -24,12 +24,12 @@ final class ProxyManager
         $this->classConfigFactory = new ClassConfigFactory();
     }
 
-    public function createObjectProxyFromInterface(
-        string $interface,
+    public function createObjectProxy(
+        string $baseStructure,
         string $parentProxyClass,
         array $constructorArguments
     ): ?object {
-        $className = $interface . 'Proxy';
+        $className = $baseStructure . 'Proxy';
         $shortClassName = $this->getProxyClassName($className);
 
         if (class_exists($shortClassName)) {
@@ -37,10 +37,8 @@ final class ProxyManager
         }
 
         if (!($classDeclaration = $this->classCache->get($className, $parentProxyClass))) {
-            $classConfig = $this->generateInterfaceProxyClassConfig(
-                $this->classConfigFactory->getInterfaceConfig($interface),
-                $parentProxyClass
-            );
+            $classConfig = $this->classConfigFactory->getClassConfig($baseStructure);
+            $classConfig = $this->generateProxyClassConfig($classConfig, $parentProxyClass);
             $classDeclaration = $this->classRenderer->render($classConfig);
             $this->classCache->set($className, $parentProxyClass, $classDeclaration);
         }
@@ -53,25 +51,28 @@ final class ProxyManager
         return new $shortClassName(...$constructorArguments);
     }
 
-    private function generateInterfaceProxyClassConfig(
-        ClassConfig $interfaceConfig,
+    private function generateProxyClassConfig(
+        ClassConfig $classConfig,
         string $parentProxyClass
     ): ClassConfig {
-        $interfaceConfig->isInterface = false;
-        $interfaceConfig->parent = $parentProxyClass;
-        $interfaceConfig->interfaces = [$interfaceConfig->name];
-        $interfaceConfig->name .= 'Proxy';
-        $interfaceConfig->shortName = $this->getProxyClassName($interfaceConfig->name);
+        if ($classConfig->isInterface) {
+            $classConfig->isInterface = false;
+            $classConfig->interfaces = [$classConfig->name];
+        }
 
-        foreach ($interfaceConfig->methods as $methodIndex => $method) {
+        $classConfig->parent = $parentProxyClass;
+        $classConfig->name .= 'Proxy';
+        $classConfig->shortName = $this->getProxyClassName($classConfig->name);
+
+        foreach ($classConfig->methods as $methodIndex => $method) {
             foreach ($method->modifiers as $index => $modifier) {
                 if ($modifier === 'abstract') {
-                    unset($interfaceConfig->methods[$methodIndex]->modifiers[$index]);
+                    unset($classConfig->methods[$methodIndex]->modifiers[$index]);
                 }
             }
         }
 
-        return $interfaceConfig;
+        return $classConfig;
     }
 
     private function getProxyClassName(string $fullClassName)

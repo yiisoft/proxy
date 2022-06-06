@@ -35,7 +35,7 @@ class ProxyTest extends TestCase
         $manager = new ProxyManager($path);
 
         /** @var Graph|Proxy $object */
-        $object = $manager->createObjectProxyFromInterface(GraphInterface::class, Proxy::class, [new Graph()]);
+        $object = $manager->createObjectProxy(GraphInterface::class, Proxy::class, [new Graph()]);
         $this->assertIsObject($object);
         $this->assertSame('Yiisoft_Proxy_Tests_Stub_GraphInterfaceProxy', get_class($object));
 
@@ -49,7 +49,7 @@ class ProxyTest extends TestCase
         $manager = new ProxyManager();
 
         /** @var Car|Proxy $object */
-        $object = $manager->createObjectProxyFromInterface(CarInterface::class, Proxy::class, [new Car()]);
+        $object = $manager->createObjectProxy(CarInterface::class, Proxy::class, [new Car()]);
         $this->assertIsObject($object);
 
         $this->assertSame(1, $object->horsepower());
@@ -62,7 +62,7 @@ class ProxyTest extends TestCase
 
         $instance = new Graph();
         /** @var Graph|Proxy $object */
-        $object = $manager->createObjectProxyFromInterface(GraphInterface::class, Proxy::class, [$instance]);
+        $object = $manager->createObjectProxy(GraphInterface::class, Proxy::class, [$instance]);
         $this->assertSame($instance, $object->getInstance());
     }
 
@@ -72,7 +72,7 @@ class ProxyTest extends TestCase
         $manager = new ProxyManager($path);
 
         /** @var Graph|Proxy $object */
-        $object = $manager->createObjectProxyFromInterface(GraphInterface::class, Proxy::class, [new Graph()]);
+        $object = $manager->createObjectProxy(GraphInterface::class, Proxy::class, [new Graph()]);
 
         $this->assertEquals($object, $object->getGraphInstance());
         $this->assertNotSame($object, $object->getGraphInstance());
@@ -87,7 +87,7 @@ class ProxyTest extends TestCase
         $manager = new ProxyManager($path);
 
         /** @var Car|Proxy $object */
-        $object = $manager->createObjectProxyFromInterface(CarInterface::class, Proxy::class, [new Car()]);
+        $object = $manager->createObjectProxy(CarInterface::class, Proxy::class, [new Car()]);
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Not implemented yet.');
         $object->ride();
@@ -98,7 +98,7 @@ class ProxyTest extends TestCase
         $path = sys_get_temp_dir();
         $manager = new ProxyManager($path);
         /** @var Car|Proxy $object */
-        $object = $manager->createObjectProxyFromInterface(CarInterface::class, Proxy::class, [new Car()]);
+        $object = $manager->createObjectProxy(CarInterface::class, Proxy::class, [new Car()]);
 
         try {
             $object->ride();
@@ -114,7 +114,7 @@ class ProxyTest extends TestCase
         $path = sys_get_temp_dir();
         $manager = new ProxyManager($path);
         /** @var Car|Proxy $object */
-        $object = $manager->createObjectProxyFromInterface(CarInterface::class, Proxy::class, [new Car()]);
+        $object = $manager->createObjectProxy(CarInterface::class, Proxy::class, [new Car()]);
 
         try {
             $object->ride();
@@ -124,5 +124,15 @@ class ProxyTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Not working currently.');
         $object->park();
+    }
+
+    public function testCreateObjectProxyFromClass(): void
+    {
+        $path = sys_get_temp_dir();
+        $manager = new ProxyManager($path);
+        /** @var Graph|Proxy $object */
+        $object = $manager->createObjectProxy(Graph::class, Proxy::class, [new Graph()]);
+
+        $this->assertSame(2, $object->edgesCount());
     }
 }

@@ -16,7 +16,7 @@ class ClassRendererTest extends TestCase
     public function testRender(): void
     {
         $factory = new ClassConfigFactory();
-        $config = $factory->getInterfaceConfig(NodeInterface::class);
+        $config = $factory->getClassConfig(NodeInterface::class);
 
         $renderer = new ClassRenderer();
         $output = $renderer->render($config);
@@ -81,7 +81,7 @@ EOD;
     public function testRenderInterfaceWithoutImplements(): void
     {
         $factory = new ClassConfigFactory();
-        $config = $factory->getInterfaceConfig(NodeGrandParentInterface::class);
+        $config = $factory->getClassConfig(NodeGrandParentInterface::class);
 
         $renderer = new ClassRenderer();
         $output = $renderer->render($config);
