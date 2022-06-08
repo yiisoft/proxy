@@ -19,7 +19,7 @@ use Yiisoft\Proxy\Config\TypeConfig;
 /**
  * A factory for creating class configs ({@see ClassConfig}). Uses PHP `Reflection` to get the necessary metadata.
  *
- * @link https://www.php.net/manual/ru/book.reflection.php
+ * @link https://www.php.net/manual/en/book.reflection.php
  */
 final class ClassConfigFactory
 {
