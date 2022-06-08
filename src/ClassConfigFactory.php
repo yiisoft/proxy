@@ -27,9 +27,10 @@ final class ClassConfigFactory
      * Gets single class config based for individual class.
      *
      * @param string $className Full class or interface name (including namespace).
-     * @return ClassConfig Class config with all related configs (methods, parameters, types) linked.
      *
      * @throws InvalidArgumentException In case class or interface does not exist.
+     *
+     * @return ClassConfig Class config with all related configs (methods, parameters, types) linked.
      */
     public function getClassConfig(string $className): ClassConfig
     {
@@ -55,6 +56,7 @@ final class ClassConfigFactory
      * Gets the complete set of method configs for a given class reflection.
      *
      * @param ReflectionClass $class Reflection of a class.
+     *
      * @return MethodConfig[] List of method configs. The order is maintained.
      */
     private function getMethodConfigs(ReflectionClass $class): array
@@ -71,6 +73,7 @@ final class ClassConfigFactory
      * Gets single method config for individual method reflection.
      *
      * @param ReflectionMethod $method Reflection of a method.
+     *
      * @return MethodConfig Single method config.
      */
     private function getMethodConfig(ReflectionMethod $method): MethodConfig
@@ -87,6 +90,7 @@ final class ClassConfigFactory
      * Gets the complete set of parameter configs for a given method reflection.
      *
      * @param ReflectionMethod $method Reflection of a method.
+     *
      * @return ParameterConfig[] List of parameter configs. The order is maintained.
      */
     private function getMethodParameterConfigs(ReflectionMethod $method): array
@@ -103,6 +107,7 @@ final class ClassConfigFactory
      * Gets single parameter config for individual method's parameter reflection.
      *
      * @param ReflectionParameter $param Reflection of a method's parameter.
+     *
      * @return ParameterConfig Single parameter config.
      */
     private function getMethodParameterConfig(ReflectionParameter $param): ParameterConfig
@@ -128,6 +133,7 @@ final class ClassConfigFactory
      * Gets single type config for individual method's parameter reflection.
      *
      * @param ReflectionParameter $param Reflection pf a method's parameter.
+     *
      * @return TypeConfig|null Single type config. `null` is returned when type is not specified.
      */
     private function getMethodParameterTypeConfig(ReflectionParameter $param): ?TypeConfig
@@ -148,6 +154,7 @@ final class ClassConfigFactory
      * Gets single return type config for individual method reflection.
      *
      * @param ReflectionMethod $method Reflection of a method.
+     *
      * @return TypeConfig|null Single type config. `null` is returned when return type is not specified.
      */
     private function getMethodReturnTypeConfig(ReflectionMethod $method): ?TypeConfig
