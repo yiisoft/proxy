@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Yiisoft\Files\FileHelper;
 use Yiisoft\Proxy\ClassCache;
 use Yiisoft\Proxy\Tests\Stub\Node;
+use Yiisoft\Proxy\Tests\Stub\MyProxy;
 use function sys_get_temp_dir;
 
 class ClassCacheTest extends TestCase
@@ -18,7 +19,7 @@ class ClassCacheTest extends TestCase
         FileHelper::removeDirectory($directory);
     }
 
-    public function testSetGet(): void
+    public function testSetAndGet(): void
     {
         $path = sys_get_temp_dir();
         $cache = new ClassCache($path);
@@ -27,28 +28,15 @@ class Node
 {}
 EOD;
 
-        $cache->set(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent', $classDeclaration);
+        $cache->set(Node::class, MyProxy::class, $classDeclaration);
         $expectedClassDeclaration = <<<'EOD'
 <?php
 
 class Node
 {}
 EOD;
-        $actualClassDeclaration = $cache->get(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent');
+        $actualClassDeclaration = $cache->get(Node::class, MyProxy::class);
         $this->assertSame($expectedClassDeclaration, $actualClassDeclaration);
-    }
-
-    public function testSetGetWithNullCachePath(): void
-    {
-        $cache = new ClassCache();
-        $classDeclaration = <<<'EOD'
-class Node
-{}
-EOD;
-
-        $cache->set(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent', $classDeclaration);
-        $actualClassDeclaration = $cache->get(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent');
-        $this->assertNull($actualClassDeclaration);
     }
 
     public function testGetWithoutSet(): void
@@ -56,7 +44,7 @@ EOD;
         $path = sys_get_temp_dir();
         $cache = new ClassCache($path);
 
-        $actualClassDeclaration = $cache->get(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent');
+        $actualClassDeclaration = $cache->get(Node::class, MyProxy::class);
         $this->assertNull($actualClassDeclaration);
     }
 
@@ -68,32 +56,13 @@ EOD;
 class Node
 {}
 EOD;
-        $cache->set(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent', $classDeclaration);
+        $cache->set(Node::class, MyProxy::class, $classDeclaration);
 
         $expectedClassPath = implode(
             DIRECTORY_SEPARATOR,
-            [sys_get_temp_dir(), 'Yiisoft', 'Proxy', 'Tests', 'Stub', 'Node.NodeParent.php']
+            [sys_get_temp_dir(), 'Yiisoft', 'Proxy', 'Tests', 'Stub', 'Node.MyProxy.php']
         );
-        $actualClassPath = $cache->getClassPath(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent');
+        $actualClassPath = $cache->getClassPath(Node::class, MyProxy::class);
         $this->assertEquals($expectedClassPath, $actualClassPath);
-    }
-
-    public function testSetAndGetClassPathWithNullCachePath(): void
-    {
-        if (PHP_OS_FAMILY !== 'Linux') {
-            $this->markTestSkipped();
-        }
-
-        $cache = new ClassCache();
-        $classDeclaration = <<<'EOD'
-class Node
-{}
-EOD;
-        $cache->set(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent', $classDeclaration);
-
-        $dir = DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, ['Yiisoft', 'Proxy', 'Tests', 'Stub']);
-        $this->expectExceptionMessage("Directory \"{$dir}\" was not created");
-
-        $cache->getClassPath(Node::class, 'Yiisoft\Proxy\Tests\Stub\NodeParent');
     }
 }

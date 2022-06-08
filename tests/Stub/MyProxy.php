@@ -6,7 +6,7 @@ namespace Yiisoft\Proxy\Tests\Stub;
 
 use Yiisoft\Proxy\ObjectProxy;
 
-class Proxy extends ObjectProxy
+class MyProxy extends ObjectProxy
 {
     protected function executeMethodProxy(string $methodName, array $arguments, $result, float $timeStart)
     {

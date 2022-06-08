@@ -8,18 +8,17 @@ use Yiisoft\Proxy\Config\ClassConfig;
 
 final class ProxyManager
 {
-    private ?string $cachePath;
-
     private ClassRenderer $classRenderer;
 
     private ClassConfigFactory $classConfigFactory;
 
-    private ClassCache $classCache;
+    private ?ClassCache $classCache;
+
+    public const PROXY_SUFFIX = 'Proxy';
 
     public function __construct(string $cachePath = null)
     {
-        $this->cachePath = $cachePath;
-        $this->classCache = new ClassCache($cachePath);
+        $this->classCache = $cachePath ? new ClassCache($cachePath) : null;
         $this->classRenderer = new ClassRenderer();
         $this->classConfigFactory = new ClassConfigFactory();
     }
@@ -29,23 +28,24 @@ final class ProxyManager
         string $parentProxyClass,
         array $constructorArguments
     ): ?object {
-        $className = $baseStructure . 'Proxy';
+        $className = $baseStructure . self::PROXY_SUFFIX;
         $shortClassName = $this->getProxyClassName($className);
 
         if (class_exists($shortClassName)) {
             return new $shortClassName(...$constructorArguments);
         }
 
-        if (!($classDeclaration = $this->classCache->get($className, $parentProxyClass))) {
+        $classDeclaration = $this->classCache?->get($className, $parentProxyClass);
+        if (!$classDeclaration) {
             $classConfig = $this->classConfigFactory->getClassConfig($baseStructure);
             $classConfig = $this->generateProxyClassConfig($classConfig, $parentProxyClass);
             $classDeclaration = $this->classRenderer->render($classConfig);
-            $this->classCache->set($className, $parentProxyClass, $classDeclaration);
+            $this->classCache?->set($baseStructure, $parentProxyClass, $classDeclaration);
         }
-        if ($this->cachePath === null) {
+        if (!$this->classCache) {
             eval(str_replace('<?php', '', $classDeclaration));
         } else {
-            $path = $this->classCache->getClassPath($className, $parentProxyClass);
+            $path = $this->classCache->getClassPath($baseStructure, $parentProxyClass);
             require $path;
         }
         return new $shortClassName(...$constructorArguments);
@@ -61,7 +61,7 @@ final class ProxyManager
         }
 
         $classConfig->parent = $parentProxyClass;
-        $classConfig->name .= 'Proxy';
+        $classConfig->name .= self::PROXY_SUFFIX;
         $classConfig->shortName = $this->getProxyClassName($classConfig->name);
 
         foreach ($classConfig->methods as $methodIndex => $method) {
