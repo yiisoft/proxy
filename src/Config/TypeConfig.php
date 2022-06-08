@@ -15,6 +15,7 @@ final class TypeConfig
          * @var string The string representation of a type, for example: `int`, `bool`, etc. In case of a class it's a
          * full path including namespace, for example `Yiisoft\Proxy\Tests\Stub\Node`. For built-in classes like
          * `ArrayIterator` the leading slash is not included.
+         *
          * @link https://www.php.net/manual/en/language.types.declarations.php
          */
         public string $name,
