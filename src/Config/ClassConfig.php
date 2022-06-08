@@ -16,6 +16,7 @@ final class ClassConfig
         public bool $isInterface,
         /**
          * @var string Namespace, for example: `Yiisoft\Proxy\Tests\Stub`.
+         *
          * @link https://www.php.net/manual/en/language.namespaces.php
          */
         public string $namespace,
