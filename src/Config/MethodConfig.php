@@ -33,6 +33,7 @@ final class MethodConfig
 
     /**
      * Whether a method has return type.
+     *
      * @return bool `true` if return type specified and `false` otherwise.
      */
     public function hasReturnType(): bool
