@@ -33,7 +33,6 @@ final class ClassCache
      * @param string $baseProxyClassName The full name of {@see ObjectProxy} implementation (with namespace) which will
      * be the base class for proxy. For example: `MyProxy`.
      * @param string $classContents The whole class contents without opening PHP tag (it's prepended automatically).
-     * @return void
      */
     public function set(string $className, string $baseProxyClassName, string $classContents): void
     {
@@ -45,10 +44,11 @@ final class ClassCache
      *
      * @param string $className {@see set()}
      * @param string $baseProxyClassName {@see set())
-     * @return string|null In case of presence data in cache the whole class contents (including PHP opening tag)
-     * returned as a string. In case of its absence or other errors - `null` is returned.
      *
      * @throws Exception When unable to write to a file in {@see getClassPath()}.
+     *
+     * @return string|null In case of presence data in cache the whole class contents (including PHP opening tag)
+     * returned as a string. In case of its absence or other errors - `null` is returned.
      */
     public function get(string $className, string $baseProxyClassName): ?string
     {
@@ -68,9 +68,10 @@ final class ClassCache
      *
      * @param string $className {@see set()}
      * @param string $baseProxyClassName {@see set()}
-     * @return string
      *
      * @throws RuntimeException In case when it's impossible to use or create {@see $cachePath}.
+     *
+     * @return string
      */
     public function getClassPath(string $className, string $baseProxyClassName): string
     {
@@ -93,6 +94,7 @@ final class ClassCache
      *
      * @param string $className {@see set()}
      * @param string $baseProxyClassName {@see set()}
+     *
      * @return string[] Array with two elements, the first one is a file name and the second one is a path. For example:
      * `[`/tmp/Yiisoft/Proxy/Tests/Stub`, `GraphInterface.MyProxy.php`]` or
      * `[`/tmp/Yiisoft/Proxy/Tests/Stub`, `Graph.MyProxy.php`]`.
