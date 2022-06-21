@@ -112,7 +112,7 @@ final class ClassRenderer
 
     private function renderMethodParameter(ParameterConfig $parameter): string
     {
-        $type = $parameter->hasType
+        $type = $parameter->hasType()
             ? $this->renderType($parameter->type)
             : '';
         $output = $type
@@ -158,7 +158,7 @@ final class ClassRenderer
 
     private function renderReturnType(MethodConfig $method): string
     {
-        if (!$method->hasReturnType) {
+        if (!$method->hasReturnType()) {
             return '';
         }
 

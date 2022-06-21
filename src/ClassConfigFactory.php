@@ -18,7 +18,7 @@ use Yiisoft\Proxy\Config\TypeConfig;
 
 final class ClassConfigFactory
 {
-    public function getInterfaceConfig(string $interfaceName): ClassConfig
+    public function getClassConfig(string $interfaceName): ClassConfig
     {
         try {
             $reflection = new ReflectionClass($interfaceName);
@@ -26,12 +26,8 @@ final class ClassConfigFactory
             throw new InvalidArgumentException("$interfaceName must exist.");
         }
 
-        if (!$reflection->isInterface()) {
-            throw new InvalidArgumentException("$interfaceName is not an interface.");
-        }
-
         return new ClassConfig(
-            isInterface: true,
+            isInterface: $reflection->isInterface(),
             namespace: $reflection->getNamespaceName(),
             modifiers: Reflection::getModifierNames($reflection->getModifiers()),
             name: $reflection->getName(),
@@ -61,7 +57,6 @@ final class ClassConfigFactory
             modifiers: Reflection::getModifierNames($method->getModifiers()),
             name: $method->getName(),
             parameters: $this->getMethodParameterConfigs($method),
-            hasReturnType: $method->hasReturnType(),
             returnType: $this->getMethodTypeConfig($method),
         );
     }
@@ -82,7 +77,6 @@ final class ClassConfigFactory
     private function getMethodParameterConfig(ReflectionParameter $param): ParameterConfig
     {
         return new ParameterConfig(
-            hasType: $param->hasType(),
             type: $this->getMethodParameterTypeConfig($param),
             name: $param->getName(),
             allowsNull: $param->allowsNull(),

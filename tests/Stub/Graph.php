@@ -20,4 +20,9 @@ class Graph implements GraphInterface
     {
         return new self();
     }
+
+    public function edgesCount(): int
+    {
+        return 2;
+    }
 }

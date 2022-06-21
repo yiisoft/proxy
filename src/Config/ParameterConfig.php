@@ -7,7 +7,6 @@ namespace Yiisoft\Proxy\Config;
 final class ParameterConfig
 {
     public function __construct(
-        public bool $hasType,
         public ?TypeConfig $type,
         public string $name,
         public bool $allowsNull,
@@ -16,5 +15,10 @@ final class ParameterConfig
         public ?string $defaultValueConstantName,
         public mixed $defaultValue,
     ) {
+    }
+
+    public function hasType(): bool
+    {
+        return $this->type !== null;
     }
 }

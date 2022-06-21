@@ -10,31 +10,23 @@ use Yiisoft\Proxy\Config\ClassConfig;
 use Yiisoft\Proxy\Config\MethodConfig;
 use Yiisoft\Proxy\Config\ParameterConfig;
 use Yiisoft\Proxy\Config\TypeConfig;
-use Yiisoft\Proxy\Tests\Stub\Node;
+use Yiisoft\Proxy\Tests\Stub\Graph;
 use Yiisoft\Proxy\Tests\Stub\NodeInterface;
 
 class ClassConfigFactoryTest extends TestCase
 {
-    public function testGetInterfaceConfigOfNonExistingInterface(): void
+    public function testGetClassConfigForNonExistingInterface(): void
     {
         $this->expectExceptionMessage('NonExistingNodeInterface must exist');
 
         $factory = new ClassConfigFactory();
-        $factory->getInterfaceConfig('Yiisoft\Proxy\Tests\Stub\NonExistingNodeInterface');
+        $factory->getClassConfig('Yiisoft\Proxy\Tests\Stub\NonExistingNodeInterface');
     }
 
-    public function testGetInterfaceConfigOfNonInterface(): void
-    {
-        $this->expectExceptionMessage('Node is not an interface');
-
-        $factory = new ClassConfigFactory();
-        $factory->getInterfaceConfig(Node::class);
-    }
-
-    public function testGetInterfaceConfig(): void
+    public function testGetClassConfigForInterface(): void
     {
         $factory = new ClassConfigFactory();
-        $config = $factory->getInterfaceConfig(NodeInterface::class);
+        $config = $factory->getClassConfig(NodeInterface::class);
         $expectedConfig = new ClassConfig(
             isInterface: true,
             namespace: 'Yiisoft\Proxy\Tests\Stub',
@@ -57,7 +49,6 @@ class ClassConfigFactoryTest extends TestCase
                     name: 'nodeInterfaceMethod1',
                     parameters: [
                         'param1' => new ParameterConfig(
-                            hasType: false,
                             type: null,
                             name: 'param1',
                             allowsNull: true,
@@ -67,7 +58,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: null
                         ),
                         'param2' => new ParameterConfig(
-                            hasType: true,
                             type: new TypeConfig(
                                 name: 'int',
                                 allowsNull: false
@@ -80,7 +70,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: null
                         ),
                         'param3' => new ParameterConfig(
-                            hasType: true,
                             type: new TypeConfig(
                                 name: 'ArrayIterator',
                                 allowsNull: false
@@ -93,7 +82,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: null
                         ),
                         'param4' => new ParameterConfig(
-                            hasType: true,
                             type: new TypeConfig(
                                 name: 'mixed',
                                 allowsNull: true
@@ -106,7 +94,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: null
                         ),
                         'param5' => new ParameterConfig(
-                            hasType: true,
                             type: new TypeConfig(
                                 name: 'bool',
                                 allowsNull: true
@@ -119,7 +106,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: null
                         ),
                         'param6' => new ParameterConfig(
-                            hasType: true,
                             type: new TypeConfig(
                                 name: 'float',
                                 allowsNull: false
@@ -132,7 +118,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: 3.5
                         ),
                         'param7' => new ParameterConfig(
-                            hasType: true,
                             type: new TypeConfig(
                                 name: 'array',
                                 allowsNull: false
@@ -145,7 +130,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: []
                         ),
                         'param8' => new ParameterConfig(
-                            hasType: true,
                             type: new TypeConfig(
                                 name: 'string',
                                 allowsNull: false
@@ -158,7 +142,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: 'CONST1_VALUE'
                         ),
                     ],
-                    hasReturnType: true,
                     returnType: new TypeConfig(
                         name: 'int',
                         allowsNull: true
@@ -171,7 +154,6 @@ class ClassConfigFactoryTest extends TestCase
                     ],
                     name: 'nodeInterfaceMethod2',
                     parameters: [],
-                    hasReturnType: false,
                     returnType: null
                 ),
                 'nodeInterfaceMethod3' => new MethodConfig(
@@ -182,7 +164,6 @@ class ClassConfigFactoryTest extends TestCase
                     name: 'nodeInterfaceMethod3',
                     parameters: [
                         'param1' => new ParameterConfig(
-                            hasType: true,
                             type: new TypeConfig(
                                 name: 'bool',
                                 allowsNull: false
@@ -195,7 +176,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: false
                         ),
                         'param2' => new ParameterConfig(
-                            hasType: true,
                             type: new TypeConfig(
                                 name: 'bool',
                                 allowsNull: false
@@ -208,7 +188,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: true
                         ),
                         'param3' => new ParameterConfig(
-                            hasType: true,
                             type: new TypeConfig(
                                 name: 'string',
                                 allowsNull: false
@@ -221,7 +200,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: 'string'
                         ),
                         'param4' => new ParameterConfig(
-                            hasType: true,
                             type: new TypeConfig(
                                 name: 'string',
                                 allowsNull: true
@@ -234,7 +212,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: null
                         ),
                         'param5' => new ParameterConfig(
-                            hasType: true,
                             type: new TypeConfig(
                                 name: 'array',
                                 allowsNull: false
@@ -247,7 +224,6 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValue: [1, 'value']
                         ),
                     ],
-                    hasReturnType: true,
                     returnType: new TypeConfig(
                         name: 'void',
                         allowsNull: false
@@ -260,7 +236,6 @@ class ClassConfigFactoryTest extends TestCase
                     ],
                     name: 'count',
                     parameters: [],
-                    hasReturnType: false,
                     returnType: null
                 ),
                 'parentMethod1' => new MethodConfig(
@@ -270,7 +245,6 @@ class ClassConfigFactoryTest extends TestCase
                     ],
                     name: 'parentMethod1',
                     parameters: [],
-                    hasReturnType: true,
                     returnType: new TypeConfig(
                         name: 'self',
                         allowsNull: false
@@ -283,7 +257,6 @@ class ClassConfigFactoryTest extends TestCase
                     ],
                     name: 'parentMethod2',
                     parameters: [],
-                    hasReturnType: false,
                     returnType: null
                 ),
                 'grandParentMethod1' => new MethodConfig(
@@ -293,7 +266,6 @@ class ClassConfigFactoryTest extends TestCase
                     ],
                     name: 'grandParentMethod1',
                     parameters: [],
-                    hasReturnType: true,
                     returnType: new TypeConfig(
                         name: 'ArrayObject',
                         allowsNull: false
@@ -306,7 +278,6 @@ class ClassConfigFactoryTest extends TestCase
                     ],
                     name: 'grandParentMethod2',
                     parameters: [],
-                    hasReturnType: true,
                     returnType: new TypeConfig(
                         name: 'ArrayObject',
                         allowsNull: false
@@ -319,7 +290,6 @@ class ClassConfigFactoryTest extends TestCase
                     ],
                     name: 'grandParentMethod3',
                     parameters: [],
-                    hasReturnType: true,
                     returnType: new TypeConfig(
                         name: 'Yiisoft\Proxy\Tests\Stub\Node',
                         allowsNull: false
@@ -332,9 +302,76 @@ class ClassConfigFactoryTest extends TestCase
                     ],
                     name: 'grandParentMethod4',
                     parameters: [],
-                    hasReturnType: true,
                     returnType: new TypeConfig(
                         name: 'Yiisoft\Proxy\Tests\Stub\Node',
+                        allowsNull: false
+                    )
+                ),
+            ]
+        );
+
+        $this->assertEquals($expectedConfig, $config);
+    }
+
+    public function testGetClassConfigForClass(): void
+    {
+        $factory = new ClassConfigFactory();
+        $config = $factory->getClassConfig(Graph::class);
+        $expectedConfig = new ClassConfig(
+            isInterface: false,
+            namespace: 'Yiisoft\Proxy\Tests\Stub',
+            modifiers: [],
+            name: 'Yiisoft\Proxy\Tests\Stub\Graph',
+            shortName: 'Graph',
+            parent: '',
+            interfaces: ['Yiisoft\Proxy\Tests\Stub\GraphInterface'],
+            methods: [
+                'nodesCount' => new MethodConfig(
+                    modifiers: ['public'],
+                    name: 'nodesCount',
+                    parameters: [
+                        'previousNodesCount' => new ParameterConfig(
+                            type: new TypeConfig(
+                                name: 'int',
+                                allowsNull: false
+                            ),
+                            name: 'previousNodesCount',
+                            allowsNull: false,
+                            isDefaultValueAvailable: false,
+                            isDefaultValueConstant: null,
+                            defaultValueConstantName: null,
+                            defaultValue: null
+                        ),
+                    ],
+                    returnType: new TypeConfig(
+                        name: 'int',
+                        allowsNull: false
+                    )
+                ),
+                'getGraphInstance' => new MethodConfig(
+                    modifiers: ['public'],
+                    name: 'getGraphInstance',
+                    parameters: [],
+                    returnType: new TypeConfig(
+                        name: 'self',
+                        allowsNull: false
+                    )
+                ),
+                'makeNewGraph' => new MethodConfig(
+                    modifiers: ['public'],
+                    name: 'makeNewGraph',
+                    parameters: [],
+                    returnType: new TypeConfig(
+                        name: 'self',
+                        allowsNull: false
+                    )
+                ),
+                'edgesCount' => new MethodConfig(
+                    modifiers: ['public'],
+                    name: 'edgesCount',
+                    parameters: [],
+                    returnType: new TypeConfig(
+                        name: 'int',
                         allowsNull: false
                     )
                 ),
