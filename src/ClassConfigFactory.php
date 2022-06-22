@@ -96,7 +96,6 @@ final class ClassConfigFactory
 
     private function getMethodParameterTypeConfig(ReflectionParameter $param): ?TypeConfig
     {
-        /** @var ReflectionNamedType $type */
         $type = $param->getType();
         if (!$type) {
             return null;
@@ -105,6 +104,7 @@ final class ClassConfigFactory
         if ($type instanceof ReflectionUnionType) {
             $name = $this->getUnionType($type);
         } else {
+            /** @var ReflectionNamedType $type */
             $name = $type->getName();
         }
 
@@ -116,7 +116,6 @@ final class ClassConfigFactory
 
     private function getMethodTypeConfig(ReflectionMethod $method): ?TypeConfig
     {
-        /** @var ReflectionNamedType $returnType */
         $returnType = $method->getReturnType();
         if (!$returnType) {
             return null;
@@ -125,6 +124,7 @@ final class ClassConfigFactory
         if ($returnType instanceof ReflectionUnionType) {
             $name = $this->getUnionType($returnType);
         } else {
+            /** @var ReflectionNamedType $returnType */
             $name = $returnType->getName();
         }
 
