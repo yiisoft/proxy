@@ -104,6 +104,7 @@ final class ClassConfigFactory
         if ($type instanceof ReflectionUnionType) {
             $name = $this->getUnionType($type);
         } else {
+            /** @var ReflectionNamedType $name */
             $name = $type->getName();
         }
 
@@ -124,6 +125,7 @@ final class ClassConfigFactory
         if ($returnType instanceof ReflectionUnionType) {
             $name = $this->getUnionType($returnType);
         } else {
+            /** @var ReflectionNamedType $name */
             $name = $returnType->getName();
         }
 
