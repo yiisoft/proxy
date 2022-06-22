@@ -136,7 +136,10 @@ final class ClassConfigFactory
 
     private function getUnionType(ReflectionUnionType $type): string
     {
-        $types = array_map(static fn (ReflectionNamedType $namedType) => $namedType->getName(), $type->getTypes());
+        $types = array_map(
+            static fn (ReflectionNamedType $namedType) => $namedType->getName(),
+            $type->getTypes()
+        );
 
         return implode('|', $types);
     }
