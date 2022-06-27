@@ -33,9 +33,9 @@ interface NodeInterface implements Countable, Yiisoft\Proxy\Tests\Stub\NodeParen
         return $this->call('nodeInterfaceMethod2', []);
     }
 
-    abstract public function nodeInterfaceMethod3(bool $param1 = false, bool $param2 = true, string $param3 = 'string', ?string $param4 = null, array $param5 = [0 => 1, 1 => 'value']): void
+    abstract public function nodeInterfaceMethod3(bool $param1 = false, bool $param2 = true, string $param3 = 'string', ?string $param4 = null, array $param5 = [0 => 1, 1 => 'value'], Stringable|string $param6 = 'stringable'): void
     {
-        $this->call('nodeInterfaceMethod3', [$param1, $param2, $param3, $param4, $param5]);
+        $this->call('nodeInterfaceMethod3', [$param1, $param2, $param3, $param4, $param5, $param6]);
     }
 
     abstract public function count()

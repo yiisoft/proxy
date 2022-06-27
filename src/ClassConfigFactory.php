@@ -11,6 +11,7 @@ use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
+use ReflectionUnionType;
 use Yiisoft\Proxy\Config\ClassConfig;
 use Yiisoft\Proxy\Config\MethodConfig;
 use Yiisoft\Proxy\Config\ParameterConfig;
@@ -95,29 +96,51 @@ final class ClassConfigFactory
 
     private function getMethodParameterTypeConfig(ReflectionParameter $param): ?TypeConfig
     {
-        /** @var ReflectionNamedType $type */
         $type = $param->getType();
         if (!$type) {
             return null;
         }
 
+        if ($type instanceof ReflectionUnionType) {
+            $name = $this->getUnionType($type);
+        } else {
+            /** @var ReflectionNamedType $type */
+            $name = $type->getName();
+        }
+
         return new TypeConfig(
-            name: $type->getName(),
+            name: $name,
             allowsNull: $type->allowsNull(),
         );
     }
 
     private function getMethodTypeConfig(ReflectionMethod $method): ?TypeConfig
     {
-        /** @var ReflectionNamedType $returnType */
         $returnType = $method->getReturnType();
         if (!$returnType) {
             return null;
         }
 
+        if ($returnType instanceof ReflectionUnionType) {
+            $name = $this->getUnionType($returnType);
+        } else {
+            /** @var ReflectionNamedType $returnType */
+            $name = $returnType->getName();
+        }
+
         return new TypeConfig(
-            name: $returnType->getName(),
+            name: $name,
             allowsNull: $returnType->allowsNull(),
         );
+    }
+
+    private function getUnionType(ReflectionUnionType $type): string
+    {
+        $types = array_map(
+            static fn (ReflectionNamedType $namedType) => $namedType->getName(),
+            $type->getTypes()
+        );
+
+        return implode('|', $types);
     }
 }

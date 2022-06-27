@@ -75,7 +75,7 @@ final class ProxyManager
         return $classConfig;
     }
 
-    private function getProxyClassName(string $fullClassName)
+    private function getProxyClassName(string $fullClassName): string
     {
         return str_replace('\\', '_', $fullClassName);
     }

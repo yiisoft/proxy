@@ -223,6 +223,18 @@ class ClassConfigFactoryTest extends TestCase
                             defaultValueConstantName: null,
                             defaultValue: [1, 'value']
                         ),
+                        'param6' => new ParameterConfig(
+                            type: new TypeConfig(
+                                name: 'Stringable|string',
+                                allowsNull: false
+                            ),
+                            name: 'param6',
+                            allowsNull: false,
+                            isDefaultValueAvailable: true,
+                            isDefaultValueConstant: false,
+                            defaultValueConstantName: null,
+                            defaultValue: 'stringable'
+                        ),
                     ],
                     returnType: new TypeConfig(
                         name: 'void',
@@ -372,6 +384,15 @@ class ClassConfigFactoryTest extends TestCase
                     parameters: [],
                     returnType: new TypeConfig(
                         name: 'int',
+                        allowsNull: false
+                    )
+                ),
+                'name' => new MethodConfig(
+                    modifiers: ['public'],
+                    name: 'name',
+                    parameters: [],
+                    returnType: new TypeConfig(
+                        name: 'Stringable|string',
                         allowsNull: false
                     )
                 ),

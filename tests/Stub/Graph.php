@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy\Tests\Stub;
 
+use Stringable;
+
 class Graph implements GraphInterface
 {
     public function nodesCount(int $previousNodesCount): int
@@ -24,5 +26,10 @@ class Graph implements GraphInterface
     public function edgesCount(): int
     {
         return 2;
+    }
+
+    public function name(): Stringable|string
+    {
+        return 'Graph';
     }
 }
