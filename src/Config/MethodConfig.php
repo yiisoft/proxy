@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Proxy\Config;
 
 /**
- * A method metadata. {@see ClassConfigFactory} is used for creation.
+ * A method metadata. {@see ClassConfigFactory} is used for creation. Note that it relies only on PHP type hints and
+ * ignores PHPDoc completely.
  */
 final class MethodConfig
 {

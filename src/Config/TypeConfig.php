@@ -6,7 +6,9 @@ namespace Yiisoft\Proxy\Config;
 
 /**
  * A type metadata. {@see ClassConfigFactory} is used for creation. Can be used both for method parameters' types and
- * return type. Note that it relies only on PHP type hints and ignores PHPDoc completely.
+ * return type.
+ *
+ * @link https://www.php.net/manual/en/language.types.declarations.php
  */
 final class TypeConfig
 {
