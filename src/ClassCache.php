@@ -80,7 +80,7 @@ final class ClassCache
         try {
             FileHelper::ensureDirectory($classFilePath, 0777);
         } catch (RuntimeException) {
-            throw new RuntimeException("Directory \"$classFilePath\" was not created");
+            throw new RuntimeException("Directory \"$classFilePath\" was not created.");
         }
 
         return $classFilePath . DIRECTORY_SEPARATOR . $classFileName;
