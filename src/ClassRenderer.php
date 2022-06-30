@@ -184,6 +184,11 @@ final class ClassRenderer
         return '$' . implode(', $', $keys);
     }
 
+    /**
+     * @param mixed $var
+     *
+     * @return string
+     */
     private static function varExport(mixed $var): string
     {
         $output = '';

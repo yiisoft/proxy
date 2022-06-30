@@ -6,6 +6,7 @@ namespace Yiisoft\Proxy\Tests\Stub;
 
 use ArrayIterator;
 use Countable;
+use Stringable;
 
 const CONST1 = 'CONST1_VALUE';
 
@@ -29,6 +30,7 @@ interface NodeInterface extends Countable, NodeParentInterface
         bool $param2 = true,
         string $param3 = 'string',
         ?string $param4 = null,
-        array $param5 = [1, 'value']
+        array $param5 = [1, 'value'],
+        Stringable|string $param6 = 'stringable'
     ): void;
 }
