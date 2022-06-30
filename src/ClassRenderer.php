@@ -82,7 +82,7 @@ final class ClassRenderer
      *
      * @param string[] $interfaces A list of interfaces' names with namespaces.
      *
-     * @return string Implements section as a string.
+     * @return string Implements section as a string. Empty string is returned when no interfaces were passed.
      *
      * @see ClassConfig::$interfaces
      */
@@ -114,7 +114,7 @@ final class ClassRenderer
      *
      * @param ClassConfig $classConfig Class config.
      *
-     * @return string Class body as a string.
+     * @return string Class body as a string. Empty string is returned when class config has no methods.
      */
     private function renderClassBody(ClassConfig $classConfig): string
     {
@@ -126,7 +126,7 @@ final class ClassRenderer
      *
      * @param MethodConfig[] $methods A list of method configs.
      *
-     * @return string Methods' sequence as a string.
+     * @return string Methods' sequence as a string. Empty string is returned when no methods were passed.
      *
      * @see ClassConfig::$methods
      */
@@ -159,7 +159,7 @@ final class ClassRenderer
     }
 
     /**
-     * Renders method signature using {@see $proxyMethodSignatureTemplate}.
+     * Renders a proxy method signature using {@see $proxyMethodSignatureTemplate}.
      *
      * @param MethodConfig $method Method config.
      *
@@ -179,16 +179,20 @@ final class ClassRenderer
      * Renders all parameters for a method.
      *
      * @param ParameterConfig[] $parameters A list of parameter configs.
-     * @return string Method parameters as a string.
+     * @return string Method parameters as a string. Empty string is returned when no parameters were passed.
      */
     private function renderMethodParameters(array $parameters): string
     {
         $params = '';
-        foreach ($parameters as $parameter) {
-            $params .= $this->renderMethodParameter($parameter) . ', ';
+        foreach ($parameters as $index => $parameter) {
+            $params .= $this->renderMethodParameter($parameter) ;
+
+            if ($index !== array_key_last($parameters)) {
+                $params .= ', ';
+            }
         }
 
-        return rtrim($params, ', ');
+        return $params;
     }
 
     /**
@@ -215,7 +219,8 @@ final class ClassRenderer
      *
      * @param ParameterConfig $parameter Parameter config.
      *
-     * @return string Parameter's default value as a string.
+     * @return string Parameter's default value as a string. Empty string is returned when no default value was
+     * specified.
      */
     private function renderParameterDefaultValue(ParameterConfig $parameter): string
     {
@@ -231,7 +236,7 @@ final class ClassRenderer
     }
 
     /**
-     * Renders a method's body using {@see $proxyMethodBodyTemplate}.
+     * Renders a proxy method's body using {@see $proxyMethodBodyTemplate}.
      *
      * @param MethodConfig $method Method config.
      *
@@ -252,7 +257,8 @@ final class ClassRenderer
      * Renders return statement for a method.
      *
      * @param MethodConfig $method Method config.
-     * @return string Return statement as a string.
+     * @return string Return statement as a string. Empty string is returned when no return type was specified or it was
+     * explicitly specified as `void`.
      */
     private function renderReturn(MethodConfig $method): string
     {
@@ -267,7 +273,7 @@ final class ClassRenderer
      * Renders return type for a method.
      *
      * @param MethodConfig $method Method config.
-     * @return string Return type as a string.
+     * @return string Return type as a string. Empty string is returned when method has no return type.
      */
     private function renderReturnType(MethodConfig $method): string
     {
@@ -300,7 +306,7 @@ final class ClassRenderer
      * {@see ParameterConfig} instance.
      * @psalm-param array<string, ParameterConfig> $parameters
      *
-     * @return string Parameters as a string.
+     * @return string Parameters as a string. Empty string is returned when no parameters were passed.
      */
     private function renderMethodCallParameters(array $parameters): string
     {
