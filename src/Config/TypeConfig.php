@@ -23,6 +23,8 @@ final class TypeConfig
         public string $name,
         /**
          * @var bool Whether the null values are allowed.
+         *
+         * @link https://www.php.net/manual/en/migration71.new-features.php#migration71.new-features.nullable-types
          */
         public bool $allowsNull,
     ) {
