@@ -179,6 +179,7 @@ final class ClassRenderer
      * Renders all parameters for a method.
      *
      * @param ParameterConfig[] $parameters A list of parameter configs.
+     *
      * @return string Method parameters as a string. Empty string is returned when no parameters were passed.
      */
     private function renderMethodParameters(array $parameters): string
@@ -199,6 +200,7 @@ final class ClassRenderer
      * Renders a single parameter for a method.
      *
      * @param ParameterConfig $parameter Parameter config.
+     *
      * @return string Method parameter as a string.
      */
     private function renderMethodParameter(ParameterConfig $parameter): string
@@ -257,6 +259,7 @@ final class ClassRenderer
      * Renders return statement for a method.
      *
      * @param MethodConfig $method Method config.
+     *
      * @return string Return statement as a string. Empty string is returned when no return type was specified or it was
      * explicitly specified as `void`.
      */
@@ -273,6 +276,7 @@ final class ClassRenderer
      * Renders return type for a method.
      *
      * @param MethodConfig $method Method config.
+     *
      * @return string Return type as a string. Empty string is returned when method has no return type.
      */
     private function renderReturnType(MethodConfig $method): string
@@ -288,6 +292,7 @@ final class ClassRenderer
      * Renders a type. Nullability is handled too.
      *
      * @param TypeConfig $type Type config.
+     *
      * @return string Type as a string.
      */
     private function renderType(TypeConfig $type): string
@@ -322,6 +327,7 @@ final class ClassRenderer
      * Renders indent. 4 spaces are used, with no tabs.
      *
      * @param int $count How many times indent should be repeated.
+     *
      * @return string Indent as a string.
      */
     private function renderIndent(int $count = 1): string
