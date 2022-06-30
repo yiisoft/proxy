@@ -43,8 +43,6 @@ trait ProxyTrait
      *
      * @param Throwable $error A throwable object.
      *
-     * @return void
-     *
      * @throws Throwable An exact error previously stored in {@see $currentError}.
      */
     protected function repeatError(Throwable $error): void
@@ -55,8 +53,6 @@ trait ProxyTrait
 
     /**
      * Resets current error.
-     *
-     * @return void
      */
     protected function resetCurrentError(): void
     {
