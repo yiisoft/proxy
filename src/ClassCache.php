@@ -42,8 +42,10 @@ final class ClassCache
     /**
      * Reads proxy class contents.
      *
-     * @param string $className {@see set()}
-     * @param string $baseProxyClassName {@see set())
+     * @param string $className The full name of user class or interface (with namespace). For example: `GraphInterface`
+     * or `Graph`. You can use `::class` instead of manually specifying a string.
+     * @param string $baseProxyClassName The full name of {@see ObjectProxy} implementation (with namespace) which will
+     * be the base class for proxy. For example: `MyProxy`.
      *
      * @throws Exception When unable to write to a file in {@see getClassPath()}.
      *
@@ -66,8 +68,10 @@ final class ClassCache
      * `/tmp/Yiisoft/Tests/Stub/Graph.MyProxy.php`. Additionally, checks and prepares (if needed) {@see $cachePath} for
      * usage (@see FileHelper::ensureDirectory()}.
      *
-     * @param string $className {@see set()}
-     * @param string $baseProxyClassName {@see set()}
+     * @param string $className The full name of user class or interface (with namespace). For example: `GraphInterface`
+     * or `Graph`. You can use `::class` instead of manually specifying a string.
+     * @param string $baseProxyClassName The full name of {@see ObjectProxy} implementation (with namespace) which will
+     * be the base class for proxy. For example: `MyProxy`.
      *
      * @throws RuntimeException In case when it's impossible to use or create {@see $cachePath}.
      *
@@ -92,8 +96,10 @@ final class ClassCache
      * - For name, a combination of both class name and base proxy class name is used.
      * - For path, {@see $cachePath} used as a base directory and class namespace for subdirectories.
      *
-     * @param string $className {@see set()}
-     * @param string $baseProxyClassName {@see set()}
+     * @param string $className The full name of user class or interface (with namespace). For example: `GraphInterface`
+     * or `Graph`. You can use `::class` instead of manually specifying a string.
+     * @param string $baseProxyClassName The full name of {@see ObjectProxy} implementation (with namespace) which will
+     * be the base class for proxy. For example: `MyProxy`.
      *
      * @return string[] Array with two elements, the first one is a file name and the second one is a path. For example:
      * `[`/tmp/Yiisoft/Proxy/Tests/Stub`, `GraphInterface.MyProxy.php`]` or
