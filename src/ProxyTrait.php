@@ -7,8 +7,8 @@ namespace Yiisoft\Proxy;
 use Throwable;
 
 /**
- * This trait allows to handle errors during proxy method calls. Handling can be added to
- * {@see ObjectProxy::executeMethodProxy()} implementation.
+ * This trait allows to handle errors during proxy method calls. Handling can be added in
+ * {@see ObjectProxy::afterCall()} event.
  */
 trait ProxyTrait
 {
