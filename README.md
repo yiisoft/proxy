@@ -52,7 +52,7 @@ class Car implements CarInterface
 
 $path = sys_get_temp_dir();
 $manager = new ProxyManager(
-    $path // This is optional. The proxy can be created "on the fly" instead. But it's recommended to use for caching.
+    $path // This is optional. The proxy can be created "on the fly" instead. But it's recommended to specify path to enable caching.
 );
 /** @var Car|ObjectProxy $object */
 $object = $manager->createObjectProxy(CarInterface::class, ObjectProxy::class, [new Car()]);
