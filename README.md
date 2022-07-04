@@ -6,7 +6,8 @@
     <br>
 </p>
 
-The package is able to build generic proxy for a class.
+The package is able to build generic proxy for a class. It's used in [yii-debug](https://github.com/yiisoft/yii-debug)
+extension.
 
 For license information check the [LICENSE](LICENSE.md)-file.
 
@@ -29,7 +30,118 @@ composer require --prefer-dist yiisoft/proxy
 
 ## Usage
 
-### Unit testing
+### With interface
+
+Having an interface and class implementing it, the proxy can be created like this:
+
+```php
+use Yiisoft\Proxy\ProxyManager;
+
+interface CarInterface
+{
+    public function horsepower(): int;
+}
+
+class Car implements CarInterface
+{
+    public function horsepower(): int
+    {
+        return 1;
+    }
+}
+
+$path = sys_get_temp_dir();
+$manager = new ProxyManager(
+    $path // This is optional. The proxy can be created "on the fly" instead. But it's recommended to use for caching.
+);
+/** @var Car|ObjectProxy $object */
+$object = $manager->createObjectProxy(CarInterface::class, ObjectProxy::class, [new Car()]);
+$object->horsepower(); // Outputs "1".
+```
+
+### Without interface
+
+An interface is not required though, the proxy still can be created almost the same way:
+
+```php
+use Yiisoft\Proxy\ProxyManager;
+
+class Car implements CarInterface
+{
+    public function horsepower(): int
+    {
+        return 1;
+    }
+}
+
+$path = sys_get_temp_dir();
+$manager = new ProxyManager($path);
+/** @var Car|ObjectProxy $object */
+$object = $manager->createObjectProxy(
+    Car::class, // Pass class instead of interface here. 
+    ObjectProxy::class, 
+    [new Car()]
+);
+$object->horsepower(); // Outputs "1".
+```
+
+### Custom base proxy class
+
+Custom base proxy class can be useful for example to perform certain actions during each method call. 
+
+```php
+use Yiisoft\Proxy\ObjectProxy;
+use Yiisoft\Proxy\ProxyManager;
+
+class Car implements CarInterface
+{
+    public function horsepower(): int
+    {
+        return 1;
+    }
+}
+
+class MyProxy extends ObjectProxy
+{
+    protected function afterCall(string $methodName, array $arguments, mixed $result, float $timeStart) : mixed {
+        $result = parent::afterCall($methodName, $arguments, $result, $timeStart);
+        
+        $error = $this->getCurrentError(); // Use to track and handle errors. 
+        $time = microtime(true) - $timeStart; // Use to measure / log execution time.
+        
+        return $result;
+    }
+}
+
+$path = sys_get_temp_dir();
+$manager = new ProxyManager($path);
+/** @var Car|MyProxy $object */
+$object = $manager->createObjectProxy(
+    Car::class, 
+    MyProxy::class, // Pass it here.
+    [new Car()]
+);
+```
+
+Additionally, you can customize new instance creation, etc. See 
+[examples](https://github.com/yiisoft/yii-debug/tree/master/src/Proxy) in 
+[yii-debug](https://github.com/yiisoft/yii-debug) extension.
+
+### Proxy class contents
+
+Here is an example how proxy class looks internally:
+
+```php
+class CarProxy extends MyProxy implements CarInterface
+{
+    public function horsepower(): int
+    {
+        return $this->call('horsepower', []);
+    }
+}
+```
+
+## Unit testing
 
 The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 
@@ -37,7 +149,7 @@ The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
 ./vendor/bin/phpunit
 ```
 
-### Mutation testing
+## Mutation testing
 
 The package tests are checked with [Infection](https://infection.github.io/) mutation framework. To run it:
 
@@ -45,7 +157,7 @@ The package tests are checked with [Infection](https://infection.github.io/) mut
 ./vendor/bin/infection
 ```
 
-### Static analysis
+## Static analysis
 
 The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
 
@@ -53,11 +165,11 @@ The code is statically analyzed with [Psalm](https://psalm.dev/). To run static 
 ./vendor/bin/psalm
 ```
 
-### Support the project
+## Support the project
 
 [![Open Collective](https://img.shields.io/badge/Open%20Collective-sponsor-7eadf1?logo=open%20collective&logoColor=7eadf1&labelColor=555555)](https://opencollective.com/yiisoft)
 
-### Follow updates
+## Follow updates
 
 [![Official website](https://img.shields.io/badge/Powered_by-Yii_Framework-green.svg?style=flat)](https://www.yiiframework.com/)
 [![Twitter](https://img.shields.io/badge/twitter-follow-1DA1F2?logo=twitter&logoColor=1DA1F2&labelColor=555555?style=flat)](https://twitter.com/yiiframework)
