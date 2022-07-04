@@ -45,8 +45,10 @@ final class ProxyManager
      * {@see ObjectProxy} or a class extended from it must be used.
      * @param array $proxyConstructorArguments A list of arguments passed to proxy constructor
      * ({@see ObjectProxy::__construct}).
-     * @return ObjectProxy A subclass of {@see ObjectProxy}.
+     *
      * @throws Exception In case of error during creation or working with cache / requiring PHP code.
+     *
+     * @return ObjectProxy A subclass of {@see ObjectProxy}.
      */
     public function createObjectProxy(
         string $baseStructure,
@@ -82,9 +84,11 @@ final class ProxyManager
      * @param ClassConfig $classConfig Initial class config.
      * @param string $parentProxyClass A base proxy class which acts like a parent for dynamically created proxy.
      * {@see ObjectProxy} or a class extended from it must be used.
+     *
      * @return ClassConfig Modified class config ready for using with proxy.
      */
-    private function generateProxyClassConfig(ClassConfig $classConfig, string $parentProxyClass): ClassConfig {
+    private function generateProxyClassConfig(ClassConfig $classConfig, string $parentProxyClass): ClassConfig
+    {
         if ($classConfig->isInterface) {
             $classConfig->isInterface = false;
             $classConfig->interfaces = [$classConfig->name];
@@ -114,6 +118,7 @@ final class ProxyManager
      * and so on.
      *
      * @param string $fullClassName Initial class name.
+     *
      * @return string Proxy class name.
      */
     private static function getProxyClassName(string $fullClassName): string
