@@ -6,8 +6,8 @@
     <br>
 </p>
 
-The package is able to build generic proxy for a class i.e. it allows intercepting all class method calls. It's used in [yii-debug](https://github.com/yiisoft/yii-debug)
-package to collect service's method calls information.
+The package is able to build generic proxy for a class i.e. it allows intercepting all class method calls. It's used in 
+[yii-debug](https://github.com/yiisoft/yii-debug) package to collect service's method calls information.
 
 For license information check the [LICENSE](LICENSE.md)-file.
 
@@ -30,7 +30,31 @@ composer require --prefer-dist yiisoft/proxy
 
 ## Usage
 
-### With interface
+### Custom base proxy class
+
+Custom base proxy class is useful to perform certain actions during each method call.
+
+```php
+use Yiisoft\Proxy\ObjectProxy;
+
+class MyProxy extends ObjectProxy
+{
+    protected function afterCall(string $methodName, array $arguments, mixed $result, float $timeStart) : mixed {
+        $result = parent::afterCall($methodName, $arguments, $result, $timeStart);
+        
+        $error = $this->getCurrentError(); // Use to track and handle errors. 
+        $time = microtime(true) - $timeStart; // Use to measure / log execution time.
+        
+        return $result;
+    }
+}
+```
+
+Additionally, you can customize new instance creation, etc. See
+[examples](https://github.com/yiisoft/yii-debug/tree/master/src/Proxy) in
+[yii-debug](https://github.com/yiisoft/yii-debug) extension.
+
+### Class with interface
 
 Having an interface and class implementing it, the proxy can be created like this:
 
@@ -52,15 +76,21 @@ class Car implements CarInterface
 
 $path = sys_get_temp_dir();
 $manager = new ProxyManager(
-    $path // This is optional. The proxy can be created "on the fly" instead. But it's recommended to specify path to enable caching.
+    // This is optional. The proxy can be created "on the fly" instead. But it's recommended to specify path to enable
+    // caching.
+    $path
 );
-/** @var Car|ObjectProxy $object */
-$object = $manager->createObjectProxy(CarInterface::class, ObjectProxy::class, [new Car()]);
+/** @var Car|MyProxy $object */
+$object = $manager->createObjectProxy(
+    CarInterface::class,
+    MyProxy::class, // Custom base proxy class defined earlier.
+    [new Car()]
+);
 // Now you can call `Car` object methods through proxy the same as you would call it in original `Car` object.
 $object->horsepower(); // Outputs "1".
 ```
 
-### Without interface
+### Class without interface
 
 An interface is not required though, the proxy still can be created almost the same way:
 
@@ -77,56 +107,13 @@ class Car implements CarInterface
 
 $path = sys_get_temp_dir();
 $manager = new ProxyManager($path);
-/** @var Car|ObjectProxy $object */
-$object = $manager->createObjectProxy(
-    Car::class, // Pass class instead of interface here. 
-    ObjectProxy::class, 
-    [new Car()]
-);
-$object->horsepower(); // Outputs "1".
-```
-
-### Custom base proxy class
-
-Custom base proxy class can be useful for example to perform certain actions during each method call. 
-
-```php
-use Yiisoft\Proxy\ObjectProxy;
-use Yiisoft\Proxy\ProxyManager;
-
-class Car implements CarInterface
-{
-    public function horsepower(): int
-    {
-        return 1;
-    }
-}
-
-class MyProxy extends ObjectProxy
-{
-    protected function afterCall(string $methodName, array $arguments, mixed $result, float $timeStart) : mixed {
-        $result = parent::afterCall($methodName, $arguments, $result, $timeStart);
-        
-        $error = $this->getCurrentError(); // Use to track and handle errors. 
-        $time = microtime(true) - $timeStart; // Use to measure / log execution time.
-        
-        return $result;
-    }
-}
-
-$path = sys_get_temp_dir();
-$manager = new ProxyManager($path);
 /** @var Car|MyProxy $object */
 $object = $manager->createObjectProxy(
-    Car::class, 
-    MyProxy::class, // Pass it here.
+    Car::class, // Pass class instead of interface here. 
+    MyProxy::class, 
     [new Car()]
 );
 ```
-
-Additionally, you can customize new instance creation, etc. See 
-[examples](https://github.com/yiisoft/yii-debug/tree/master/src/Proxy) in 
-[yii-debug](https://github.com/yiisoft/yii-debug) extension.
 
 ### Proxy class contents
 
