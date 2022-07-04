@@ -28,8 +28,9 @@ final class ClassCache
     /**
      * Writes proxy class contents to a file in {@see getClassPath()}.
      *
-     * @param string $className The full name of user class or interface (with namespace). For example: `GraphInterface`
-     * or `Graph`. You can use `::class` instead of manually specifying a string.
+     * @param string $className The full name of user class or interface (with namespace). For example:
+     * `Yiisoft\Proxy\Tests\Stub\GraphInterface` or `Yiisoft\Proxy\Tests\Stub\Graph`. You can use `::class` instead of
+     * manually specifying a string.
      * @param string $baseProxyClassName The full name of {@see ObjectProxy} implementation (with namespace) which will
      * be the base class for proxy. For example: `MyProxy`.
      * @param string $classContents The whole class contents without opening PHP tag (it's prepended automatically).
