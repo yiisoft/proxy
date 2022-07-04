@@ -37,8 +37,10 @@ class ObjectProxy
      *
      * @param string $methodName A called method in the {@see $instance}.
      * @param array $arguments A list of arguments passed to a called method. The order must be maintained.
-     * @return $this|mixed Either a new instance of {@see $instance} class or return value of a called method.
+     *
      * @throws Throwable In case of error happen during the method call.
+     *
+     * @return $this|mixed Either a new instance of {@see $instance} class or return value of a called method.
      */
     protected function call(string $methodName, array $arguments): mixed
     {
@@ -64,6 +66,7 @@ class ObjectProxy
      * @param array $arguments A list of arguments passed to a called method. The order must be maintained.
      * @param mixed $result Return value of a called method.
      * @param float $timeStart UNIX timestamp right before proxy method call. For example: `1656657586.4849`.
+     *
      * @return mixed Return value of a called method.
      */
     protected function afterCall(
@@ -71,8 +74,7 @@ class ObjectProxy
         array $arguments,
         mixed $result,
         float $timeStart
-    ): mixed
-    {
+    ): mixed {
         return $result;
     }
 
@@ -80,6 +82,7 @@ class ObjectProxy
      * Gets new instance of {@see $instance} class.
      *
      * @param object $instance {@see $instance}.
+     *
      * @return $this A new instance of the same class
      */
     protected function getNewStaticInstance(object $instance): self
@@ -92,6 +95,7 @@ class ObjectProxy
      *
      * @param string $methodName A called method in the {@see $instance}.
      * @param array $arguments A list of arguments passed to a called method. The order must be maintained.
+     *
      * @return mixed Return value of a called method.
      */
     private function callInternal(string $methodName, array $arguments): mixed
@@ -104,6 +108,7 @@ class ObjectProxy
      * instance is created, otherwise it's returned as is.
      *
      * @param mixed $result Return value of a called method.
+     *
      * @return $this|mixed Either a new instance of {@see $instance} class or return value of a called method.
      */
     private function processResult(mixed $result): mixed
