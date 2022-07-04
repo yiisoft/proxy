@@ -56,6 +56,7 @@ $manager = new ProxyManager(
 );
 /** @var Car|ObjectProxy $object */
 $object = $manager->createObjectProxy(CarInterface::class, ObjectProxy::class, [new Car()]);
+// Now you can call `Car` object methods through proxy the same as you would call it in original `Car` object.
 $object->horsepower(); // Outputs "1".
 ```
 
