@@ -6,8 +6,8 @@
     <br>
 </p>
 
-The package is able to build generic proxy for a class. It's used in [yii-debug](https://github.com/yiisoft/yii-debug)
-extension.
+The package is able to build generic proxy for a class i.e. it allows intercepting all class method calls. It's used in [yii-debug](https://github.com/yiisoft/yii-debug)
+package to collect service's method calls information.
 
 For license information check the [LICENSE](LICENSE.md)-file.
 
