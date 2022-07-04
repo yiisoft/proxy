@@ -4,65 +4,99 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy;
 
+use Exception;
 use Yiisoft\Proxy\Config\ClassConfig;
 
 final class ProxyManager
 {
-    private ?string $cachePath;
-
+    /**
+     * @var ClassRenderer A class renderer dependency.
+     */
     private ClassRenderer $classRenderer;
-
+    /**
+     * @var ClassConfigFactory A class config factory dependency.
+     */
     private ClassConfigFactory $classConfigFactory;
+    /**
+     * @var ClassCache|null A class cache dependency (optional).
+     */
+    private ?ClassCache $classCache;
 
-    private ClassCache $classCache;
+    /**
+     * A suffix appended to proxy class names / files.
+     */
+    public const PROXY_SUFFIX = 'Proxy';
 
+    /**
+     * @param string|null $cachePath Cache path, optional, {@see ClassCache::$cachePath}.
+     */
     public function __construct(string $cachePath = null)
     {
-        $this->cachePath = $cachePath;
-        $this->classCache = new ClassCache($cachePath);
+        $this->classCache = $cachePath ? new ClassCache($cachePath) : null;
         $this->classRenderer = new ClassRenderer();
         $this->classConfigFactory = new ClassConfigFactory();
     }
 
+    /**
+     * Creates object proxy based on an interface / a class and parent proxy class.
+     *
+     * @param string $baseStructure Either or an interface or a class for proxying method calls.
+     * @param string $parentProxyClass A base proxy class which acts like a parent for dynamically created proxy.
+     * {@see ObjectProxy} or a class extended from it must be used.
+     * @param array $proxyConstructorArguments A list of arguments passed to proxy constructor
+     * ({@see ObjectProxy::__construct}).
+     *
+     * @throws Exception In case of error during creation or working with cache / requiring PHP code.
+     *
+     * @return ObjectProxy A subclass of {@see ObjectProxy}.
+     */
     public function createObjectProxy(
         string $baseStructure,
         string $parentProxyClass,
-        array $constructorArguments
-    ): ?object {
-        $className = $baseStructure . 'Proxy';
-        $shortClassName = $this->getProxyClassName($className);
+        array $proxyConstructorArguments
+    ): ObjectProxy {
+        $className = $baseStructure . self::PROXY_SUFFIX;
+        $shortClassName = self::getProxyClassName($className);
 
         if (class_exists($shortClassName)) {
-            return new $shortClassName(...$constructorArguments);
+            return new $shortClassName(...$proxyConstructorArguments);
         }
 
-        if (!($classDeclaration = $this->classCache->get($className, $parentProxyClass))) {
+        $classDeclaration = $this->classCache?->get($className, $parentProxyClass);
+        if (!$classDeclaration) {
             $classConfig = $this->classConfigFactory->getClassConfig($baseStructure);
             $classConfig = $this->generateProxyClassConfig($classConfig, $parentProxyClass);
             $classDeclaration = $this->classRenderer->render($classConfig);
-            $this->classCache->set($className, $parentProxyClass, $classDeclaration);
+            $this->classCache?->set($baseStructure, $parentProxyClass, $classDeclaration);
         }
-        if ($this->cachePath === null) {
+        if (!$this->classCache) {
             eval(str_replace('<?php', '', $classDeclaration));
         } else {
-            $path = $this->classCache->getClassPath($className, $parentProxyClass);
+            $path = $this->classCache->getClassPath($baseStructure, $parentProxyClass);
             require $path;
         }
-        return new $shortClassName(...$constructorArguments);
+        return new $shortClassName(...$proxyConstructorArguments);
     }
 
-    private function generateProxyClassConfig(
-        ClassConfig $classConfig,
-        string $parentProxyClass
-    ): ClassConfig {
+    /**
+     * Generates class config for using with proxy from a regular class config.
+     *
+     * @param ClassConfig $classConfig Initial class config.
+     * @param string $parentProxyClass A base proxy class which acts like a parent for dynamically created proxy.
+     * {@see ObjectProxy} or a class extended from it must be used.
+     *
+     * @return ClassConfig Modified class config ready for using with proxy.
+     */
+    private function generateProxyClassConfig(ClassConfig $classConfig, string $parentProxyClass): ClassConfig
+    {
         if ($classConfig->isInterface) {
             $classConfig->isInterface = false;
             $classConfig->interfaces = [$classConfig->name];
         }
 
         $classConfig->parent = $parentProxyClass;
-        $classConfig->name .= 'Proxy';
-        $classConfig->shortName = $this->getProxyClassName($classConfig->name);
+        $classConfig->name .= self::PROXY_SUFFIX;
+        $classConfig->shortName = self::getProxyClassName($classConfig->name);
 
         foreach ($classConfig->methods as $methodIndex => $method) {
             foreach ($method->modifiers as $index => $modifier) {
@@ -75,7 +109,19 @@ final class ProxyManager
         return $classConfig;
     }
 
-    private function getProxyClassName(string $fullClassName): string
+    /**
+     * Transforms full class / interface name with namespace to short class name for using in proxy. For example:
+     *
+     * - `Yiisoft\Proxy\Tests\Stub\GraphInterfaceProxy` becomes `Yiisoft_Proxy_Tests_Stub_GraphInterfaceProxy`.
+     * - `Yiisoft\Proxy\Tests\Stub\GraphProxy` becomes `Yiisoft_Proxy_Tests_Stub_GraphProxy`.
+     *
+     * and so on.
+     *
+     * @param string $fullClassName Initial class name.
+     *
+     * @return string Proxy class name.
+     */
+    private static function getProxyClassName(string $fullClassName): string
     {
         return str_replace('\\', '_', $fullClassName);
     }

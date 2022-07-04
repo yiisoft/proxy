@@ -17,14 +17,28 @@ use Yiisoft\Proxy\Config\MethodConfig;
 use Yiisoft\Proxy\Config\ParameterConfig;
 use Yiisoft\Proxy\Config\TypeConfig;
 
+/**
+ * A factory for creating class configs ({@see ClassConfig}). Uses PHP `Reflection` to get the necessary metadata.
+ *
+ * @link https://www.php.net/manual/en/book.reflection.php
+ */
 final class ClassConfigFactory
 {
-    public function getClassConfig(string $interfaceName): ClassConfig
+    /**
+     * Gets single class config based for individual class.
+     *
+     * @param string $className Full class or interface name (including namespace).
+     *
+     * @throws InvalidArgumentException In case class or interface does not exist.
+     *
+     * @return ClassConfig Class config with all related configs (methods, parameters, types) linked.
+     */
+    public function getClassConfig(string $className): ClassConfig
     {
         try {
-            $reflection = new ReflectionClass($interfaceName);
+            $reflection = new ReflectionClass($className);
         } catch (ReflectionException) {
-            throw new InvalidArgumentException("$interfaceName must exist.");
+            throw new InvalidArgumentException("$className must exist.");
         }
 
         return new ClassConfig(
@@ -40,30 +54,45 @@ final class ClassConfigFactory
     }
 
     /**
-     * @return MethodConfig[]
+     * Gets the complete set of method configs for a given class reflection.
+     *
+     * @param ReflectionClass $class Reflection of a class.
+     *
+     * @return MethodConfig[] List of method configs. The order is maintained.
      */
-    private function getMethodConfigs(ReflectionClass $reflection): array
+    private function getMethodConfigs(ReflectionClass $class): array
     {
         $methods = [];
-        foreach ($reflection->getMethods() as $method) {
+        foreach ($class->getMethods() as $method) {
             $methods[$method->getName()] = $this->getMethodConfig($method);
         }
 
         return $methods;
     }
 
+    /**
+     * Gets single method config for individual method reflection.
+     *
+     * @param ReflectionMethod $method Reflection of a method.
+     *
+     * @return MethodConfig Single method config.
+     */
     private function getMethodConfig(ReflectionMethod $method): MethodConfig
     {
         return new MethodConfig(
             modifiers: Reflection::getModifierNames($method->getModifiers()),
             name: $method->getName(),
             parameters: $this->getMethodParameterConfigs($method),
-            returnType: $this->getMethodTypeConfig($method),
+            returnType: $this->getMethodReturnTypeConfig($method),
         );
     }
 
     /**
-     * @return ParameterConfig[]
+     * Gets the complete set of parameter configs for a given method reflection.
+     *
+     * @param ReflectionMethod $method Reflection of a method.
+     *
+     * @return ParameterConfig[] List of parameter configs. The order is maintained.
      */
     private function getMethodParameterConfigs(ReflectionMethod $method): array
     {
@@ -75,6 +104,13 @@ final class ClassConfigFactory
         return $parameters;
     }
 
+    /**
+     * Gets single parameter config for individual method's parameter reflection.
+     *
+     * @param ReflectionParameter $param Reflection of a method's parameter.
+     *
+     * @return ParameterConfig Single parameter config.
+     */
     private function getMethodParameterConfig(ReflectionParameter $param): ParameterConfig
     {
         return new ParameterConfig(
@@ -94,6 +130,13 @@ final class ClassConfigFactory
         );
     }
 
+    /**
+     * Gets single type config for individual method's parameter reflection.
+     *
+     * @param ReflectionParameter $param Reflection pf a method's parameter.
+     *
+     * @return TypeConfig|null Single type config. `null` is returned when type is not specified.
+     */
     private function getMethodParameterTypeConfig(ReflectionParameter $param): ?TypeConfig
     {
         $type = $param->getType();
@@ -114,7 +157,14 @@ final class ClassConfigFactory
         );
     }
 
-    private function getMethodTypeConfig(ReflectionMethod $method): ?TypeConfig
+    /**
+     * Gets single return type config for individual method reflection.
+     *
+     * @param ReflectionMethod $method Reflection of a method.
+     *
+     * @return TypeConfig|null Single type config. `null` is returned when return type is not specified.
+     */
+    private function getMethodReturnTypeConfig(ReflectionMethod $method): ?TypeConfig
     {
         $returnType = $method->getReturnType();
         if (!$returnType) {
