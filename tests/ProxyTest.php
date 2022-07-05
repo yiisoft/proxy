@@ -25,14 +25,12 @@ class ProxyTest extends TestCase
 {
     public function tearDown(): void
     {
-        $directory = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Yiisoft';
-        FileHelper::removeDirectory($directory);
+        FileHelper::removeDirectory('php://memory');
     }
 
     public function testCreateObjectProxyFromInterface(): void
     {
-        $path = sys_get_temp_dir();
-        $manager = new ProxyManager($path);
+        $manager = new ProxyManager('php://memory');
 
         /** @var Graph|MyProxy $object */
         $object = $manager->createObjectProxy(GraphInterface::class, MyProxy::class, [new Graph()]);
@@ -57,8 +55,7 @@ class ProxyTest extends TestCase
 
     public function testGetInstance(): void
     {
-        $path = sys_get_temp_dir();
-        $manager = new ProxyManager($path);
+        $manager = new ProxyManager('php://memory');
 
         $instance = new Graph();
         /** @var Graph|MyProxy $object */
@@ -68,8 +65,7 @@ class ProxyTest extends TestCase
 
     public function testMethodReturningInstanceOfSameType(): void
     {
-        $path = sys_get_temp_dir();
-        $manager = new ProxyManager($path);
+        $manager = new ProxyManager('php://memory');
 
         /** @var Graph|MyProxy $object */
         $object = $manager->createObjectProxy(GraphInterface::class, MyProxy::class, [new Graph()]);
@@ -83,8 +79,7 @@ class ProxyTest extends TestCase
 
     public function testMethodThrowingException(): void
     {
-        $path = sys_get_temp_dir();
-        $manager = new ProxyManager($path);
+        $manager = new ProxyManager('php://memory');
 
         /** @var Car|MyProxy $object */
         $object = $manager->createObjectProxy(CarInterface::class, MyProxy::class, [new Car()]);
@@ -95,8 +90,7 @@ class ProxyTest extends TestCase
 
     public function testCurrentErrorAfterMethodThrowingException(): void
     {
-        $path = sys_get_temp_dir();
-        $manager = new ProxyManager($path);
+        $manager = new ProxyManager('php://memory');
         /** @var Car|MyProxy $object */
         $object = $manager->createObjectProxy(CarInterface::class, MyProxy::class, [new Car()]);
 
@@ -111,8 +105,7 @@ class ProxyTest extends TestCase
 
     public function testResetCurrentErrorAfterMethodThrowingException(): void
     {
-        $path = sys_get_temp_dir();
-        $manager = new ProxyManager($path);
+        $manager = new ProxyManager('php://memory');
         /** @var Car|MyProxy $object */
         $object = $manager->createObjectProxy(CarInterface::class, MyProxy::class, [new Car()]);
 
@@ -128,8 +121,7 @@ class ProxyTest extends TestCase
 
     public function testCreateObjectProxyFromClass(): void
     {
-        $path = sys_get_temp_dir();
-        $manager = new ProxyManager($path);
+        $manager = new ProxyManager('php://memory');
         /** @var Graph|MyProxy $object */
         $object = $manager->createObjectProxy(Graph::class, MyProxy::class, [new Graph()]);
 

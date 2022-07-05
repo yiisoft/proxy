@@ -20,6 +20,7 @@ final class ClassCache
         /**
          * @var string Base directory for working with cache. It will be created automatically if it does not exist
          * ({@see getClassPath()}).
+         * Warning: Do not use stream like "php://memory" in production! It can cause file name collisions.
          */
         private string $cachePath
     ) {
@@ -37,7 +38,8 @@ final class ClassCache
      */
     public function set(string $className, string $baseProxyClassName, string $classContents): void
     {
-        file_put_contents($this->getClassPath($className, $baseProxyClassName), "<?php\n\n" . $classContents, LOCK_EX);
+        $flags = $this->cachePath === 'php://memory' ? LOCK_EX : 0;
+        file_put_contents($this->getClassPath($className, $baseProxyClassName), "<?php\n\n" . $classContents, $flags);
     }
 
     /**
@@ -81,6 +83,10 @@ final class ClassCache
     public function getClassPath(string $className, string $baseProxyClassName): string
     {
         [$classFileName, $classFilePath] = $this->getClassFileNameAndPath($className, $baseProxyClassName);
+
+        if ($this->cachePath === 'php://memory') {
+            return $classFileName;
+        }
 
         try {
             FileHelper::ensureDirectory($classFilePath, 0777);

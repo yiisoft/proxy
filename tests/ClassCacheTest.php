@@ -9,20 +9,22 @@ use Yiisoft\Files\FileHelper;
 use Yiisoft\Proxy\ClassCache;
 use Yiisoft\Proxy\Tests\Stub\Node;
 use Yiisoft\Proxy\Tests\Stub\MyProxy;
-use function sys_get_temp_dir;
 
 class ClassCacheTest extends TestCase
 {
     public function tearDown(): void
     {
+        if (!in_array($this->getName(false), ['testGetWithoutSet', 'testSetAndGetClassPath'])) {
+            return;
+        }
+
         $directory = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'Yiisoft';
         FileHelper::removeDirectory($directory);
     }
 
     public function testSetAndGet(): void
     {
-        $path = sys_get_temp_dir();
-        $cache = new ClassCache($path);
+        $cache = new ClassCache('php://memory');
         $classDeclaration = <<<'EOD'
 class Node
 {}
@@ -60,7 +62,7 @@ EOD;
 
         $expectedClassPath = implode(
             DIRECTORY_SEPARATOR,
-            [sys_get_temp_dir(), 'Yiisoft', 'Proxy', 'Tests', 'Stub', 'Node.MyProxy.php']
+            [$path, 'Yiisoft', 'Proxy', 'Tests', 'Stub', 'Node.MyProxy.php']
         );
         $actualClassPath = $cache->getClassPath(Node::class, MyProxy::class);
         $this->assertEquals($expectedClassPath, $actualClassPath);

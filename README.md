@@ -74,6 +74,7 @@ class Car implements CarInterface
     }
 }
 
+// Warning: Do not use stream like "php://memory" in production! It can cause file name collisions.
 $path = sys_get_temp_dir();
 $manager = new ProxyManager(
     // This is optional. The proxy can be created "on the fly" instead. But it's recommended to specify path to enable
