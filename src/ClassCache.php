@@ -38,8 +38,7 @@ final class ClassCache
      */
     public function set(string $className, string $baseProxyClassName, string $classContents): void
     {
-        $flags = $this->cachePath === 'php://memory' ? LOCK_EX : 0;
-        file_put_contents($this->getClassPath($className, $baseProxyClassName), "<?php\n\n" . $classContents, $flags);
+        file_put_contents($this->getClassPath($className, $baseProxyClassName), "<?php\n\n" . $classContents, LOCK_EX);
     }
 
     /**
