@@ -149,6 +149,7 @@ class ProxyTest extends TestCase
         /** @var Money|MyProxy $object */
         $object = $manager->createObjectProxy(Countable::class, MyProxy::class, [new Money()]);
 
+        $this->assertSame('CountableProxy', get_class($object));
         $this->assertSame(1, $object->count());
     }
 }
