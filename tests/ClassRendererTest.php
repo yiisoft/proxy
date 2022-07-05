@@ -42,7 +42,7 @@ interface NodeInterface implements Countable, Yiisoft\Proxy\Tests\Stub\NodeParen
         $this->call('nodeInterfaceMethod3', [$param1, $param2, $param3, $param4, $param5, $param6]);
     }
 
-    abstract public function count()
+    abstract public function count(): int
     {
         return $this->call('count', []);
     }

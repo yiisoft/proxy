@@ -248,7 +248,10 @@ class ClassConfigFactoryTest extends TestCase
                     ],
                     name: 'count',
                     parameters: [],
-                    returnType: null
+                    returnType: new TypeConfig(
+                        name: 'int',
+                        allowsNull: false
+                    )
                 ),
                 'parentMethod1' => new MethodConfig(
                     modifiers: [
