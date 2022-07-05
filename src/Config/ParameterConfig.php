@@ -20,12 +20,6 @@ final class ParameterConfig
          */
         public string $name,
         /**
-         * @var bool Whether the null values are allowed.
-         *
-         * @link https://www.php.net/manual/en/migration71.new-features.php#migration71.new-features.nullable-types
-         */
-        public bool $allowsNull,
-        /**
          * @var bool Whether the default value available.
          *
          * @link https://www.php.net/manual/en/functions.arguments.php#functions.arguments.default
@@ -62,5 +56,15 @@ final class ParameterConfig
     public function hasType(): bool
     {
         return $this->type !== null;
+    }
+
+    /**
+     * Whether the null values are allowed.
+     * @return bool `true` when null values are allowed and `false` otherwise.
+     * @link https://www.php.net/manual/en/migration71.new-features.php#migration71.new-features.nullable-types
+     */
+    public function allowsNull(): bool
+    {
+        return $this->type ? $this->type->allowsNull : true;
     }
 }
