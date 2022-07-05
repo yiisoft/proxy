@@ -64,27 +64,45 @@ final class ClassConfigFactory
     {
         $methods = [];
         foreach ($class->getMethods() as $method) {
-            $methods[$method->getName()] = $this->getMethodConfig($method);
+            $methods[$method->getName()] = $this->getMethodConfig($class, $method);
         }
 
         return $methods;
     }
 
     /**
-     * Gets single method config for individual method reflection.
+     * Gets single method config for individual class / method reflection pair.
      *
+     * @param ReflectionClass $class Reflection of a class.
      * @param ReflectionMethod $method Reflection of a method.
      *
      * @return MethodConfig Single method config.
      */
-    private function getMethodConfig(ReflectionMethod $method): MethodConfig
+    private function getMethodConfig(ReflectionClass $class, ReflectionMethod $method): MethodConfig
     {
         return new MethodConfig(
-            modifiers: Reflection::getModifierNames($method->getModifiers()),
+            modifiers: $this->getMethodModifiers($class, $method),
             name: $method->getName(),
             parameters: $this->getMethodParameterConfigs($method),
             returnType: $this->getMethodReturnTypeConfig($method),
         );
+    }
+
+    /**
+     * Gets the set of method modifiers for a given class / method reflection pair
+     *
+     * @param ReflectionClass $class Reflection of a class.
+     * @param ReflectionMethod $method Reflection of a method.
+     * @return string[] List of method modifiers.
+     */
+    private function getMethodModifiers(ReflectionClass $class, ReflectionMethod $method): array
+    {
+        $modifiers = Reflection::getModifierNames($method->getModifiers());
+        if (!$class->isInterface()) {
+            return $modifiers;
+        }
+
+        return array_values(array_filter($modifiers, fn (string $modifier) => $modifier !== 'abstract'));
     }
 
     /**
