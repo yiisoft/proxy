@@ -93,6 +93,7 @@ final class ClassConfigFactory
      *
      * @param ReflectionClass $class Reflection of a class.
      * @param ReflectionMethod $method Reflection of a method.
+     *
      * @return string[] List of method modifiers.
      */
     private function getMethodModifiers(ReflectionClass $class, ReflectionMethod $method): array
