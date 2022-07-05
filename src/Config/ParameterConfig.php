@@ -57,14 +57,4 @@ final class ParameterConfig
     {
         return $this->type !== null;
     }
-
-    /**
-     * Whether the null values are allowed.
-     * @return bool `true` when null values are allowed and `false` otherwise.
-     * @link https://www.php.net/manual/en/migration71.new-features.php#migration71.new-features.nullable-types
-     */
-    public function allowsNull(): bool
-    {
-        return $this->type ? $this->type->allowsNull : true;
-    }
 }
