@@ -109,6 +109,10 @@ final class ClassCache
     private function getClassFileNameAndPath(string $className, string $baseProxyClassName): array
     {
         $classParts = explode('\\', $className);
+        if (count($classParts) === 1) {
+            $classParts = ['Builtin', ...$classParts];
+        }
+
         $parentClassParts = explode('\\', $baseProxyClassName);
         $classFileName = array_pop($classParts) . '.' . array_pop($parentClassParts) . '.php';
         $classFilePath = $this->cachePath . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, $classParts);

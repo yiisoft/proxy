@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy\Tests;
 
+use Countable;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Files\FileHelper;
@@ -14,6 +15,7 @@ use Yiisoft\Proxy\Tests\Stub\Car;
 use Yiisoft\Proxy\Tests\Stub\CarInterface;
 use Yiisoft\Proxy\Tests\Stub\Graph;
 use Yiisoft\Proxy\Tests\Stub\GraphInterface;
+use Yiisoft\Proxy\Tests\Stub\Money;
 use Yiisoft\Proxy\Tests\Stub\MyProxy;
 
 /**
@@ -134,5 +136,20 @@ class ProxyTest extends TestCase
         $object = $manager->createObjectProxy(Graph::class, MyProxy::class, [new Graph()]);
 
         $this->assertSame(2, $object->edgesCount());
+    }
+
+    /**
+     * @link https://github.com/yiisoft/proxy/issues/26
+     * @link https://github.com/yiisoft/proxy/issues/45
+     */
+    public function testClassWithBuiltInInterface(): void
+    {
+        $path = sys_get_temp_dir();
+        $manager = new ProxyManager($path);
+        /** @var Money|MyProxy $object */
+        $object = $manager->createObjectProxy(Countable::class, MyProxy::class, [new Money()]);
+
+        $this->assertSame('CountableProxy', get_class($object));
+        $this->assertSame(1, $object->count());
     }
 }

@@ -50,7 +50,6 @@ class ClassConfigFactoryTest extends TestCase
                         'param1' => new ParameterConfig(
                             type: null,
                             name: 'param1',
-                            allowsNull: true,
                             isDefaultValueAvailable: false,
                             isDefaultValueConstant: null,
                             defaultValueConstantName: null,
@@ -62,7 +61,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: false
                             ),
                             name: 'param2',
-                            allowsNull: false,
                             isDefaultValueAvailable: false,
                             isDefaultValueConstant: null,
                             defaultValueConstantName: null,
@@ -74,7 +72,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: false
                             ),
                             name: 'param3',
-                            allowsNull: false,
                             isDefaultValueAvailable: false,
                             isDefaultValueConstant: null,
                             defaultValueConstantName: null,
@@ -86,7 +83,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: true
                             ),
                             name: 'param4',
-                            allowsNull: true,
                             isDefaultValueAvailable: false,
                             isDefaultValueConstant: null,
                             defaultValueConstantName: null,
@@ -98,7 +94,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: true
                             ),
                             name: 'param5',
-                            allowsNull: true,
                             isDefaultValueAvailable: false,
                             isDefaultValueConstant: null,
                             defaultValueConstantName: null,
@@ -110,7 +105,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: false
                             ),
                             name: 'param6',
-                            allowsNull: false,
                             isDefaultValueAvailable: true,
                             isDefaultValueConstant: false,
                             defaultValueConstantName: null,
@@ -122,7 +116,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: false
                             ),
                             name: 'param7',
-                            allowsNull: false,
                             isDefaultValueAvailable: true,
                             isDefaultValueConstant: false,
                             defaultValueConstantName: null,
@@ -134,7 +127,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: false
                             ),
                             name: 'param8',
-                            allowsNull: false,
                             isDefaultValueAvailable: true,
                             isDefaultValueConstant: true,
                             defaultValueConstantName: 'Yiisoft\Proxy\Tests\Stub\CONST1',
@@ -166,7 +158,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: false
                             ),
                             name: 'param1',
-                            allowsNull: false,
                             isDefaultValueAvailable: true,
                             isDefaultValueConstant: false,
                             defaultValueConstantName: null,
@@ -178,7 +169,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: false
                             ),
                             name: 'param2',
-                            allowsNull: false,
                             isDefaultValueAvailable: true,
                             isDefaultValueConstant: false,
                             defaultValueConstantName: null,
@@ -190,7 +180,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: false
                             ),
                             name: 'param3',
-                            allowsNull: false,
                             isDefaultValueAvailable: true,
                             isDefaultValueConstant: false,
                             defaultValueConstantName: null,
@@ -202,7 +191,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: true
                             ),
                             name: 'param4',
-                            allowsNull: true,
                             isDefaultValueAvailable: true,
                             isDefaultValueConstant: false,
                             defaultValueConstantName: null,
@@ -214,7 +202,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: false
                             ),
                             name: 'param5',
-                            allowsNull: false,
                             isDefaultValueAvailable: true,
                             isDefaultValueConstant: false,
                             defaultValueConstantName: null,
@@ -226,7 +213,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: false
                             ),
                             name: 'param6',
-                            allowsNull: false,
                             isDefaultValueAvailable: true,
                             isDefaultValueConstant: false,
                             defaultValueConstantName: null,
@@ -244,7 +230,12 @@ class ClassConfigFactoryTest extends TestCase
                     ],
                     name: 'count',
                     parameters: [],
-                    returnType: null
+                    returnType: PHP_VERSION_ID >= 80100
+                        ? new TypeConfig(
+                            name: 'int',
+                            allowsNull: false
+                        )
+                        : null
                 ),
                 'parentMethod1' => new MethodConfig(
                     modifiers: [
@@ -338,7 +329,6 @@ class ClassConfigFactoryTest extends TestCase
                                 allowsNull: false
                             ),
                             name: 'previousNodesCount',
-                            allowsNull: false,
                             isDefaultValueAvailable: false,
                             isDefaultValueConstant: null,
                             defaultValueConstantName: null,

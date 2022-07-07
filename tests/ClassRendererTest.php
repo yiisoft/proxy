@@ -80,6 +80,9 @@ interface NodeInterface implements Countable, Yiisoft\Proxy\Tests\Stub\NodeParen
     }
 }
 EOD;
+        if (PHP_VERSION_ID >= 80100) {
+            $expectedOutput = str_replace('function count()', 'function count(): int', $expectedOutput);
+        }
 
         $this->assertSame($expectedOutput, $output);
     }

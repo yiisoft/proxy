@@ -135,7 +135,6 @@ final class ClassConfigFactory
         return new ParameterConfig(
             type: $this->getMethodParameterTypeConfig($param),
             name: $param->getName(),
-            allowsNull: $param->allowsNull(),
             isDefaultValueAvailable: $param->isDefaultValueAvailable(),
             isDefaultValueConstant: $param->isDefaultValueAvailable()
                 ? $param->isDefaultValueConstant()
@@ -186,16 +185,17 @@ final class ClassConfigFactory
     private function getMethodReturnTypeConfig(ReflectionMethod $method): ?TypeConfig
     {
         $returnType = $method->getReturnType();
+        if (!$returnType && method_exists($method, 'getTentativeReturnType')) {
+            $returnType = $method->getTentativeReturnType();
+        }
+
         if (!$returnType) {
             return null;
         }
 
-        if ($returnType instanceof ReflectionUnionType) {
-            $name = $this->getUnionType($returnType);
-        } else {
-            /** @var ReflectionNamedType $returnType */
-            $name = $returnType->getName();
-        }
+        $name = $returnType instanceof ReflectionUnionType
+            ? $this->getUnionType($returnType)
+            : $returnType->getName();
 
         return new TypeConfig(
             name: $name,
