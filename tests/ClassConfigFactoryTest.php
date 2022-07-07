@@ -234,7 +234,12 @@ class ClassConfigFactoryTest extends TestCase
                     ],
                     name: 'count',
                     parameters: [],
-                    returnType: null
+                    returnType: PHP_VERSION_ID >= 80100
+                        ? new TypeConfig(
+                            name: 'int',
+                            allowsNull: false
+                        )
+                        : null
                 ),
                 'parentMethod1' => new MethodConfig(
                     modifiers: [

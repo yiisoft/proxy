@@ -20,14 +20,12 @@ final class ClassRenderer
      * @see renderClassSignature()
      */
     private string $classSignatureTemplate = '{{modifiers}} {{classType}} {{name}}{{extends}}{{parent}}{{implements}}';
-
     /**
      * @var string A template for rendering proxy method signature.
      *
      * @see renderMethodSignature()
      */
     private string $proxyMethodSignatureTemplate = '{{modifiers}} function {{name}}({{params}}){{returnType}}';
-
     /**
      * @var string A template for rendering proxy method body.
      *
