@@ -20,7 +20,7 @@ final class ClassRenderer
      *
      * @see renderClassSignature()
      */
-    private string $classSignatureTemplate = '{{modifiers}} class {{name}}{{extends}}{{parent}}';
+    private string $classSignatureTemplate = '{{modifiers}}class {{name}} extends {{parent}}';
     /**
      * @var string A template for rendering proxy method signature.
      *
@@ -47,6 +47,10 @@ final class ClassRenderer
             throw new InvalidArgumentException('Rendering of interfaces is not supported.');
         }
 
+        if (!$classConfig->parent) {
+            throw new InvalidArgumentException('Class config is missing a parent.');
+        }
+
         return trim($this->renderClassSignature($classConfig))
             . "\n"
             . '{'
@@ -63,14 +67,9 @@ final class ClassRenderer
      */
     private function renderClassSignature(ClassConfig $classConfig): string
     {
-        $extends = $classConfig->parent
-            ? ' extends '
-            : '';
-
         return strtr($this->classSignatureTemplate, [
             '{{modifiers}}' => $this->renderModifiers($classConfig->modifiers),
             '{{name}}' => $classConfig->shortName,
-            '{{extends}}' => $extends,
             '{{parent}}' => $classConfig->parent,
         ]);
     }

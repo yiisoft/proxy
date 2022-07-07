@@ -48,7 +48,6 @@ final class ClassConfigFactory
             name: $reflection->getName(),
             shortName: $reflection->getShortName(),
             parent: (string) $reflection->getParentClass(),
-            interfaces: $reflection->getInterfaceNames(),
             methods: $this->getMethodConfigs($reflection),
         );
     }
