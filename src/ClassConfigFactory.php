@@ -72,6 +72,7 @@ final class ClassConfigFactory
     /**
      * Gets single method config for individual method reflection.
      *
+     * @param ReflectionClass $class Reflection of a class.
      * @param ReflectionMethod $method Reflection of a method.
      *
      * @return MethodConfig Single method config.
