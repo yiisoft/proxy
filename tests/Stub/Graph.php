@@ -23,13 +23,13 @@ class Graph implements GraphInterface
         return new self();
     }
 
-    public function edgesCount(): int
-    {
-        return 2;
-    }
-
     public function name(): Stringable|string
     {
         return 'Graph';
+    }
+
+    public function edgesCount(): int
+    {
+        return 2;
     }
 }
