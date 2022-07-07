@@ -116,7 +116,6 @@ final class ClassConfigFactory
         return new ParameterConfig(
             type: $this->getMethodParameterTypeConfig($param),
             name: $param->getName(),
-            allowsNull: $param->allowsNull(),
             isDefaultValueAvailable: $param->isDefaultValueAvailable(),
             isDefaultValueConstant: $param->isDefaultValueAvailable()
                 ? $param->isDefaultValueConstant()
