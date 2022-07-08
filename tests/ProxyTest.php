@@ -18,6 +18,7 @@ use Yiisoft\Proxy\Tests\Stub\Graph;
 use Yiisoft\Proxy\Tests\Stub\GraphInterface;
 use Yiisoft\Proxy\Tests\Stub\Money;
 use Yiisoft\Proxy\Tests\Stub\MyProxy;
+use Yiisoft\Proxy\Tests\Stub\Square;
 
 /**
  * @see ProxyManager
@@ -161,5 +162,18 @@ class ProxyTest extends TestCase
         $this->assertSame('CountableProxy', get_class($object));
         $this->assertSame(1, $object->count());
         $this->assertSame('Log', $object->getLog());
+    }
+
+    /**
+     * @link https://github.com/yiisoft/proxy/issues/38
+     */
+    public function testClassWithParametersInConstructor(): void
+    {
+        $path = sys_get_temp_dir();
+        $manager = new ProxyManager($path);
+        /** @var MyProxy|Square $object */
+        $object = $manager->createObjectProxy(Square::class, MyProxy::class, [new Square(3.1)]);
+
+        $this->assertSame(6.2, $object->area());
     }
 }
