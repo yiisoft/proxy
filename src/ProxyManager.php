@@ -6,6 +6,7 @@ namespace Yiisoft\Proxy;
 
 use Exception;
 use Yiisoft\Proxy\Config\ClassConfig;
+use Yiisoft\Proxy\Config\MethodConfig;
 
 final class ProxyManager
 {
@@ -98,6 +99,13 @@ final class ProxyManager
         $classConfig->shortName = self::getProxyClassName($classConfig->name);
 
         foreach ($classConfig->methods as $methodIndex => $method) {
+            /** @var MethodConfig $method */
+            if ($method->name === '__construct') {
+                unset($classConfig->methods[$methodIndex]);
+
+                continue;
+            }
+
             foreach ($method->modifiers as $index => $modifier) {
                 if ($modifier === 'abstract') {
                     unset($classConfig->methods[$methodIndex]->modifiers[$index]);
