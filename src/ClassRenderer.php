@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy;
 
+use InvalidArgumentException;
 use Yiisoft\Proxy\Config\ClassConfig;
 use Yiisoft\Proxy\Config\MethodConfig;
 use Yiisoft\Proxy\Config\ParameterConfig;
@@ -19,7 +20,7 @@ final class ClassRenderer
      *
      * @see renderClassSignature()
      */
-    private string $classSignatureTemplate = '{{modifiers}} {{classType}} {{name}}{{extends}}{{parent}}{{implements}}';
+    private string $classSignatureTemplate = '{{modifiers}}class {{name}} extends {{parent}}';
     /**
      * @var string A template for rendering proxy method signature.
      *
@@ -42,6 +43,14 @@ final class ClassRenderer
      */
     public function render(ClassConfig $classConfig): string
     {
+        if ($classConfig->isInterface) {
+            throw new InvalidArgumentException('Rendering of interfaces is not supported.');
+        }
+
+        if (!$classConfig->parent) {
+            throw new InvalidArgumentException('Class config is missing a parent.');
+        }
+
         return trim($this->renderClassSignature($classConfig))
             . "\n"
             . '{'
@@ -50,7 +59,7 @@ final class ClassRenderer
     }
 
     /**
-     * Renders class / interface signature using {@see $classSignatureTemplate}.
+     * Renders class signature using {@see $classSignatureTemplate}.
      *
      * @param ClassConfig $classConfig Class config.
      *
@@ -58,39 +67,11 @@ final class ClassRenderer
      */
     private function renderClassSignature(ClassConfig $classConfig): string
     {
-        $classType = $classConfig->isInterface
-            ? 'interface'
-            : 'class';
-        $extends = $classConfig->parent
-            ? ' extends '
-            : '';
-
         return strtr($this->classSignatureTemplate, [
             '{{modifiers}}' => $this->renderModifiers($classConfig->modifiers),
-            '{{classType}}' => $classType,
             '{{name}}' => $classConfig->shortName,
-            '{{extends}}' => $extends,
             '{{parent}}' => $classConfig->parent,
-            '{{implements}}' => $this->renderImplements($classConfig->interfaces),
         ]);
-    }
-
-    /**
-     * Renders implements section. Used for interfaces Only
-     *
-     * @param string[] $interfaces A list of interfaces' names with namespaces.
-     *
-     * @return string Implements section as a string. Empty string is returned when no interfaces were passed.
-     *
-     * @see ClassConfig::$interfaces
-     */
-    private function renderImplements(array $interfaces): string
-    {
-        if ($interfaces === []) {
-            return '';
-        }
-
-        return ' implements ' . implode(', ', $interfaces);
     }
 
     /**
