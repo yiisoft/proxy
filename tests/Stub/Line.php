@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Yiisoft\Proxy\Tests\Stub;
 
-class Node
+class Line
 {
-    public function someMethod(): void
-    {
-    }
 }

@@ -34,15 +34,9 @@ class ClassConfigFactoryTest extends TestCase
             name: 'Yiisoft\Proxy\Tests\Stub\NodeInterface',
             shortName: 'NodeInterface',
             parent: '',
-            interfaces: [
-                'Countable',
-                'Yiisoft\Proxy\Tests\Stub\NodeParentInterface',
-                'Yiisoft\Proxy\Tests\Stub\NodeGrandParentInterface',
-            ],
             methods: [
                 'nodeInterfaceMethod1' => new MethodConfig(
                     modifiers: [
-                        'abstract',
                         'public',
                         'static',
                     ],
@@ -141,7 +135,6 @@ class ClassConfigFactoryTest extends TestCase
                 ),
                 'nodeInterfaceMethod2' => new MethodConfig(
                     modifiers: [
-                        'abstract',
                         'public',
                     ],
                     name: 'nodeInterfaceMethod2',
@@ -150,7 +143,6 @@ class ClassConfigFactoryTest extends TestCase
                 ),
                 'nodeInterfaceMethod3' => new MethodConfig(
                     modifiers: [
-                        'abstract',
                         'public',
                     ],
                     name: 'nodeInterfaceMethod3',
@@ -229,7 +221,6 @@ class ClassConfigFactoryTest extends TestCase
                 ),
                 'count' => new MethodConfig(
                     modifiers: [
-                        'abstract',
                         'public',
                     ],
                     name: 'count',
@@ -243,7 +234,6 @@ class ClassConfigFactoryTest extends TestCase
                 ),
                 'parentMethod1' => new MethodConfig(
                     modifiers: [
-                        'abstract',
                         'public',
                     ],
                     name: 'parentMethod1',
@@ -255,7 +245,6 @@ class ClassConfigFactoryTest extends TestCase
                 ),
                 'parentMethod2' => new MethodConfig(
                     modifiers: [
-                        'abstract',
                         'public',
                     ],
                     name: 'parentMethod2',
@@ -264,7 +253,6 @@ class ClassConfigFactoryTest extends TestCase
                 ),
                 'grandParentMethod1' => new MethodConfig(
                     modifiers: [
-                        'abstract',
                         'public',
                     ],
                     name: 'grandParentMethod1',
@@ -276,7 +264,6 @@ class ClassConfigFactoryTest extends TestCase
                 ),
                 'grandParentMethod2' => new MethodConfig(
                     modifiers: [
-                        'abstract',
                         'public',
                     ],
                     name: 'grandParentMethod2',
@@ -288,7 +275,6 @@ class ClassConfigFactoryTest extends TestCase
                 ),
                 'grandParentMethod3' => new MethodConfig(
                     modifiers: [
-                        'abstract',
                         'public',
                     ],
                     name: 'grandParentMethod3',
@@ -300,7 +286,6 @@ class ClassConfigFactoryTest extends TestCase
                 ),
                 'grandParentMethod4' => new MethodConfig(
                     modifiers: [
-                        'abstract',
                         'public',
                     ],
                     name: 'grandParentMethod4',
@@ -327,7 +312,6 @@ class ClassConfigFactoryTest extends TestCase
             name: 'Yiisoft\Proxy\Tests\Stub\Graph',
             shortName: 'Graph',
             parent: '',
-            interfaces: ['Yiisoft\Proxy\Tests\Stub\GraphInterface'],
             methods: [
                 'nodesCount' => new MethodConfig(
                     modifiers: ['public'],
