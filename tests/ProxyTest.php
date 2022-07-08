@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yiisoft\Proxy\Tests;
 
 use Countable;
+use Error;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Yiisoft\Files\FileHelper;
@@ -45,6 +46,12 @@ class ProxyTest extends TestCase
         $this->assertSame(2, $object->nodesCount(1));
         $this->assertNull($object->getCurrentError());
         $this->assertFalse($object->hasCurrentError());
+        $this->assertSame('Log', $object->getLog());
+
+        $this->expectException(Error::class);
+        $message = 'Call to undefined method Yiisoft_Proxy_Tests_Stub_GraphInterfaceProxy::edgesCount()';
+        $this->expectExceptionMessage($message);
+        $object->edgesCount();
     }
 
     public function testCreateObjectProxyWithNullCachePath(): void
@@ -136,7 +143,9 @@ class ProxyTest extends TestCase
         /** @var Graph|MyProxy $object */
         $object = $manager->createObjectProxy(Graph::class, MyProxy::class, [new Graph()]);
 
+        $this->assertSame(2, $object->nodesCount(1));
         $this->assertSame(2, $object->edgesCount());
+        $this->assertSame('Log', $object->getLog());
     }
 
     /**
@@ -152,6 +161,7 @@ class ProxyTest extends TestCase
 
         $this->assertSame('CountableProxy', get_class($object));
         $this->assertSame(1, $object->count());
+        $this->assertSame('Log', $object->getLog());
     }
 
     /**
