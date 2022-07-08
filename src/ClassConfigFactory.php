@@ -102,7 +102,7 @@ final class ClassConfigFactory
             return $modifiers;
         }
 
-        return array_values(array_filter($modifiers, fn (string $modifier) => $modifier !== 'abstract'));
+        return array_values(array_filter($modifiers, static fn (string $modifier) => $modifier !== 'abstract'));
     }
 
     /**
