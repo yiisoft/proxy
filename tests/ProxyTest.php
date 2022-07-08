@@ -161,7 +161,7 @@ class ProxyTest extends TestCase
     {
         $path = sys_get_temp_dir();
         $manager = new ProxyManager($path);
-        /** @var Square|MyProxy $object */
+        /** @var MyProxy|Square $object */
         $object = $manager->createObjectProxy(Square::class, MyProxy::class, [new Square(3.1)]);
 
         $this->assertSame(6.2, $object->area());
