@@ -15,8 +15,6 @@
         "chat": "https://t.me/yii3en",
         "source": "https://github.com/yiisoft/proxy"
     },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
     "require": {
         "php": "^8.0",
         "yiisoft/files": "^1.0.2|^2.0.0"
@@ -35,11 +33,6 @@
     "autoload-dev": {
         "psr-4": {
             "Yiisoft\\Proxy\\Tests\\": "tests"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "3.0.x-dev"
         }
     },
     "scripts": {
