@@ -104,7 +104,7 @@ class ObjectProxy
     }
 
     /**
-     * Processes return value of a called method - if it's a instance of the same class in {@see $instance} - a new
+     * Processes return value of a called method - if it's an instance of the same class in {@see $instance} - a new
      * instance is created, otherwise it's returned as is.
      *
      * @param mixed $result Return value of a called method.
