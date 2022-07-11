@@ -34,6 +34,11 @@ class ClassConfigFactoryTest extends TestCase
             name: 'Yiisoft\Proxy\Tests\Stub\NodeInterface',
             shortName: 'NodeInterface',
             parent: '',
+            interfaces: [
+                'Countable',
+                'Yiisoft\Proxy\Tests\Stub\NodeParentInterface',
+                'Yiisoft\Proxy\Tests\Stub\NodeGrandParentInterface',
+            ],
             methods: [
                 'nodeInterfaceMethod1' => new MethodConfig(
                     modifiers: [
@@ -312,6 +317,7 @@ class ClassConfigFactoryTest extends TestCase
             name: 'Yiisoft\Proxy\Tests\Stub\Graph',
             shortName: 'Graph',
             parent: '',
+            interfaces: ['Yiisoft\Proxy\Tests\Stub\GraphInterface'],
             methods: [
                 'nodesCount' => new MethodConfig(
                     modifiers: ['public'],

@@ -37,6 +37,10 @@ final class ClassConfig
          */
         public string $parent,
         /**
+         * @var string[] A list of interfaces this class implements or interface extends from.
+         */
+        public array $interfaces,
+        /**
          * @var MethodConfig[] A map where key is a {@see $name} and value is {@see MethodConfig} instance.
          * @psalm-var array<string, MethodConfig>
          */

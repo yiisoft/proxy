@@ -20,7 +20,7 @@ final class ClassRenderer
      *
      * @see renderClassSignature()
      */
-    private string $classSignatureTemplate = '{{modifiers}}class {{name}} extends {{parent}}';
+    private string $classSignatureTemplate = '{{modifiers}}class {{name}} extends {{parent}}{{implements}}';
     /**
      * @var string A template for rendering proxy method signature.
      *
@@ -71,7 +71,26 @@ final class ClassRenderer
             '{{modifiers}}' => $this->renderModifiers($classConfig->modifiers),
             '{{name}}' => $classConfig->shortName,
             '{{parent}}' => $classConfig->parent,
+            '{{implements}}' => $this->renderImplements($classConfig->interfaces),
         ]);
+    }
+
+    /**
+     * Renders implements section. Used for interfaces Only
+     *
+     * @param string[] $interfaces A list of interfaces' names with namespaces.
+     *
+     * @return string Implements section as a string. Empty string is returned when no interfaces were passed.
+     *
+     * @see ClassConfig::$interfaces
+     */
+    private function renderImplements(array $interfaces): string
+    {
+        if ($interfaces === []) {
+            return '';
+        }
+
+        return ' implements ' . implode(', ', $interfaces);
     }
 
     /**

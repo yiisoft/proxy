@@ -47,7 +47,7 @@ class ClassRendererTest extends TestCase
         $renderer = new ClassRenderer();
         $output = $renderer->render($config);
         $expectedOutput = <<<'EOD'
-class Money extends Yiisoft\Proxy\Tests\Stub\MyProxy
+class Money extends Yiisoft\Proxy\Tests\Stub\MyProxy implements Countable
 {
     public function count(): int
     {
