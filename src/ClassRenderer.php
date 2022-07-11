@@ -76,7 +76,7 @@ final class ClassRenderer
     }
 
     /**
-     * Renders implements section. Used for interfaces Only
+     * Renders implements section.
      *
      * @param string[] $interfaces A list of interfaces' names with namespaces.
      *
