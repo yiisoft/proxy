@@ -1,6 +1,6 @@
 # Proxy Change Log
 
-## 1.0.1 under development
+## 1.0.1 July 11, 2022
 
 - Bug #54: Revert `implements` section for proxy class (@arogachev)
 
