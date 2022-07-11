@@ -92,6 +92,7 @@ final class ProxyManager
     {
         if ($classConfig->isInterface) {
             $classConfig->isInterface = false;
+            $classConfig->interfaces = [$classConfig->name];
         }
 
         $classConfig->parent = $parentProxyClass;
