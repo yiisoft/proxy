@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Proxy\Config;
 
 /**
+ * @internal
+ *
  * A class / an interface metadata. {@see ClassConfigFactory} is used for creation.
  */
 final class ClassConfig
