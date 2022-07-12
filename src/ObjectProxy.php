@@ -7,8 +7,6 @@ namespace Yiisoft\Proxy;
 use Throwable;
 
 /**
- * @internal
- *
  * Base proxy class for objects to use in {@see ProxyManager}. A concrete implementation can be provided too.
  */
 class ObjectProxy
