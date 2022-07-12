@@ -18,6 +18,8 @@ use Yiisoft\Proxy\Config\ParameterConfig;
 use Yiisoft\Proxy\Config\TypeConfig;
 
 /**
+ * @internal
+ *
  * A factory for creating class configs ({@see ClassConfig}). Uses PHP `Reflection` to get the necessary metadata.
  *
  * @link https://www.php.net/manual/en/book.reflection.php

@@ -11,6 +11,8 @@ use Yiisoft\Proxy\Config\ParameterConfig;
 use Yiisoft\Proxy\Config\TypeConfig;
 
 /**
+ * @internal
+ *
  * Renders class contents based on a given config ({@see ClassConfig}).
  */
 final class ClassRenderer

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Proxy\Config;
 
 /**
+ * @internal
+ *
  * A type metadata. {@see ClassConfigFactory} is used for creation. Can be used both for method parameters' types and
  * return type.
  *

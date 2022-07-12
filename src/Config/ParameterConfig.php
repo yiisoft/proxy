@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yiisoft\Proxy\Config;
 
 /**
+ * @internal
+ *
  * A parameter metadata. {@see ClassConfigFactory} is used for creation. Note that it relies only on PHP type hints and
  * ignores PHPDoc completely.
  */
