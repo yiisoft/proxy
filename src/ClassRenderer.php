@@ -69,8 +69,13 @@ final class ClassRenderer
      */
     private function renderClassSignature(ClassConfig $classConfig): string
     {
+        $modifiers = $this->renderModifiers($classConfig->modifiers);
+        if ($modifiers) {
+            $modifiers .= ' ';
+        }
+
         return strtr($this->classSignatureTemplate, [
-            '{{modifiers}}' => $this->renderModifiers($classConfig->modifiers),
+            '{{modifiers}}' => $modifiers,
             '{{name}}' => $classConfig->shortName,
             '{{parent}}' => $classConfig->parent,
             '{{implements}}' => $this->renderImplements($classConfig->interfaces),
@@ -96,9 +101,9 @@ final class ClassRenderer
     }
 
     /**
-     * Renders modifiers section.
+     * Renders modifiers section. Can be used for both class and method signature.
      *
-     * @param string[] $modifiers A list of modifiers
+     * @param string[] $modifiers A list of modifiers.
      *
      * @return string Modifiers section as a string.
      *
