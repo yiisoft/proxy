@@ -13,6 +13,7 @@ use Yiisoft\Proxy\Tests\Stub\Money;
 use Yiisoft\Proxy\Tests\Stub\MyProxy;
 use Yiisoft\Proxy\Tests\Stub\Node;
 use Yiisoft\Proxy\Tests\Stub\NodeInterface;
+use Yiisoft\Proxy\Tests\Stub\Race;
 
 class ClassRendererTest extends TestCase
 {
@@ -73,6 +74,27 @@ class Node extends Yiisoft\Proxy\Tests\Stub\MyProxy
     public function someMethod(): void
     {
         $this->call('someMethod', []);
+    }
+}
+EOD;
+
+        $this->assertSame($expectedOutput, $output);
+    }
+
+    public function testRenderModifiers(): void
+    {
+        $factory = new ClassConfigFactory();
+        $config = $factory->getClassConfig(Race::class);
+        $config->parent = MyProxy::class;
+
+        $renderer = new ClassRenderer();
+        $output = $renderer->render($config);
+        $expectedOutput = <<<'EOD'
+final class Race extends Yiisoft\Proxy\Tests\Stub\MyProxy
+{
+    public function time(): int
+    {
+        return $this->call('time', []);
     }
 }
 EOD;

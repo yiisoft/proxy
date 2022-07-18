@@ -28,7 +28,7 @@ final class ClassRenderer
      *
      * @see renderMethodSignature()
      */
-    private string $proxyMethodSignatureTemplate = '{{modifiers}} function {{name}}({{params}}){{returnType}}';
+    private string $proxyMethodSignatureTemplate = '{{modifiers}}function {{name}}({{params}}){{returnType}}';
     /**
      * @var string A template for rendering proxy method body.
      *
@@ -96,9 +96,9 @@ final class ClassRenderer
     }
 
     /**
-     * Renders modifiers section.
+     * Renders modifiers section. Can be used for both class and method signature.
      *
-     * @param string[] $modifiers A list of modifiers
+     * @param string[] $modifiers A list of modifiers.
      *
      * @return string Modifiers section as a string.
      *
@@ -106,7 +106,12 @@ final class ClassRenderer
      */
     private function renderModifiers(array $modifiers): string
     {
-        return implode(' ', $modifiers);
+        $output = implode(' ', $modifiers);
+        if ($output !== '') {
+            $output .= ' ';
+        }
+
+        return $output;
     }
 
     /**
