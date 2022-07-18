@@ -28,7 +28,7 @@ final class ClassRenderer
      *
      * @see renderMethodSignature()
      */
-    private string $proxyMethodSignatureTemplate = '{{modifiers}} function {{name}}({{params}}){{returnType}}';
+    private string $proxyMethodSignatureTemplate = '{{modifiers}}function {{name}}({{params}}){{returnType}}';
     /**
      * @var string A template for rendering proxy method body.
      *
@@ -69,13 +69,8 @@ final class ClassRenderer
      */
     private function renderClassSignature(ClassConfig $classConfig): string
     {
-        $modifiers = $this->renderModifiers($classConfig->modifiers);
-        if ($modifiers === '') {
-            $modifiers .= ' ';
-        }
-
         return strtr($this->classSignatureTemplate, [
-            '{{modifiers}}' => $modifiers,
+            '{{modifiers}}' => $this->renderModifiers($classConfig->modifiers),
             '{{name}}' => $classConfig->shortName,
             '{{parent}}' => $classConfig->parent,
             '{{implements}}' => $this->renderImplements($classConfig->interfaces),
@@ -111,7 +106,12 @@ final class ClassRenderer
      */
     private function renderModifiers(array $modifiers): string
     {
-        return implode(' ', $modifiers);
+        $output = implode(' ', $modifiers);
+        if ($output === '') {
+            $output .= ' ';
+        }
+
+        return $output;
     }
 
     /**
