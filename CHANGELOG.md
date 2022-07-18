@@ -1,6 +1,6 @@
 # Proxy Change Log
 
-## 1.0.2 under development
+## 1.0.2 July 18, 2022
 
 - Bug #58: Fix rendering of class modifiers (@arogachev)
 
