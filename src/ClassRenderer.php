@@ -107,7 +107,7 @@ final class ClassRenderer
     private function renderModifiers(array $modifiers): string
     {
         $output = implode(' ', $modifiers);
-        if ($output === '') {
+        if ($output !== '') {
             $output .= ' ';
         }
 
