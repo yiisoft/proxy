@@ -70,7 +70,7 @@ final class ClassRenderer
     private function renderClassSignature(ClassConfig $classConfig): string
     {
         $modifiers = $this->renderModifiers($classConfig->modifiers);
-        if ($modifiers) {
+        if ($modifiers === '') {
             $modifiers .= ' ';
         }
 
