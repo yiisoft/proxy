@@ -14,6 +14,7 @@ use Yiisoft\Proxy\Tests\Stub\MyProxy;
 use Yiisoft\Proxy\Tests\Stub\Node;
 use Yiisoft\Proxy\Tests\Stub\NodeInterface;
 use Yiisoft\Proxy\Tests\Stub\Race;
+use Yiisoft\Proxy\Tests\Stub\UnionTypes;
 
 class ClassRendererTest extends TestCase
 {
@@ -98,6 +99,27 @@ final class Race extends Yiisoft\Proxy\Tests\Stub\MyProxy
     }
 }
 EOD;
+
+        $this->assertSame($expectedOutput, $output);
+    }
+
+    public function testUnionTypes(): void
+    {
+        $factory = new ClassConfigFactory();
+        $config = $factory->getClassConfig(UnionTypes::class);
+        $config->parent = MyProxy::class;
+
+        $renderer = new ClassRenderer();
+        $output = $renderer->render($config);
+        $expectedOutput = <<<'EOD'
+            final class UnionTypes extends Yiisoft\Proxy\Tests\Stub\MyProxy
+            {
+                public function run(string|int|null $param): void
+                {
+                    $this->call('run', [$param]);
+                }
+            }
+            EOD;
 
         $this->assertSame($expectedOutput, $output);
     }
