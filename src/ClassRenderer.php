@@ -302,7 +302,11 @@ final class ClassRenderer
      */
     private function renderType(TypeConfig $type): string
     {
-        if ($type->name === 'mixed' || !$type->allowsNull) {
+        if (
+            $type->name === 'mixed'
+            || !$type->allowsNull
+            || str_contains($type->name, '|')
+        ) {
             return $type->name;
         }
 
