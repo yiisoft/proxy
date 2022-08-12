@@ -13,10 +13,10 @@ class ObjectProxy
 {
     use ProxyTrait;
 
-    public function __construct(
+    final public function __construct(
         /**
-        * @var object An instance of the class for proxying method calls.
-        */
+         * @var object An instance of the class for proxying method calls.
+         */
         private object $instance
     ) {
     }

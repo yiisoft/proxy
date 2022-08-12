@@ -59,6 +59,7 @@ final class ProxyManager
         array $proxyConstructorArguments
     ): ObjectProxy {
         $className = $baseStructure . self::PROXY_SUFFIX;
+        /** @psalm-var class-string $shortClassName */
         $shortClassName = self::getProxyClassName($className);
 
         if (class_exists($shortClassName)) {
@@ -77,6 +78,7 @@ final class ProxyManager
             eval(str_replace('<?php', '', $classDeclaration));
         } else {
             $path = $this->classCache->getClassPath($baseStructure, $parentProxyClass);
+            /** @psalm-suppress UnresolvableInclude */
             require $path;
         }
 
