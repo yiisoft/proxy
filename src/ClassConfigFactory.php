@@ -224,7 +224,7 @@ final class ClassConfigFactory
     }
 
     /**
-     * @psalm-suppress UndefinedClass Need for PHP 8.0 only, because ReflectionIntersectionType don't support
+     * @psalm-suppress UndefinedClass Needed for PHP 8.0 only, because ReflectionIntersectionType is not supported.
      */
     private function getIntersectionType(ReflectionIntersectionType $type): string
     {
