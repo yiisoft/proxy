@@ -63,7 +63,10 @@ final class ProxyManager
         $shortClassName = self::getProxyClassName($className);
 
         if (class_exists($shortClassName)) {
-            /** @var ObjectProxy */
+            /**
+             * @var ObjectProxy
+             * @psalm-suppress MixedMethodCall
+             */
             return new $shortClassName(...$proxyConstructorArguments);
         }
 
@@ -75,6 +78,7 @@ final class ProxyManager
             $this->classCache?->set($baseStructure, $parentProxyClass, $classDeclaration);
         }
         if (!$this->classCache) {
+            /** @psalm-suppress UnusedFunctionCall Bug https://github.com/vimeo/psalm/issues/8406 */
             eval(str_replace('<?php', '', $classDeclaration));
         } else {
             $path = $this->classCache->getClassPath($baseStructure, $parentProxyClass);
@@ -82,7 +86,10 @@ final class ProxyManager
             require $path;
         }
 
-        /** @var ObjectProxy */
+        /**
+         * @var ObjectProxy
+         * @psalm-suppress MixedMethodCall
+         */
         return new $shortClassName(...$proxyConstructorArguments);
     }
 
@@ -107,7 +114,6 @@ final class ProxyManager
         $classConfig->shortName = self::getProxyClassName($classConfig->name);
 
         foreach ($classConfig->methods as $methodIndex => $method) {
-            /** @var MethodConfig $method */
             if ($method->name === '__construct') {
                 unset($classConfig->methods[$methodIndex]);
 

@@ -48,10 +48,12 @@ class ObjectProxy
         $result = null;
         $timeStart = microtime(true);
         try {
+            /** @var mixed $result */
             $result = $this->callInternal($methodName, $arguments);
         } catch (Throwable $e) {
             $this->repeatError($e);
         } finally {
+            /** @var mixed $result */
             $result = $this->afterCall($methodName, $arguments, $result, $timeStart);
         }
 
@@ -100,6 +102,7 @@ class ObjectProxy
      */
     private function callInternal(string $methodName, array $arguments): mixed
     {
+        /** @psalm-suppress MixedMethodCall */
         return $this->instance->$methodName(...$arguments);
     }
 
