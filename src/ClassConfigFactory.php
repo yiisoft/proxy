@@ -205,7 +205,12 @@ final class ClassConfigFactory
     {
         $returnType = $method->getReturnType();
         if (!$returnType && method_exists($method, 'getTentativeReturnType')) {
-            /** @var ReflectionType|null Needed for PHP 8.0 only, because getTentativeReturnType() is not supported. */
+            /**
+             * Needed for PHP 8.0 only, because getTentativeReturnType() is not supported.
+             *
+             * @var ReflectionType|null
+             * @psalm-suppress UnnecessaryVarAnnotation
+             */
             $returnType = $method->getTentativeReturnType();
         }
 
@@ -256,6 +261,10 @@ final class ClassConfigFactory
      */
     private function getIntersectionType(ReflectionIntersectionType $type): string
     {
+        /**
+         * @psalm-suppress ArgumentTypeCoercion ReflectionIntersectionType::getTypes() always returns
+         * array of `ReflectionNamedType`, at least until PHP 8.2 released.
+         */
         $types = array_map(
             static fn (ReflectionNamedType $namedType) => $namedType->getName(),
             $type->getTypes()
