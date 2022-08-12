@@ -3,6 +3,7 @@
 ## 1.0.3 under development
 
 - Bug #59: Fix rendering nullable union types (@vjik)
+- Bug #62: Fix rendering intersection types (@vjik)
 
 ## 1.0.2 July 18, 2022
 

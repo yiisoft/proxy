@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Reflection;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionIntersectionType;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -164,15 +165,8 @@ final class ClassConfigFactory
             return null;
         }
 
-        if ($type instanceof ReflectionUnionType) {
-            $name = $this->getUnionType($type);
-        } else {
-            /** @var ReflectionNamedType $type */
-            $name = $type->getName();
-        }
-
         return new TypeConfig(
-            name: $name,
+            name: $this->convertTypeToString($type),
             allowsNull: $type->allowsNull(),
         );
     }
@@ -195,14 +189,28 @@ final class ClassConfigFactory
             return null;
         }
 
-        $name = $returnType instanceof ReflectionUnionType
-            ? $this->getUnionType($returnType)
-            : $returnType->getName();
-
+        /** @psalm-suppress UndefinedClass Needed for PHP 8.0 only, because ReflectionIntersectionType is not supported. */
         return new TypeConfig(
-            name: $name,
+            name: $this->convertTypeToString($returnType),
             allowsNull: $returnType->allowsNull(),
         );
+    }
+
+    /**
+     * @psalm-suppress UndefinedClass Needed for PHP 8.0 only, because ReflectionIntersectionType is not supported.
+     */
+    private function convertTypeToString(
+        ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType $type
+    ): string {
+        if ($type instanceof ReflectionNamedType) {
+            return $type->getName();
+        }
+
+        if ($type instanceof ReflectionUnionType) {
+            return $this->getUnionType($type);
+        }
+
+        return $this->getIntersectionType($type);
     }
 
     private function getUnionType(ReflectionUnionType $type): string
@@ -213,5 +221,18 @@ final class ClassConfigFactory
         );
 
         return implode('|', $types);
+    }
+
+    /**
+     * @psalm-suppress UndefinedClass Needed for PHP 8.0 only, because ReflectionIntersectionType is not supported.
+     */
+    private function getIntersectionType(ReflectionIntersectionType $type): string
+    {
+        $types = array_map(
+            static fn (ReflectionNamedType $namedType) => $namedType->getName(),
+            $type->getTypes()
+        );
+
+        return implode('&', $types);
     }
 }
