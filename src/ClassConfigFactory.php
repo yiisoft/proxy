@@ -31,6 +31,7 @@ final class ClassConfigFactory
      * Gets single class config based for individual class.
      *
      * @param string $className Full class or interface name (including namespace).
+     * @psalm-param class-string $className
      *
      * @throws InvalidArgumentException In case class or interface does not exist.
      *
@@ -160,6 +161,7 @@ final class ClassConfigFactory
      */
     private function getMethodParameterTypeConfig(ReflectionParameter $param): ?TypeConfig
     {
+        /** @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type */
         $type = $param->getType();
         if (!$type) {
             return null;

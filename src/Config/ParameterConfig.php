@@ -54,6 +54,8 @@ final class ParameterConfig
      * Whether a parameter has type.
      *
      * @return bool `true` if type specified and `false` otherwise.
+     *
+     * @psalm-assert-if-true TypeConfig $this->type
      */
     public function hasType(): bool
     {

@@ -38,6 +38,8 @@ final class MethodConfig
      * Whether a method has return type.
      *
      * @return bool `true` if return type specified and `false` otherwise.
+     *
+     * @psalm-assert-if-true TypeConfig $this->returnType
      */
     public function hasReturnType(): bool
     {

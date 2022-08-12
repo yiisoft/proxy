@@ -47,6 +47,8 @@ final class ProxyManager
      * @param array $proxyConstructorArguments A list of arguments passed to proxy constructor
      * ({@see ObjectProxy::__construct}).
      *
+     * @psalm-param class-string $baseStructure
+     *
      * @throws Exception In case of error during creation or working with cache / requiring PHP code.
      *
      * @return ObjectProxy A subclass of {@see ObjectProxy}.
@@ -60,6 +62,7 @@ final class ProxyManager
         $shortClassName = self::getProxyClassName($className);
 
         if (class_exists($shortClassName)) {
+            /** @var ObjectProxy */
             return new $shortClassName(...$proxyConstructorArguments);
         }
 
@@ -76,6 +79,8 @@ final class ProxyManager
             $path = $this->classCache->getClassPath($baseStructure, $parentProxyClass);
             require $path;
         }
+
+        /** @var ObjectProxy */
         return new $shortClassName(...$proxyConstructorArguments);
     }
 
