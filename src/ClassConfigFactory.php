@@ -107,7 +107,7 @@ final class ClassConfigFactory
             return $modifiers;
         }
 
-        return array_values(array_filter($modifiers, static fn(string $modifier) => $modifier !== 'abstract'));
+        return array_values(array_filter($modifiers, static fn (string $modifier) => $modifier !== 'abstract'));
     }
 
     /**
@@ -212,7 +212,7 @@ final class ClassConfigFactory
     private function getUnionType(ReflectionUnionType $type): string
     {
         $types = array_map(
-            static fn(ReflectionNamedType $namedType) => $namedType->getName(),
+            static fn (ReflectionNamedType $namedType) => $namedType->getName(),
             $type->getTypes()
         );
 
@@ -222,7 +222,7 @@ final class ClassConfigFactory
     private function getIntersectionType(ReflectionIntersectionType $type): string
     {
         $types = array_map(
-            static fn(ReflectionNamedType $namedType) => $namedType->getName(),
+            static fn (ReflectionNamedType $namedType) => $namedType->getName(),
             $type->getTypes()
         );
 
