@@ -6,7 +6,6 @@ namespace Yiisoft\Proxy;
 
 use Exception;
 use Yiisoft\Proxy\Config\ClassConfig;
-use Yiisoft\Proxy\Config\MethodConfig;
 
 final class ProxyManager
 {

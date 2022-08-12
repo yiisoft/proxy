@@ -176,7 +176,7 @@ final class ClassConfigFactory
     private function getMethodParameterTypeConfig(ReflectionParameter $param): ?TypeConfig
     {
         /**
-         * @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type
+         * @var ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType|null $type
          * @psalm-suppress UndefinedDocblockClass Needed for PHP 8.0 only, because ReflectionIntersectionType is
          * not supported.
          */
