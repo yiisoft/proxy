@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Proxy\ClassConfigFactory;
 use Yiisoft\Proxy\ClassRenderer;
+use Yiisoft\Proxy\Tests\Stub\IntersectionTypes;
 use Yiisoft\Proxy\Tests\Stub\Line;
 use Yiisoft\Proxy\Tests\Stub\Money;
 use Yiisoft\Proxy\Tests\Stub\MyProxy;
@@ -114,9 +115,43 @@ EOD;
         $expectedOutput = <<<'EOD'
             final class UnionTypes extends Yiisoft\Proxy\Tests\Stub\MyProxy
             {
-                public function run(string|int|null $param): void
+                public function param(string|int|null $param): void
                 {
-                    $this->call('run', [$param]);
+                    $this->call('param', [$param]);
+                }
+
+                public function result(): string|int|null
+                {
+                    return $this->call('result', []);
+                }
+            }
+            EOD;
+
+        $this->assertSame($expectedOutput, $output);
+    }
+
+    /**
+     * @requires PHP >= 8.1
+     */
+    public function testIntersectionTypes(): void
+    {
+        $factory = new ClassConfigFactory();
+        $config = $factory->getClassConfig(IntersectionTypes::class);
+        $config->parent = MyProxy::class;
+
+        $renderer = new ClassRenderer();
+        $output = $renderer->render($config);
+        $expectedOutput = <<<'EOD'
+            final class IntersectionTypes extends Yiisoft\Proxy\Tests\Stub\MyProxy
+            {
+                public function param(Stringable&Countable $param): void
+                {
+                    $this->call('param', [$param]);
+                }
+
+                public function result(): Stringable&Countable
+                {
+                    return $this->call('result', []);
                 }
             }
             EOD;

@@ -8,9 +8,11 @@ use InvalidArgumentException;
 use Reflection;
 use ReflectionClass;
 use ReflectionException;
+use ReflectionIntersectionType;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
+use ReflectionType;
 use ReflectionUnionType;
 use Yiisoft\Proxy\Config\ClassConfig;
 use Yiisoft\Proxy\Config\MethodConfig;
@@ -105,7 +107,7 @@ final class ClassConfigFactory
             return $modifiers;
         }
 
-        return array_values(array_filter($modifiers, static fn (string $modifier) => $modifier !== 'abstract'));
+        return array_values(array_filter($modifiers, static fn(string $modifier) => $modifier !== 'abstract'));
     }
 
     /**
@@ -164,15 +166,8 @@ final class ClassConfigFactory
             return null;
         }
 
-        if ($type instanceof ReflectionUnionType) {
-            $name = $this->getUnionType($type);
-        } else {
-            /** @var ReflectionNamedType $type */
-            $name = $type->getName();
-        }
-
         return new TypeConfig(
-            name: $name,
+            name: $this->convertTypeToString($type),
             allowsNull: $type->allowsNull(),
         );
     }
@@ -195,23 +190,42 @@ final class ClassConfigFactory
             return null;
         }
 
-        $name = $returnType instanceof ReflectionUnionType
-            ? $this->getUnionType($returnType)
-            : $returnType->getName();
-
         return new TypeConfig(
-            name: $name,
+            name: $this->convertTypeToString($returnType),
             allowsNull: $returnType->allowsNull(),
         );
+    }
+
+    private function convertTypeToString(ReflectionType $type): string
+    {
+        if ($type instanceof ReflectionNamedType) {
+            return $type->getName();
+        }
+
+        if ($type instanceof ReflectionUnionType) {
+            return $this->getUnionType($type);
+        }
+
+        return $this->getIntersectionType($type);
     }
 
     private function getUnionType(ReflectionUnionType $type): string
     {
         $types = array_map(
-            static fn (ReflectionNamedType $namedType) => $namedType->getName(),
+            static fn(ReflectionNamedType $namedType) => $namedType->getName(),
             $type->getTypes()
         );
 
         return implode('|', $types);
+    }
+
+    private function getIntersectionType(ReflectionIntersectionType $type): string
+    {
+        $types = array_map(
+            static fn(ReflectionNamedType $namedType) => $namedType->getName(),
+            $type->getTypes()
+        );
+
+        return implode('&', $types);
     }
 }
