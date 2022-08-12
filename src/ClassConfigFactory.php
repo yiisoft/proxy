@@ -190,14 +190,19 @@ final class ClassConfigFactory
             return null;
         }
 
+        /** @psalm-suppress UndefinedClass Need for PHP 8.0 only, because ReflectionIntersectionType don't support */
         return new TypeConfig(
             name: $this->convertTypeToString($returnType),
             allowsNull: $returnType->allowsNull(),
         );
     }
 
-    private function convertTypeToString(ReflectionType $type): string
-    {
+    /**
+     * @psalm-suppress UndefinedClass Need for PHP 8.0 only, because ReflectionIntersectionType don't support
+     */
+    private function convertTypeToString(
+        ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType $type
+    ): string {
         if ($type instanceof ReflectionNamedType) {
             return $type->getName();
         }
@@ -219,6 +224,9 @@ final class ClassConfigFactory
         return implode('|', $types);
     }
 
+    /**
+     * @psalm-suppress UndefinedClass Need for PHP 8.0 only, because ReflectionIntersectionType don't support
+     */
     private function getIntersectionType(ReflectionIntersectionType $type): string
     {
         $types = array_map(
