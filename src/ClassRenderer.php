@@ -235,6 +235,7 @@ final class ClassRenderer
             return '';
         }
 
+        /** @var string $value */
         $value = $parameter->isDefaultValueConstant
             ? $parameter->defaultValueConstantName
             : var_export($parameter->defaultValue, true);

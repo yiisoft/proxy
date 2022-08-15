@@ -6,7 +6,6 @@ namespace Yiisoft\Proxy;
 
 use Exception;
 use Yiisoft\Proxy\Config\ClassConfig;
-use Yiisoft\Proxy\Config\MethodConfig;
 
 final class ProxyManager
 {
@@ -47,6 +46,8 @@ final class ProxyManager
      * @param array $proxyConstructorArguments A list of arguments passed to proxy constructor
      * ({@see ObjectProxy::__construct}).
      *
+     * @psalm-param class-string $baseStructure
+     *
      * @throws Exception In case of error during creation or working with cache / requiring PHP code.
      *
      * @return ObjectProxy A subclass of {@see ObjectProxy}.
@@ -57,9 +58,14 @@ final class ProxyManager
         array $proxyConstructorArguments
     ): ObjectProxy {
         $className = $baseStructure . self::PROXY_SUFFIX;
+        /** @psalm-var class-string $shortClassName */
         $shortClassName = self::getProxyClassName($className);
 
         if (class_exists($shortClassName)) {
+            /**
+             * @var ObjectProxy
+             * @psalm-suppress MixedMethodCall
+             */
             return new $shortClassName(...$proxyConstructorArguments);
         }
 
@@ -71,11 +77,18 @@ final class ProxyManager
             $this->classCache?->set($baseStructure, $parentProxyClass, $classDeclaration);
         }
         if (!$this->classCache) {
+            /** @psalm-suppress UnusedFunctionCall Bug https://github.com/vimeo/psalm/issues/8406 */
             eval(str_replace('<?php', '', $classDeclaration));
         } else {
             $path = $this->classCache->getClassPath($baseStructure, $parentProxyClass);
+            /** @psalm-suppress UnresolvableInclude */
             require $path;
         }
+
+        /**
+         * @var ObjectProxy
+         * @psalm-suppress MixedMethodCall
+         */
         return new $shortClassName(...$proxyConstructorArguments);
     }
 
@@ -100,7 +113,6 @@ final class ProxyManager
         $classConfig->shortName = self::getProxyClassName($classConfig->name);
 
         foreach ($classConfig->methods as $methodIndex => $method) {
-            /** @var MethodConfig $method */
             if ($method->name === '__construct') {
                 unset($classConfig->methods[$methodIndex]);
 
