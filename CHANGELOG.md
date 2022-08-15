@@ -1,6 +1,6 @@
 # Yii Proxy Change Log
 
-## 1.0.3 under development
+## 1.0.3 August 15, 2022
 
 - Bug #59: Fix rendering nullable union types (@vjik)
 - Bug #62: Fix rendering intersection types (@vjik)
