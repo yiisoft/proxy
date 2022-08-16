@@ -2,7 +2,7 @@
 
 ## 1.0.4 under development
 
-- no changes in this release.
+- Bug #64: Unfinalize `ObjectProxy::__construct()` (@vjik)
 
 ## 1.0.3 August 15, 2022
 

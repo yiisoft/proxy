@@ -13,7 +13,7 @@ class ObjectProxy
 {
     use ProxyTrait;
 
-    final public function __construct(
+    public function __construct(
         /**
          * @var object An instance of the class for proxying method calls.
          */
@@ -89,6 +89,9 @@ class ObjectProxy
      */
     protected function getNewStaticInstance(object $instance): self
     {
+        /**
+         * @psalm-suppress UnsafeInstantiation Constructor should be consistent to `getNewStaticInstance()`.
+         */
         return new static($instance);
     }
 
