@@ -1,6 +1,6 @@
 # Yii Proxy Change Log
 
-## 1.0.4 under development
+## 1.0.4 August 16, 2022
 
 - Bug #64: Unfinalize `ObjectProxy::__construct()` (@vjik)
 
