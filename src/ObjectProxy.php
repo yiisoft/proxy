@@ -89,6 +89,9 @@ class ObjectProxy
      */
     protected function getNewStaticInstance(object $instance): self
     {
+        /**
+         * @psalm-suppress UnsafeInstantiation Constructor should be consistent to `getNewStaticInstance()`.
+         */
         return new static($instance);
     }
 
