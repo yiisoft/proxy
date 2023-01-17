@@ -109,7 +109,6 @@ final class ClassConfigFactory
      */
     private function getMethodModifiers(ReflectionClass $class, ReflectionMethod $method): array
     {
-        /** @psalm-var list<string> $modifiers Can be removed after release https://github.com/vimeo/psalm/pull/8405 */
         $modifiers = Reflection::getModifierNames($method->getModifiers());
         if (!$class->isInterface()) {
             return $modifiers;
