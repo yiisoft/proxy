@@ -6,7 +6,6 @@ namespace Yiisoft\Proxy;
 
 use Exception;
 use RuntimeException;
-use Throwable;
 use Yiisoft\Files\FileHelper;
 
 /**
