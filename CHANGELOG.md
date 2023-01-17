@@ -2,7 +2,7 @@
 
 ## 1.0.5 under development
 
-- no changes in this release.
+- Bug #67: Fix unexpected warning in `ClassCache::get()` in some cases (@vjik)
 
 ## 1.0.4 August 16, 2022
 
