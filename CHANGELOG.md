@@ -1,5 +1,9 @@
 # Yii Proxy Change Log
 
+## 1.0.6 under development
+
+- no changes in this release.
+
 ## 1.0.5 January 17, 2023
 
 - Bug #67: Fix unexpected warning in `ClassCache::get()` in some cases (@vjik)
