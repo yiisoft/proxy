@@ -6,6 +6,7 @@ namespace Yiisoft\Proxy;
 
 use Exception;
 use RuntimeException;
+use Throwable;
 use Yiisoft\Files\FileHelper;
 
 /**
@@ -55,13 +56,14 @@ final class ClassCache
      */
     public function get(string $className, string $baseProxyClassName): ?string
     {
-        try {
-            $content = file_get_contents($this->getClassPath($className, $baseProxyClassName));
-        } catch (Exception) {
+        $classPath = $this->getClassPath($className, $baseProxyClassName);
+        if (!file_exists($classPath)) {
             return null;
         }
 
-        return $content;
+        $content = file_get_contents($classPath);
+
+        return $content === false ? null : $content;
     }
 
     /**
