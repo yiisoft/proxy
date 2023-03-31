@@ -9,6 +9,7 @@ use Yiisoft\Files\FileHelper;
 use Yiisoft\Proxy\ClassCache;
 use Yiisoft\Proxy\Tests\Stub\Node;
 use Yiisoft\Proxy\Tests\Stub\MyProxy;
+
 use function sys_get_temp_dir;
 
 class ClassCacheTest extends TestCase
