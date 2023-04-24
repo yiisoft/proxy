@@ -31,13 +31,13 @@ class ClassConfigFactoryTest extends TestCase
             isInterface: true,
             namespace: 'Yiisoft\Proxy\Tests\Stub',
             modifiers: [],
-            name: 'Yiisoft\Proxy\Tests\Stub\NodeInterface',
+            name: \Yiisoft\Proxy\Tests\Stub\NodeInterface::class,
             shortName: 'NodeInterface',
             parent: '',
             interfaces: [
-                'Countable',
-                'Yiisoft\Proxy\Tests\Stub\NodeParentInterface',
-                'Yiisoft\Proxy\Tests\Stub\NodeGrandParentInterface',
+                \Countable::class,
+                \Yiisoft\Proxy\Tests\Stub\NodeParentInterface::class,
+                \Yiisoft\Proxy\Tests\Stub\NodeGrandParentInterface::class,
             ],
             methods: [
                 'nodeInterfaceMethod1' => new MethodConfig(
@@ -68,7 +68,7 @@ class ClassConfigFactoryTest extends TestCase
                         ),
                         'param3' => new ParameterConfig(
                             type: new TypeConfig(
-                                name: 'ArrayIterator',
+                                name: \ArrayIterator::class,
                                 allowsNull: false
                             ),
                             name: 'param3',
@@ -263,7 +263,7 @@ class ClassConfigFactoryTest extends TestCase
                     name: 'grandParentMethod1',
                     parameters: [],
                     returnType: new TypeConfig(
-                        name: 'ArrayObject',
+                        name: \ArrayObject::class,
                         allowsNull: false
                     )
                 ),
@@ -274,7 +274,7 @@ class ClassConfigFactoryTest extends TestCase
                     name: 'grandParentMethod2',
                     parameters: [],
                     returnType: new TypeConfig(
-                        name: 'ArrayObject',
+                        name: \ArrayObject::class,
                         allowsNull: false
                     )
                 ),
@@ -285,7 +285,7 @@ class ClassConfigFactoryTest extends TestCase
                     name: 'grandParentMethod3',
                     parameters: [],
                     returnType: new TypeConfig(
-                        name: 'Yiisoft\Proxy\Tests\Stub\Node',
+                        name: \Yiisoft\Proxy\Tests\Stub\Node::class,
                         allowsNull: false
                     )
                 ),
@@ -296,7 +296,7 @@ class ClassConfigFactoryTest extends TestCase
                     name: 'grandParentMethod4',
                     parameters: [],
                     returnType: new TypeConfig(
-                        name: 'Yiisoft\Proxy\Tests\Stub\Node',
+                        name: \Yiisoft\Proxy\Tests\Stub\Node::class,
                         allowsNull: false
                     )
                 ),
@@ -314,10 +314,10 @@ class ClassConfigFactoryTest extends TestCase
             isInterface: false,
             namespace: 'Yiisoft\Proxy\Tests\Stub',
             modifiers: [],
-            name: 'Yiisoft\Proxy\Tests\Stub\Graph',
+            name: \Yiisoft\Proxy\Tests\Stub\Graph::class,
             shortName: 'Graph',
             parent: '',
-            interfaces: ['Yiisoft\Proxy\Tests\Stub\GraphInterface'],
+            interfaces: [\Yiisoft\Proxy\Tests\Stub\GraphInterface::class],
             methods: [
                 'nodesCount' => new MethodConfig(
                     modifiers: ['public'],
