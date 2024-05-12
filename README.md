@@ -6,11 +6,6 @@
     <br>
 </p>
 
-The package is able to build generic proxy for a class i.e. it allows intercepting all class method calls. It's used in 
-[yii-debug](https://github.com/yiisoft/yii-debug) package to collect service's method calls information.
-
-For license information check the [LICENSE](LICENSE.md)-file.
-
 [![Latest Stable Version](https://poser.pugx.org/yiisoft/proxy/v/stable.png)](https://packagist.org/packages/yiisoft/proxy)
 [![Total Downloads](https://poser.pugx.org/yiisoft/proxy/downloads.png)](https://packagist.org/packages/yiisoft/proxy)
 [![Build status](https://github.com/yiisoft/proxy/workflows/build/badge.svg)](https://github.com/yiisoft/proxy/actions?query=workflow%3Abuild)
@@ -20,15 +15,22 @@ For license information check the [LICENSE](LICENSE.md)-file.
 [![static analysis](https://github.com/yiisoft/proxy/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/proxy/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/proxy/coverage.svg)](https://shepherd.dev/github/yiisoft/proxy)
 
+The package is able to build generic proxy for a class i.e. it allows intercepting all class method calls. It's used in 
+[yii-debug](https://github.com/yiisoft/yii-debug) package to collect service's method calls information.
+
+## Requirements
+
+- PHP 8.0 or higher.
+
 ## Installation
 
-The preferred way to install this extension is through [Сomposer](http://getcomposer.org/download/).
+The package could be installed with [Composer](https://getcomposer.org):
 
 ```
-composer require --prefer-dist yiisoft/proxy
+composer require yiisoft/proxy
 ```
 
-## Usage
+## General usage
 
 ### Custom base proxy class
 
@@ -129,29 +131,19 @@ class CarProxy extends MyProxy implements CarInterface
 }
 ```
 
-## Unit testing
+## Documentation
 
-The package is tested with [PHPUnit](https://phpunit.de/). To run tests:
+- [Internals](docs/internals.md)
 
-```shell
-./vendor/bin/phpunit
-```
+If you need help or have a question, the [Yii Forum](https://forum.yiiframework.com/c/yii-3-0/63) is a good place for that.
+You may also check out other [Yii Community Resources](https://www.yiiframework.com/community).
 
-## Mutation testing
+## License
 
-The package tests are checked with [Infection](https://infection.github.io/) mutation framework. To run it:
+The Yiisoft Proxy is free software. It is released under the terms of the BSD License.
+Please see [`LICENSE`](./LICENSE.md) for more information.
 
-```shell
-./vendor/bin/infection
-```
-
-## Static analysis
-
-The code is statically analyzed with [Psalm](https://psalm.dev/). To run static analysis:
-
-```shell
-./vendor/bin/psalm
-```
+Maintained by [Yii Software](https://www.yiiframework.com/).
 
 ## Support the project
 
@@ -164,10 +156,3 @@ The code is statically analyzed with [Psalm](https://psalm.dev/). To run static 
 [![Telegram](https://img.shields.io/badge/telegram-join-1DA1F2?style=flat&logo=telegram)](https://t.me/yii3en)
 [![Facebook](https://img.shields.io/badge/facebook-join-1DA1F2?style=flat&logo=facebook&logoColor=ffffff)](https://www.facebook.com/groups/yiitalk)
 [![Slack](https://img.shields.io/badge/slack-join-1DA1F2?style=flat&logo=slack)](https://yiiframework.com/go/slack)
-
-## License
-
-The Yiisoft Proxy is free software. It is released under the terms of the BSD License.
-Please see [`LICENSE`](./LICENSE.md) for more information.
-
-Maintained by [Yii Software](https://www.yiiframework.com/).
