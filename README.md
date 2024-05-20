@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
-        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px">
+        <img src="https://yiisoft.github.io/docs/images/yii_logo.svg" height="100px" alt="Yii">
     </a>
     <h1 align="center">Yii Proxy</h1>
     <br>
@@ -15,7 +15,7 @@
 [![static analysis](https://github.com/yiisoft/proxy/workflows/static%20analysis/badge.svg)](https://github.com/yiisoft/proxy/actions?query=workflow%3A%22static+analysis%22)
 [![type-coverage](https://shepherd.dev/github/yiisoft/proxy/coverage.svg)](https://shepherd.dev/github/yiisoft/proxy)
 
-The package is able to build generic proxy for a class i.e. it allows intercepting all class method calls. It's used in 
+The package is able to build generic proxy for a class i.e. it allows intercepting all class method calls. It's used in
 [yii-debug](https://github.com/yiisoft/yii-debug) package to collect service's method calls information.
 
 ## Requirements
