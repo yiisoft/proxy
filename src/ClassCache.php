@@ -76,8 +76,6 @@ final class ClassCache
      * be the base class for proxy. For example: `MyProxy`.
      *
      * @throws RuntimeException In case when it's impossible to use or create {@see $cachePath}.
-     *
-     * @return string
      */
     public function getClassPath(string $className, string $baseProxyClassName): string
     {

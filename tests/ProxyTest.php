@@ -41,7 +41,7 @@ class ProxyTest extends TestCase
         /** @var Graph|MyProxy $object */
         $object = $manager->createObjectProxy(GraphInterface::class, MyProxy::class, [new Graph()]);
         $this->assertIsObject($object);
-        $this->assertSame('Yiisoft_Proxy_Tests_Stub_GraphInterfaceProxy', get_class($object));
+        $this->assertSame('Yiisoft_Proxy_Tests_Stub_GraphInterfaceProxy', $object::class);
 
         $this->assertSame(2, $object->nodesCount(1));
         $this->assertNull($object->getCurrentError());
@@ -159,7 +159,7 @@ class ProxyTest extends TestCase
         /** @var Money|MyProxy $object */
         $object = $manager->createObjectProxy(Countable::class, MyProxy::class, [new Money()]);
 
-        $this->assertSame('CountableProxy', get_class($object));
+        $this->assertSame('CountableProxy', $object::class);
         $this->assertSame(1, $object->count());
         $this->assertSame('Log', $object->getLog());
     }
