@@ -119,7 +119,7 @@ class ObjectProxy
      */
     private function processResult(mixed $result): mixed
     {
-        if (is_object($result) && get_class($result) === get_class($this->instance)) {
+        if (is_object($result) && $result::class === $this->instance::class) {
             $result = $this->getNewStaticInstance($result);
         }
 
