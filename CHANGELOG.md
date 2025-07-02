@@ -1,8 +1,10 @@
 # Yii Proxy Change Log
 
-## 1.0.6 under development
+## 1.1.0 under development
 
-- no changes in this release.
+- Chg #75: Change PHP constraint in `composer.json` to `8.1 - 8.4` (@batyrmastyr)
+- Bug #75: Fix the nullable parameter declarations for compatibility with PHP 8.4 (@batyrmastyr)
+- Enh #75: Support disjunctive normal form types (@batyrmastyr)
 
 ## 1.0.5 January 17, 2023
 

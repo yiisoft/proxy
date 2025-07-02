@@ -8,6 +8,7 @@ use Throwable;
 
 /**
  * Base proxy class for objects to use in {@see ProxyManager}. A concrete implementation can be provided too.
+ * @psalm-suppress ClassMustBeFinal
  */
 class ObjectProxy
 {
@@ -24,7 +25,7 @@ class ObjectProxy
     /**
      * Gets instance.
      *
-     * @return object {@see $instance}.
+     * @see $instance
      */
     public function getInstance(): object
     {

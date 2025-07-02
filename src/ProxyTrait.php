@@ -23,7 +23,7 @@ trait ProxyTrait
     /**
      * Gets current error.
      *
-     * @return Throwable|null {@see $currentError}.
+     * @see $currentError
      */
     public function getCurrentError(): ?Throwable
     {

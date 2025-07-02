@@ -30,9 +30,9 @@ final class ProxyManager
     /**
      * @param string|null $cachePath Cache path, optional, {@see ClassCache::$cachePath}.
      */
-    public function __construct(string $cachePath = null)
+    public function __construct(?string $cachePath = null)
     {
-        $this->classCache = $cachePath ? new ClassCache($cachePath) : null;
+        $this->classCache = $cachePath !== null && $cachePath !== '' ? new ClassCache($cachePath) : null;
         $this->classRenderer = new ClassRenderer();
         $this->classConfigFactory = new ClassConfigFactory();
     }
@@ -70,7 +70,7 @@ final class ProxyManager
         }
 
         $classDeclaration = $this->classCache?->get($className, $parentProxyClass);
-        if (!$classDeclaration) {
+        if ($classDeclaration === null) {
             $classConfig = $this->classConfigFactory->getClassConfig($baseStructure);
             $classConfig = $this->generateProxyClassConfig($classConfig, $parentProxyClass);
             $classDeclaration = $this->classRenderer->render($classConfig);
@@ -87,6 +87,7 @@ final class ProxyManager
 
         /**
          * @var ObjectProxy
+         * @psalm-var class-string $shortClassName
          * @psalm-suppress MixedMethodCall
          */
         return new $shortClassName(...$proxyConstructorArguments);

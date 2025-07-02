@@ -65,6 +65,17 @@ class ProxyTest extends TestCase
         $this->assertSame(1, $object->horsepower());
     }
 
+    public function testCreateObjectProxyWithEmptyCachePath(): void
+    {
+        $manager = new ProxyManager('');
+
+        /** @var Car|MyProxy $object */
+        $object = $manager->createObjectProxy(CarInterface::class, MyProxy::class, [new Car()]);
+        $this->assertIsObject($object);
+
+        $this->assertSame(1, $object->horsepower());
+    }
+
     public function testGetInstance(): void
     {
         $path = sys_get_temp_dir();

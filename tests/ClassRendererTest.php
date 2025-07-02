@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Yiisoft\Proxy\ClassConfigFactory;
 use Yiisoft\Proxy\ClassRenderer;
+use Yiisoft\Proxy\Tests\Stub\DisjunctiveNormalFormTypes;
 use Yiisoft\Proxy\Tests\Stub\IntersectionTypes;
 use Yiisoft\Proxy\Tests\Stub\Line;
 use Yiisoft\Proxy\Tests\Stub\Money;
@@ -150,6 +151,35 @@ EOD;
                 }
 
                 public function result(): Stringable&Countable
+                {
+                    return $this->call('result', []);
+                }
+            }
+            EOD;
+
+        $this->assertSame($expectedOutput, $output);
+    }
+
+    /**
+     * @requires PHP >= 8.2
+     */
+    public function testDisjunctiveNormalFormTypes(): void
+    {
+        $factory = new ClassConfigFactory();
+        $config = $factory->getClassConfig(DisjunctiveNormalFormTypes::class);
+        $config->parent = MyProxy::class;
+
+        $renderer = new ClassRenderer();
+        $output = $renderer->render($config);
+        $expectedOutput = <<<'EOD'
+            final class DisjunctiveNormalFormTypes extends Yiisoft\Proxy\Tests\Stub\MyProxy
+            {
+                public function param((Stringable&Countable)|string|int|null $param): void
+                {
+                    $this->call('param', [$param]);
+                }
+
+                public function result(): Yiisoft\Proxy\Tests\Stub\CarInterface|(Yiisoft\Proxy\Tests\Stub\Line&Yiisoft\Proxy\Tests\Stub\Money)|null
                 {
                     return $this->call('result', []);
                 }
