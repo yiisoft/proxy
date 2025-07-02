@@ -3,15 +3,14 @@
 <phpunit
     bootstrap="vendor/autoload.php"
     colors="true"
-    verbose="true"
     failOnRisky="true"
     failOnWarning="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="false"
-    stopOnFailure="false"
+    requireCoverageMetadata="false"
+    beStrictAboutCoverageMetadata="true"
+    beStrictAboutOutputDuringTests="true"
     executionOrder="random"
-    resolveDependencies="true"
+    stopOnFailure="false"
+    displayDetailsOnPhpunitDeprecations="true"
 >
     <php>
         <ini name="error_reporting" value="-1"/>
@@ -23,9 +22,9 @@
         </testsuite>
     </testsuites>
 
-    <coverage>
+    <source>
         <include>
             <directory>./src</directory>
         </include>
-    </coverage>
+    </source>
 </phpunit>

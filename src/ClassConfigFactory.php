@@ -247,25 +247,29 @@ final class ClassConfigFactory
     private function getUnionType(ReflectionUnionType $type): string
     {
         $types = array_map(
-            static fn (ReflectionNamedType $namedType) => $namedType->getName(),
+            function (ReflectionNamedType|ReflectionIntersectionType $subType) {
+                /** @psalm-suppress DocblockTypeContradiction */
+                if ($subType instanceof ReflectionIntersectionType) {
+                    return '(' . $this->getIntersectionType($subType) . ')';
+                }
+                return $subType->getName();
+            },
             $type->getTypes()
         );
 
         return implode('|', $types);
     }
 
-    /**
-     * @psalm-suppress UndefinedClass, MixedArgument Needed for PHP 8.0 only, because ReflectionIntersectionType is
-     * not supported.
-     */
     private function getIntersectionType(ReflectionIntersectionType $type): string
     {
-        /**
-         * @psalm-suppress ArgumentTypeCoercion ReflectionIntersectionType::getTypes() always returns
-         * array of `ReflectionNamedType`, at least until PHP 8.2 released.
-         */
         $types = array_map(
-            static fn (ReflectionNamedType $namedType) => $namedType->getName(),
+            function (ReflectionNamedType|ReflectionUnionType $subType) {
+                /** @psalm-suppress DocblockTypeContradiction */
+                if ($subType instanceof ReflectionUnionType) {
+                    return '(' . $this->getUnionType($subType) . ')';
+                }
+                return $subType->getName();
+            },
             $type->getTypes()
         );
 
