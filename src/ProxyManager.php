@@ -29,10 +29,12 @@ final class ProxyManager
 
     /**
      * @param string|null $cachePath Cache path, optional, {@see ClassCache::$cachePath}.
+     *
+     * @psalm-param non-empty-string|null $cachePath
      */
     public function __construct(?string $cachePath = null)
     {
-        $this->classCache = $cachePath !== null && $cachePath !== '' ? new ClassCache($cachePath) : null;
+        $this->classCache = $cachePath !== null ? new ClassCache($cachePath) : null;
         $this->classRenderer = new ClassRenderer();
         $this->classConfigFactory = new ClassConfigFactory();
     }
