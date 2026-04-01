@@ -34,7 +34,7 @@ final class ProxyManager
      */
     public function __construct(?string $cachePath = null)
     {
-        $this->classCache = $cachePath !== null ? new ClassCache($cachePath) : null;
+        $this->classCache = ($cachePath !== null && $cachePath !== '') ? new ClassCache($cachePath) : null;
         $this->classRenderer = new ClassRenderer();
         $this->classConfigFactory = new ClassConfigFactory();
     }
