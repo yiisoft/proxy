@@ -188,7 +188,7 @@ final class ClassConfigFactory
          * @psalm-suppress UndefinedClass Needed for PHP 8.0 only, because ReflectionIntersectionType is not supported.
          */
         return new TypeConfig(
-            name: $this->convertTypeToString($type),
+            name: $this->convertTypeToString($type, $param->getDeclaringClass()?->getName()),
             allowsNull: $type->allowsNull(),
         );
     }
@@ -222,7 +222,7 @@ final class ClassConfigFactory
          * not supported.
          */
         return new TypeConfig(
-            name: $this->convertTypeToString($returnType),
+            name: $this->convertTypeToString($returnType, $method->getDeclaringClass()->getName()),
             allowsNull: $returnType->allowsNull(),
         );
     }
@@ -231,28 +231,31 @@ final class ClassConfigFactory
      * @psalm-suppress UndefinedClass Needed for PHP 8.0 only, because ReflectionIntersectionType is not supported.
      */
     private function convertTypeToString(
-        ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType $type
+        ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType $type,
+        ?string $declaringClassName = null,
     ): string {
         if ($type instanceof ReflectionNamedType) {
-            return $this->getNamedTypeName($type);
+            $name = $type->getName();
+            return ($declaringClassName !== null && $name === $declaringClassName) ? 'self' : $name;
         }
 
         if ($type instanceof ReflectionUnionType) {
-            return $this->getUnionType($type);
+            return $this->getUnionType($type, $declaringClassName);
         }
 
-        return $this->getIntersectionType($type);
+        return $this->getIntersectionType($type, $declaringClassName);
     }
 
-    private function getUnionType(ReflectionUnionType $type): string
+    private function getUnionType(ReflectionUnionType $type, ?string $declaringClassName = null): string
     {
         $types = array_map(
-            function (ReflectionNamedType|ReflectionIntersectionType $subType) {
+            function (ReflectionNamedType|ReflectionIntersectionType $subType) use ($declaringClassName) {
                 /** @psalm-suppress DocblockTypeContradiction */
                 if ($subType instanceof ReflectionIntersectionType) {
-                    return '(' . $this->getIntersectionType($subType) . ')';
+                    return '(' . $this->getIntersectionType($subType, $declaringClassName) . ')';
                 }
-                return $this->getNamedTypeName($subType);
+                $name = $subType->getName();
+                return ($declaringClassName !== null && $name === $declaringClassName) ? 'self' : $name;
             },
             $type->getTypes()
         );
@@ -260,36 +263,20 @@ final class ClassConfigFactory
         return implode('|', $types);
     }
 
-    private function getIntersectionType(ReflectionIntersectionType $type): string
+    private function getIntersectionType(ReflectionIntersectionType $type, ?string $declaringClassName = null): string
     {
         $types = array_map(
-            function (ReflectionNamedType|ReflectionUnionType $subType) {
+            function (ReflectionNamedType|ReflectionUnionType $subType) use ($declaringClassName) {
                 /** @psalm-suppress DocblockTypeContradiction */
                 if ($subType instanceof ReflectionUnionType) {
-                    return '(' . $this->getUnionType($subType) . ')';
+                    return '(' . $this->getUnionType($subType, $declaringClassName) . ')';
                 }
-                return $this->getNamedTypeName($subType);
+                $name = $subType->getName();
+                return ($declaringClassName !== null && $name === $declaringClassName) ? 'self' : $name;
             },
             $type->getTypes()
         );
 
         return implode('&', $types);
-    }
-
-    private function getNamedTypeName(ReflectionNamedType $type): string
-    {
-        // PHP 8.5+ resolves 'self', 'static', 'parent' to the actual class name in getName().
-        // Use the dedicated isSelf/isStatic/isParent methods when available to preserve the keyword.
-        if (method_exists($type, 'isSelf') && $type->isSelf()) {
-            return 'self';
-        }
-        if (method_exists($type, 'isStatic') && $type->isStatic()) {
-            return 'static';
-        }
-        if (method_exists($type, 'isParent') && $type->isParent()) {
-            return 'parent';
-        }
-
-        return $type->getName();
     }
 }
