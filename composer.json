@@ -46,8 +46,7 @@
     },
     "scripts": {
         "phan": "phan --progress-bar -o analysis.txt",
-        "test": "phpunit --testdox --no-interaction",
-        "test-watch": "phpunit-watcher watch"
+        "test": "phpunit --testdox --no-interaction"
     },
     "config": {
         "sort-packages": true,
