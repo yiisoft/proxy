@@ -230,7 +230,7 @@ final class ClassConfigFactory
 
     private function resolveTypeName(string $name, ReflectionFunctionAbstract $function): string
     {
-        if ($name === 'self' && $function instanceof ReflectionMethod) {
+        if ($name === 'self' && $function instanceof ReflectionMethod && $function->getDeclaringClass()->isInterface()) {
             return $function->getDeclaringClass()->getName();
         }
 
