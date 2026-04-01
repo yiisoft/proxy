@@ -19,7 +19,7 @@ The package is able to build generic proxy for a class i.e. it allows intercepti
 
 ## Requirements
 
-- PHP 8.0 or higher.
+- PHP 8.1 or higher.
 
 ## Installation
 
