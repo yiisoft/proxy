@@ -234,7 +234,7 @@ final class ClassConfigFactory
         ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType $type
     ): string {
         if ($type instanceof ReflectionNamedType) {
-            return $type->getName();
+            return $this->getNamedTypeName($type);
         }
 
         if ($type instanceof ReflectionUnionType) {
@@ -252,7 +252,7 @@ final class ClassConfigFactory
                 if ($subType instanceof ReflectionIntersectionType) {
                     return '(' . $this->getIntersectionType($subType) . ')';
                 }
-                return $subType->getName();
+                return $this->getNamedTypeName($subType);
             },
             $type->getTypes()
         );
@@ -268,11 +268,28 @@ final class ClassConfigFactory
                 if ($subType instanceof ReflectionUnionType) {
                     return '(' . $this->getUnionType($subType) . ')';
                 }
-                return $subType->getName();
+                return $this->getNamedTypeName($subType);
             },
             $type->getTypes()
         );
 
         return implode('&', $types);
+    }
+
+    private function getNamedTypeName(ReflectionNamedType $type): string
+    {
+        // PHP 8.5+ resolves 'self', 'static', 'parent' to the actual class name in getName().
+        // Use the dedicated isSelf/isStatic/isParent methods when available to preserve the keyword.
+        if (method_exists($type, 'isSelf') && $type->isSelf()) {
+            return 'self';
+        }
+        if (method_exists($type, 'isStatic') && $type->isStatic()) {
+            return 'static';
+        }
+        if (method_exists($type, 'isParent') && $type->isParent()) {
+            return 'parent';
+        }
+
+        return $type->getName();
     }
 }
