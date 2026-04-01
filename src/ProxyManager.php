@@ -28,9 +28,10 @@ final class ProxyManager
     public const PROXY_SUFFIX = 'Proxy';
 
     /**
-     * @param string|null $cachePath Cache path, optional, {@see ClassCache::$cachePath}.
+     * @param string|null $cachePath Cache path, optional, {@see ClassCache::$cachePath}. Pass `null` to disable
+     * caching.
      *
-     * @psalm-param string|null $cachePath
+     * @psalm-param non-empty-string|null $cachePath
      */
     public function __construct(?string $cachePath = null)
     {
