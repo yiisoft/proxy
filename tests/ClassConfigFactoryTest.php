@@ -244,7 +244,7 @@ class ClassConfigFactoryTest extends TestCase
                     name: 'parentMethod1',
                     parameters: [],
                     returnType: new TypeConfig(
-                        name: 'self',
+                        name: 'Yiisoft\Proxy\Tests\Stub\NodeParentInterface',
                         allowsNull: false
                     )
                 ),
@@ -345,7 +345,7 @@ class ClassConfigFactoryTest extends TestCase
                     name: 'getGraphInstance',
                     parameters: [],
                     returnType: new TypeConfig(
-                        name: 'self',
+                        name: 'Yiisoft\Proxy\Tests\Stub\Graph',
                         allowsNull: false
                     )
                 ),
@@ -354,7 +354,7 @@ class ClassConfigFactoryTest extends TestCase
                     name: 'makeNewGraph',
                     parameters: [],
                     returnType: new TypeConfig(
-                        name: 'self',
+                        name: 'Yiisoft\Proxy\Tests\Stub\Graph',
                         allowsNull: false
                     )
                 ),
