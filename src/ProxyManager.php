@@ -106,6 +106,8 @@ final class ProxyManager
      */
     private function generateProxyClassConfig(ClassConfig $classConfig, string $parentProxyClass): ClassConfig
     {
+        $originalName = $classConfig->name;
+
         if ($classConfig->isInterface) {
             $classConfig->isInterface = false;
             $classConfig->interfaces = [$classConfig->name];
@@ -125,6 +127,16 @@ final class ProxyManager
             foreach ($method->modifiers as $index => $modifier) {
                 if ($modifier === 'abstract') {
                     unset($classConfig->methods[$methodIndex]->modifiers[$index]);
+                }
+            }
+
+            if ($method->returnType !== null) {
+                $method->returnType->name = str_replace('self', $originalName, $method->returnType->name);
+            }
+
+            foreach ($method->parameters as $parameter) {
+                if ($parameter->type !== null) {
+                    $parameter->type->name = str_replace('self', $originalName, $parameter->type->name);
                 }
             }
         }

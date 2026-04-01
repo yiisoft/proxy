@@ -244,7 +244,7 @@ class ClassConfigFactoryTest extends TestCase
                     name: 'parentMethod1',
                     parameters: [],
                     returnType: new TypeConfig(
-                        name: 'Yiisoft\Proxy\Tests\Stub\NodeParentInterface',
+                        name: 'self',
                         allowsNull: false
                     )
                 ),

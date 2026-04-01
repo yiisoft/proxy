@@ -3,7 +3,6 @@
 ## 1.1.1 under development
 
 - Chg #78: Add PHP 8.5 support (@xepozz)
-- Chg #78: Resolved class name is now used instead of `self` (@samdark)
 
 ## 1.1.0 September 23, 2025
 

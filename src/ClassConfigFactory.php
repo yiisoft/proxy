@@ -14,7 +14,6 @@ use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionType;
 use ReflectionUnionType;
-use ReflectionFunctionAbstract;
 use Yiisoft\Proxy\Config\ClassConfig;
 use Yiisoft\Proxy\Config\MethodConfig;
 use Yiisoft\Proxy\Config\ParameterConfig;
@@ -189,7 +188,7 @@ final class ClassConfigFactory
          * @psalm-suppress UndefinedClass Needed for PHP 8.0 only, because ReflectionIntersectionType is not supported.
          */
         return new TypeConfig(
-            name: $this->resolveTypeName($this->convertTypeToString($type), $param->getDeclaringFunction()),
+            name: $this->convertTypeToString($type),
             allowsNull: $type->allowsNull(),
         );
     }
@@ -223,18 +222,9 @@ final class ClassConfigFactory
          * not supported.
          */
         return new TypeConfig(
-            name: $this->resolveTypeName($this->convertTypeToString($returnType), $method),
+            name: $this->convertTypeToString($returnType),
             allowsNull: $returnType->allowsNull(),
         );
-    }
-
-    private function resolveTypeName(string $name, ReflectionFunctionAbstract $function): string
-    {
-        if ($name === 'self' && $function instanceof ReflectionMethod && $function->getDeclaringClass()->isInterface()) {
-            return $function->getDeclaringClass()->getName();
-        }
-
-        return $name;
     }
 
     /**
