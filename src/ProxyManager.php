@@ -30,8 +30,6 @@ final class ProxyManager
     /**
      * @param string|null $cachePath Cache path, optional, {@see ClassCache::$cachePath}. Pass `null` to disable
      * caching.
-     *
-     * @psalm-param string|null $cachePath
      */
     public function __construct(?string $cachePath = null)
     {
