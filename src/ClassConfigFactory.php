@@ -12,7 +12,6 @@ use ReflectionIntersectionType;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
-use ReflectionType;
 use ReflectionUnionType;
 use Yiisoft\Proxy\Config\ClassConfig;
 use Yiisoft\Proxy\Config\MethodConfig;
@@ -175,7 +174,7 @@ final class ClassConfigFactory
     private function getMethodParameterTypeConfig(ReflectionParameter $param): ?TypeConfig
     {
         /**
-         * @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null
+         * @var ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType|null
          */
         $type = $param->getType();
         if (!$type) {
@@ -202,7 +201,7 @@ final class ClassConfigFactory
             $returnType = $method->getTentativeReturnType();
         }
         /**
-         * @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $returnType
+         * @var ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType|null $returnType
          */
 
         if (!$returnType) {
