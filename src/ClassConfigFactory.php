@@ -12,7 +12,6 @@ use ReflectionIntersectionType;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
-use ReflectionType;
 use ReflectionUnionType;
 use Yiisoft\Proxy\Config\ClassConfig;
 use Yiisoft\Proxy\Config\MethodConfig;
@@ -175,18 +174,13 @@ final class ClassConfigFactory
     private function getMethodParameterTypeConfig(ReflectionParameter $param): ?TypeConfig
     {
         /**
-         * @var ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType|null $type
-         * @psalm-suppress UndefinedDocblockClass Needed for PHP 8.0 only, because ReflectionIntersectionType is
-         * not supported.
+         * @var ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType|null
          */
         $type = $param->getType();
         if (!$type) {
             return null;
         }
 
-        /**
-         * @psalm-suppress UndefinedClass Needed for PHP 8.0 only, because ReflectionIntersectionType is not supported.
-         */
         return new TypeConfig(
             name: $this->convertTypeToString($type, $param->getDeclaringClass()?->getName()),
             allowsNull: $type->allowsNull(),
@@ -204,32 +198,22 @@ final class ClassConfigFactory
     {
         $returnType = $method->getReturnType();
         if (!$returnType && method_exists($method, 'getTentativeReturnType')) {
-            /**
-             * Needed for PHP 8.0 only, because getTentativeReturnType() is not supported.
-             *
-             * @var ReflectionType|null
-             * @psalm-suppress UnnecessaryVarAnnotation
-             */
             $returnType = $method->getTentativeReturnType();
         }
+        /**
+         * @var ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType|null $returnType
+         */
 
         if (!$returnType) {
             return null;
         }
 
-        /**
-         * @psalm-suppress ArgumentTypeCoercion Needed for PHP 8.0 only, because ReflectionIntersectionType is
-         * not supported.
-         */
         return new TypeConfig(
             name: $this->convertTypeToString($returnType, $method->getDeclaringClass()->getName()),
             allowsNull: $returnType->allowsNull(),
         );
     }
 
-    /**
-     * @psalm-suppress UndefinedClass Needed for PHP 8.0 only, because ReflectionIntersectionType is not supported.
-     */
     private function convertTypeToString(
         ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType $type,
         ?string $declaringClassName = null,
