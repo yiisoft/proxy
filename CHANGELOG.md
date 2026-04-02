@@ -2,7 +2,7 @@
 
 ## 1.1.1 under development
 
-- no changes in this release.
+- Chg #78: Add PHP 8.5 support (@xepozz, @samdark)
 
 ## 1.1.0 September 23, 2025
 

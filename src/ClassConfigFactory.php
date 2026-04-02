@@ -188,7 +188,7 @@ final class ClassConfigFactory
          * @psalm-suppress UndefinedClass Needed for PHP 8.0 only, because ReflectionIntersectionType is not supported.
          */
         return new TypeConfig(
-            name: $this->convertTypeToString($type),
+            name: $this->convertTypeToString($type, $param->getDeclaringClass()?->getName()),
             allowsNull: $type->allowsNull(),
         );
     }
@@ -222,7 +222,7 @@ final class ClassConfigFactory
          * not supported.
          */
         return new TypeConfig(
-            name: $this->convertTypeToString($returnType),
+            name: $this->convertTypeToString($returnType, $method->getDeclaringClass()->getName()),
             allowsNull: $returnType->allowsNull(),
         );
     }
@@ -231,28 +231,31 @@ final class ClassConfigFactory
      * @psalm-suppress UndefinedClass Needed for PHP 8.0 only, because ReflectionIntersectionType is not supported.
      */
     private function convertTypeToString(
-        ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType $type
+        ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType $type,
+        ?string $declaringClassName = null,
     ): string {
         if ($type instanceof ReflectionNamedType) {
-            return $type->getName();
+            $name = $type->getName();
+            return ($declaringClassName !== null && $name === $declaringClassName) ? 'self' : $name;
         }
 
         if ($type instanceof ReflectionUnionType) {
-            return $this->getUnionType($type);
+            return $this->getUnionType($type, $declaringClassName);
         }
 
-        return $this->getIntersectionType($type);
+        return $this->getIntersectionType($type, $declaringClassName);
     }
 
-    private function getUnionType(ReflectionUnionType $type): string
+    private function getUnionType(ReflectionUnionType $type, ?string $declaringClassName = null): string
     {
         $types = array_map(
-            function (ReflectionNamedType|ReflectionIntersectionType $subType) {
+            function (ReflectionNamedType|ReflectionIntersectionType $subType) use ($declaringClassName) {
                 /** @psalm-suppress DocblockTypeContradiction */
                 if ($subType instanceof ReflectionIntersectionType) {
-                    return '(' . $this->getIntersectionType($subType) . ')';
+                    return '(' . $this->getIntersectionType($subType, $declaringClassName) . ')';
                 }
-                return $subType->getName();
+                $name = $subType->getName();
+                return ($declaringClassName !== null && $name === $declaringClassName) ? 'self' : $name;
             },
             $type->getTypes()
         );
@@ -260,15 +263,16 @@ final class ClassConfigFactory
         return implode('|', $types);
     }
 
-    private function getIntersectionType(ReflectionIntersectionType $type): string
+    private function getIntersectionType(ReflectionIntersectionType $type, ?string $declaringClassName = null): string
     {
         $types = array_map(
-            function (ReflectionNamedType|ReflectionUnionType $subType) {
+            function (ReflectionNamedType|ReflectionUnionType $subType) use ($declaringClassName) {
                 /** @psalm-suppress DocblockTypeContradiction */
                 if ($subType instanceof ReflectionUnionType) {
-                    return '(' . $this->getUnionType($subType) . ')';
+                    return '(' . $this->getUnionType($subType, $declaringClassName) . ')';
                 }
-                return $subType->getName();
+                $name = $subType->getName();
+                return ($declaringClassName !== null && $name === $declaringClassName) ? 'self' : $name;
             },
             $type->getTypes()
         );

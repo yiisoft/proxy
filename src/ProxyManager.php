@@ -28,13 +28,12 @@ final class ProxyManager
     public const PROXY_SUFFIX = 'Proxy';
 
     /**
-     * @param string|null $cachePath Cache path, optional, {@see ClassCache::$cachePath}.
-     *
-     * @psalm-param non-empty-string|null $cachePath
+     * @param string|null $cachePath Cache path, optional, {@see ClassCache::$cachePath}. Pass `null` to disable
+     * caching.
      */
     public function __construct(?string $cachePath = null)
     {
-        $this->classCache = $cachePath !== null ? new ClassCache($cachePath) : null;
+        $this->classCache = ($cachePath !== null && $cachePath !== '') ? new ClassCache($cachePath) : null;
         $this->classRenderer = new ClassRenderer();
         $this->classConfigFactory = new ClassConfigFactory();
     }
@@ -106,6 +105,8 @@ final class ProxyManager
      */
     private function generateProxyClassConfig(ClassConfig $classConfig, string $parentProxyClass): ClassConfig
     {
+        $originalName = $classConfig->name;
+
         if ($classConfig->isInterface) {
             $classConfig->isInterface = false;
             $classConfig->interfaces = [$classConfig->name];
@@ -125,6 +126,16 @@ final class ProxyManager
             foreach ($method->modifiers as $index => $modifier) {
                 if ($modifier === 'abstract') {
                     unset($classConfig->methods[$methodIndex]->modifiers[$index]);
+                }
+            }
+
+            if ($method->returnType !== null) {
+                $method->returnType->name = str_replace('self', $originalName, $method->returnType->name);
+            }
+
+            foreach ($method->parameters as $parameter) {
+                if ($parameter->type !== null) {
+                    $parameter->type->name = str_replace('self', $originalName, $parameter->type->name);
                 }
             }
         }
