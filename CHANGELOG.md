@@ -1,5 +1,9 @@
 # Yii Proxy Change Log
 
+## 1.2.1 under development
+
+- no changes in this release.
+
 ## 1.2.0 April 02, 2026
 
 - Chg #78: Add PHP 8.5 support (@xepozz, @samdark)
