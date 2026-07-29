@@ -2,7 +2,7 @@
 
 ## 1.2.1 under development
 
-- Chg #85: Explicitly import classes, functions, and constants in "use" section (@vjik)
+- Enh #85: Explicitly import functions and constants in "use" section (@vjik)
 
 ## 1.2.0 April 02, 2026
 
