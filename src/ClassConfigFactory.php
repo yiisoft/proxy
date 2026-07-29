@@ -116,8 +116,8 @@ final class ClassConfigFactory
         return array_values(
             array_filter(
                 $modifiers,
-                static fn (string $modifier) => $modifier !== 'abstract'
-            )
+                static fn(string $modifier) => $modifier !== 'abstract',
+            ),
         );
     }
 
@@ -241,7 +241,7 @@ final class ClassConfigFactory
                 $name = $subType->getName();
                 return ($declaringClassName !== null && $name === $declaringClassName) ? 'self' : $name;
             },
-            $type->getTypes()
+            $type->getTypes(),
         );
 
         return implode('|', $types);
@@ -258,7 +258,7 @@ final class ClassConfigFactory
                 $name = $subType->getName();
                 return ($declaringClassName !== null && $name === $declaringClassName) ? 'self' : $name;
             },
-            $type->getTypes()
+            $type->getTypes(),
         );
 
         return implode('&', $types);

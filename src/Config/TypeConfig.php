@@ -29,6 +29,5 @@ final class TypeConfig
          * @link https://www.php.net/manual/en/migration71.new-features.php#migration71.new-features.nullable-types
          */
         public bool $allowsNull,
-    ) {
-    }
+    ) {}
 }

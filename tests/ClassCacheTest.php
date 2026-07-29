@@ -12,6 +12,8 @@ use Yiisoft\Proxy\Tests\Stub\MyProxy;
 
 use function sys_get_temp_dir;
 
+use const DIRECTORY_SEPARATOR;
+
 class ClassCacheTest extends TestCase
 {
     public function tearDown(): void
@@ -61,7 +63,7 @@ EOD;
 
         $expectedClassPath = implode(
             DIRECTORY_SEPARATOR,
-            [sys_get_temp_dir(), 'Yiisoft', 'Proxy', 'Tests', 'Stub', 'Node.MyProxy.php']
+            [sys_get_temp_dir(), 'Yiisoft', 'Proxy', 'Tests', 'Stub', 'Node.MyProxy.php'],
         );
         $actualClassPath = $cache->getClassPath(Node::class, MyProxy::class);
         $this->assertEquals($expectedClassPath, $actualClassPath);

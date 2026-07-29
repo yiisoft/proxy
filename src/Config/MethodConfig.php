@@ -31,8 +31,7 @@ final class MethodConfig
          * @var TypeConfig|null Return type config. `null` means no return type specified.
          */
         public ?TypeConfig $returnType,
-    ) {
-    }
+    ) {}
 
     /**
      * Whether a method has return type.

@@ -47,6 +47,5 @@ final class ClassConfig
          * @psalm-var array<string, MethodConfig>
          */
         public array $methods,
-    ) {
-    }
+    ) {}
 }

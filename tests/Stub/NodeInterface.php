@@ -20,7 +20,7 @@ interface NodeInterface extends Countable, NodeParentInterface
         ?bool $param5,
         float $param6 = 3.5,
         array $param7 = [],
-        string $param8 = CONST1
+        string $param8 = CONST1,
     ): ?int;
 
     public function nodeInterfaceMethod2();
@@ -31,6 +31,6 @@ interface NodeInterface extends Countable, NodeParentInterface
         string $param3 = 'string',
         ?string $param4 = null,
         array $param5 = [1, 'value'],
-        Stringable|string $param6 = 'stringable'
+        Stringable|string $param6 = 'stringable',
     ): void;
 }

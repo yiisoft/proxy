@@ -6,9 +6,7 @@ namespace Yiisoft\Proxy\Tests\Stub;
 
 class Square
 {
-    public function __construct(private float $sideLength)
-    {
-    }
+    public function __construct(private float $sideLength) {}
 
     public function area(): float
     {

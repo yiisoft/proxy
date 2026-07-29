@@ -9,11 +9,7 @@ use Stringable;
 
 final class DisjunctiveNormalFormTypes
 {
-    public function param(string|int|null|(Stringable&Countable) $param): void
-    {
-    }
+    public function param(string|int|(Stringable&Countable)|null $param): void {}
 
-    public function result(): CarInterface|(Line&Money)|null
-    {
-    }
+    public function result(): CarInterface|(Line&Money)|null {}
 }

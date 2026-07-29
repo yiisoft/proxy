@@ -10,6 +10,10 @@ use Yiisoft\Proxy\Config\ClassConfig;
 final class ProxyManager
 {
     /**
+     * A suffix appended to proxy class names / files.
+     */
+    public const PROXY_SUFFIX = 'Proxy';
+    /**
      * @var ClassRenderer A class renderer dependency.
      */
     private ClassRenderer $classRenderer;
@@ -21,11 +25,6 @@ final class ProxyManager
      * @var ClassCache|null A class cache dependency (optional).
      */
     private ?ClassCache $classCache;
-
-    /**
-     * A suffix appended to proxy class names / files.
-     */
-    public const PROXY_SUFFIX = 'Proxy';
 
     /**
      * @param string|null $cachePath Cache path, optional, {@see ClassCache::$cachePath}. Pass `null` to disable
@@ -56,7 +55,7 @@ final class ProxyManager
     public function createObjectProxy(
         string $baseStructure,
         string $parentProxyClass,
-        array $proxyConstructorArguments
+        array $proxyConstructorArguments,
     ): ObjectProxy {
         $className = $baseStructure . self::PROXY_SUFFIX;
         /** @psalm-var class-string $shortClassName */
