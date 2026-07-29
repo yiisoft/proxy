@@ -6,7 +6,5 @@ namespace Yiisoft\Proxy\Tests\Stub;
 
 class Node
 {
-    public function someMethod(): void
-    {
-    }
+    public function someMethod(): void {}
 }

@@ -6,6 +6,8 @@ namespace Yiisoft\Proxy;
 
 use Throwable;
 
+use function is_object;
+
 /**
  * Base proxy class for objects to use in {@see ProxyManager}. A concrete implementation can be provided too.
  * @psalm-suppress ClassMustBeFinal
@@ -18,9 +20,8 @@ class ObjectProxy
         /**
          * @var object An instance of the class for proxying method calls.
          */
-        private object $instance
-    ) {
-    }
+        private object $instance,
+    ) {}
 
     /**
      * Gets instance.
@@ -76,7 +77,7 @@ class ObjectProxy
         string $methodName,
         array $arguments,
         mixed $result,
-        float $timeStart
+        float $timeStart,
     ): mixed {
         return $result;
     }
@@ -120,7 +121,7 @@ class ObjectProxy
      */
     private function processResult(mixed $result): mixed
     {
-        if (is_object($result) && get_class($result) === get_class($this->instance)) {
+        if (is_object($result) && $result::class === $this->instance::class) {
             $result = $this->getNewStaticInstance($result);
         }
 

@@ -8,6 +8,11 @@ use Exception;
 use RuntimeException;
 use Yiisoft\Files\FileHelper;
 
+use function count;
+
+use const DIRECTORY_SEPARATOR;
+use const LOCK_EX;
+
 /**
  * @internal
  *
@@ -21,9 +26,8 @@ final class ClassCache
          * @var string Base directory for working with cache. It will be created automatically if it does not exist
          * ({@see getClassPath()}).
          */
-        private string $cachePath
-    ) {
-    }
+        private string $cachePath,
+    ) {}
 
     /**
      * Writes proxy class contents to a file in {@see getClassPath()}.

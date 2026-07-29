@@ -30,9 +30,12 @@
         "yiisoft/files": "^1.0.2 || ^2.0.0"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95",
         "phpunit/phpunit": "^10.5.47",
+        "rector/rector": "^2.5",
         "roave/infection-static-analysis-plugin": "^1.35",
-        "vimeo/psalm": "^5.26.1 || ^6.12"
+        "vimeo/psalm": "^5.26.1 || ^6.12",
+        "yiisoft/code-style": "^1.1"
     },
     "autoload": {
         "psr-4": {
@@ -45,7 +48,9 @@
         }
     },
     "scripts": {
+        "cs-fix": "php-cs-fixer fix",
         "phan": "phan --progress-bar -o analysis.txt",
+        "rector": "rector",
         "test": "phpunit --testdox --no-interaction"
     },
     "config": {

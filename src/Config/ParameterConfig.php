@@ -47,8 +47,7 @@ final class ParameterConfig
          * when {@see $isDefaultValueAvailable} is `false`).
          */
         public mixed $defaultValue,
-    ) {
-    }
+    ) {}
 
     /**
      * Whether a parameter has type.

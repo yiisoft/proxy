@@ -9,11 +9,7 @@ use Countable;
 
 final class IntersectionTypes
 {
-    public function param(Stringable&Countable $param): void
-    {
-    }
+    public function param(Stringable&Countable $param): void {}
 
-    public function result(): Stringable&Countable
-    {
-    }
+    public function result(): Stringable&Countable {}
 }
