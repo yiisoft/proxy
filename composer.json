@@ -34,6 +34,7 @@
         "phpunit/phpunit": "^10.5.47",
         "rector/rector": "^2.5",
         "roave/infection-static-analysis-plugin": "^1.35",
+        "shipmonk/composer-dependency-analyser": "^1.8",
         "vimeo/psalm": "^5.26.1 || ^6.12",
         "yiisoft/code-style": "^1.1"
     },
@@ -49,6 +50,7 @@
     },
     "scripts": {
         "cs-fix": "php-cs-fixer fix",
+        "dependency-analyser": "composer-dependency-analyser",
         "phan": "phan --progress-bar -o analysis.txt",
         "rector": "rector",
         "test": "phpunit --testdox --no-interaction"
