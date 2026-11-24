@@ -30,9 +30,7 @@ final class ClassConfigFactory
     /**
      * Gets single class config based for individual class.
      *
-     * @param string $className Full class or interface name (including namespace).
-     *
-     * @psalm-param class-string $className
+     * @param class-string $className Full class or interface name (including namespace).
      *
      * @throws InvalidArgumentException In case class or interface does not exist.
      *
@@ -42,14 +40,16 @@ final class ClassConfigFactory
     {
         try {
             $reflection = new ReflectionClass($className);
-        } catch (ReflectionException) {
+        }
+        /**
+         * PHPStan treats `class-string` as an existing class name even with `treatPhpDocTypesAsCertain: false`.
+         * @see https://github.com/phpstan/phpstan/issues/5502
+         * @phpstan-ignore catch.neverThrown
+         */
+        catch (ReflectionException) {
             throw new InvalidArgumentException("$className must exist.");
         }
 
-        /**
-         * @psalm-suppress MixedArgumentTypeCoercion Can be removed after release
-         * https://github.com/vimeo/psalm/pull/8405
-         */
         return new ClassConfig(
             isInterface: $reflection->isInterface(),
             namespace: $reflection->getNamespaceName(),
@@ -65,10 +65,9 @@ final class ClassConfigFactory
     /**
      * Gets the complete set of method configs for a given class reflection.
      *
-     * @param ReflectionClass $class Reflection of a class.
+     * @param ReflectionClass<object> $class Reflection of a class.
      *
-     * @return MethodConfig[] List of method configs. The order is maintained.
-     * @psalm-return array<string,MethodConfig>
+     * @return array<string, MethodConfig> List of method configs. The order is maintained.
      */
     private function getMethodConfigs(ReflectionClass $class): array
     {
@@ -83,7 +82,7 @@ final class ClassConfigFactory
     /**
      * Gets single method config for individual class / method reflection pair.
      *
-     * @param ReflectionClass $class Reflection of a class.
+     * @param ReflectionClass<object> $class Reflection of a class.
      * @param ReflectionMethod $method Reflection of a method.
      *
      * @return MethodConfig Single method config.
@@ -101,7 +100,7 @@ final class ClassConfigFactory
     /**
      * Gets the set of method modifiers for a given class / method reflection pair
      *
-     * @param ReflectionClass $class Reflection of a class.
+     * @param ReflectionClass<object> $class Reflection of a class.
      * @param ReflectionMethod $method Reflection of a method.
      *
      * @return string[] List of method modifiers.
@@ -126,8 +125,7 @@ final class ClassConfigFactory
      *
      * @param ReflectionMethod $method Reflection of a method.
      *
-     * @return ParameterConfig[] List of parameter configs. The order is maintained.
-     * @psalm-return array<string,ParameterConfig>
+     * @return array<string, ParameterConfig> List of parameter configs. The order is maintained.
      */
     private function getMethodParameterConfigs(ReflectionMethod $method): array
     {
@@ -196,17 +194,11 @@ final class ClassConfigFactory
      */
     private function getMethodReturnTypeConfig(ReflectionMethod $method): ?TypeConfig
     {
-        $returnType = $method->getReturnType();
-        if (!$returnType && method_exists($method, 'getTentativeReturnType')) {
-            $returnType = $method->getTentativeReturnType();
-        }
-        /**
-         * @var ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType|null $returnType
-         */
-
-        if (!$returnType) {
+        $returnType = $method->getReturnType() ?? $method->getTentativeReturnType();
+        if ($returnType === null) {
             return null;
         }
+        /** @var ReflectionIntersectionType|ReflectionNamedType|ReflectionUnionType $returnType */
 
         return new TypeConfig(
             name: $this->convertTypeToString($returnType, $method->getDeclaringClass()->getName()),
@@ -234,7 +226,6 @@ final class ClassConfigFactory
     {
         $types = array_map(
             function (ReflectionNamedType|ReflectionIntersectionType $subType) use ($declaringClassName) {
-                /** @psalm-suppress DocblockTypeContradiction */
                 if ($subType instanceof ReflectionIntersectionType) {
                     return '(' . $this->getIntersectionType($subType, $declaringClassName) . ')';
                 }
@@ -250,11 +241,13 @@ final class ClassConfigFactory
     private function getIntersectionType(ReflectionIntersectionType $type, ?string $declaringClassName = null): string
     {
         $types = array_map(
-            function (ReflectionNamedType|ReflectionUnionType $subType) use ($declaringClassName) {
-                /** @psalm-suppress DocblockTypeContradiction */
-                if ($subType instanceof ReflectionUnionType) {
-                    return '(' . $this->getUnionType($subType, $declaringClassName) . ')';
-                }
+            /**
+             * `ReflectionIntersectionType::getTypes()` is typed as `ReflectionType[]` in the stubs bundled with
+             * PHPStan, although intersection parts are always `ReflectionNamedType`.
+             * @see https://github.com/phpstan/phpstan/issues/15809
+             * @phpstan-ignore argument.type
+             */
+            function (ReflectionNamedType $subType) use ($declaringClassName) {
                 $name = $subType->getName();
                 return ($declaringClassName !== null && $name === $declaringClassName) ? 'self' : $name;
             },

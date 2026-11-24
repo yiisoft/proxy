@@ -317,9 +317,8 @@ final class ClassRenderer
     /**
      * Renders parameters passed to a proxy's method call.
      *
-     * @param ParameterConfig[] $parameters A map where key is a {@see ParameterConfig::$name} and value is
+     * @param array<string, ParameterConfig> $parameters A map where key is a {@see ParameterConfig::$name} and value is
      * {@see ParameterConfig} instance.
-     * @psalm-param array<string, ParameterConfig> $parameters
      *
      * @return string Parameters as a string. Empty string is returned when no parameters were passed.
      */

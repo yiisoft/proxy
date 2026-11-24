@@ -43,8 +43,7 @@ final class ClassConfig
          */
         public array $interfaces,
         /**
-         * @var MethodConfig[] A map where key is a {@see $name} and value is {@see MethodConfig} instance.
-         * @psalm-var array<string, MethodConfig>
+         * @var array<string, MethodConfig> A map where key is a {@see $name} and value is {@see MethodConfig} instance.
          */
         public array $methods,
     ) {}

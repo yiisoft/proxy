@@ -10,7 +10,6 @@ use function is_object;
 
 /**
  * Base proxy class for objects to use in {@see ProxyManager}. A concrete implementation can be provided too.
- * @psalm-suppress ClassMustBeFinal
  */
 class ObjectProxy
 {
@@ -38,7 +37,7 @@ class ObjectProxy
      * error).
      *
      * @param string $methodName A called method in the {@see $instance}.
-     * @param array $arguments A list of arguments passed to a called method. The order must be maintained.
+     * @param mixed[] $arguments A list of arguments passed to a called method. The order must be maintained.
      *
      * @throws Throwable In case of error happen during the method call.
      *
@@ -67,7 +66,7 @@ class ObjectProxy
      * always returned.
      *
      * @param string $methodName A called method in the {@see $instance}.
-     * @param array $arguments A list of arguments passed to a called method. The order must be maintained.
+     * @param mixed[] $arguments A list of arguments passed to a called method. The order must be maintained.
      * @param mixed $result Return value of a called method.
      * @param float $timeStart UNIX timestamp right before proxy method call. For example: `1656657586.4849`.
      *
@@ -87,13 +86,11 @@ class ObjectProxy
      *
      * @param object $instance {@see $instance}.
      *
-     * @return $this A new instance of the same class
+     * @return static A new instance of the same class
      */
     protected function getNewStaticInstance(object $instance): self
     {
-        /**
-         * @psalm-suppress UnsafeInstantiation Constructor should be consistent to `getNewStaticInstance()`.
-         */
+        // @phpstan-ignore new.static (Constructor should be consistent to `getNewStaticInstance()`)
         return new static($instance);
     }
 
@@ -101,13 +98,12 @@ class ObjectProxy
      * Just calls a method in the {@see $instance}.
      *
      * @param string $methodName A called method in the {@see $instance}.
-     * @param array $arguments A list of arguments passed to a called method. The order must be maintained.
+     * @param mixed[] $arguments A list of arguments passed to a called method. The order must be maintained.
      *
      * @return mixed Return value of a called method.
      */
     private function callInternal(string $methodName, array $arguments): mixed
     {
-        /** @psalm-suppress MixedMethodCall */
         return $this->instance->$methodName(...$arguments);
     }
 

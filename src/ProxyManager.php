@@ -40,13 +40,11 @@ final class ProxyManager
     /**
      * Creates object proxy based on an interface / a class and parent proxy class.
      *
-     * @param string $baseStructure Either or an interface or a class for proxying method calls.
+     * @param class-string $baseStructure Either or an interface or a class for proxying method calls.
      * @param string $parentProxyClass A base proxy class which acts like a parent for dynamically created proxy.
      * {@see ObjectProxy} or a class extended from it must be used.
-     * @param array $proxyConstructorArguments A list of arguments passed to proxy constructor
+     * @param mixed[] $proxyConstructorArguments A list of arguments passed to proxy constructor
      * ({@see ObjectProxy::__construct}).
-     *
-     * @psalm-param class-string $baseStructure
      *
      * @throws Exception In case of error during creation or working with cache / requiring PHP code.
      *
@@ -58,14 +56,11 @@ final class ProxyManager
         array $proxyConstructorArguments,
     ): ObjectProxy {
         $className = $baseStructure . self::PROXY_SUFFIX;
-        /** @psalm-var class-string $shortClassName */
+        /** @var class-string $shortClassName */
         $shortClassName = self::getProxyClassName($className);
 
         if (class_exists($shortClassName)) {
-            /**
-             * @var ObjectProxy
-             * @psalm-suppress MixedMethodCall
-             */
+            /** @var ObjectProxy */
             return new $shortClassName(...$proxyConstructorArguments);
         }
 
@@ -77,18 +72,15 @@ final class ProxyManager
             $this->classCache?->set($baseStructure, $parentProxyClass, $classDeclaration);
         }
         if (!$this->classCache) {
-            /** @psalm-suppress UnusedFunctionCall Bug https://github.com/vimeo/psalm/issues/8406 */
             eval(str_replace('<?php', '', $classDeclaration));
         } else {
             $path = $this->classCache->getClassPath($baseStructure, $parentProxyClass);
-            /** @psalm-suppress UnresolvableInclude */
             require $path;
         }
 
         /**
          * @var ObjectProxy
-         * @psalm-var class-string $shortClassName
-         * @psalm-suppress MixedMethodCall
+         * @var class-string $shortClassName
          */
         return new $shortClassName(...$proxyConstructorArguments);
     }
