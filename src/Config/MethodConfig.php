@@ -22,9 +22,8 @@ final class MethodConfig
          */
         public string $name,
         /**
-         * @var ParameterConfig[] A map where key is a {@see ParameterConfig::$name} and value is {@see ParameterConfig}
-         * instance.
-         * @psalm-var array<string, ParameterConfig>
+         * @var array<string, ParameterConfig> A map where key is a {@see ParameterConfig::$name} and value is
+         * {@see ParameterConfig} instance.
          */
         public array $parameters,
         /**
@@ -38,7 +37,7 @@ final class MethodConfig
      *
      * @return bool `true` if return type specified and `false` otherwise.
      *
-     * @psalm-assert-if-true TypeConfig $this->returnType
+     * @phpstan-assert-if-true TypeConfig $this->returnType
      */
     public function hasReturnType(): bool
     {

@@ -2,6 +2,9 @@
 
 ## 1.2.1 under development
 
+- Chg #92: Replace Psalm with PHPStan (@vjik)
+- Enh #92: Remove redundant `method_exists()` check for `ReflectionMethod::getTentativeReturnType()` (@vjik)
+- Enh #92: Remove unreachable union type handling in intersection type rendering (@vjik)
 - Enh #85: Explicitly import functions and constants in "use" section (@vjik)
 
 ## 1.2.0 April 02, 2026
