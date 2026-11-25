@@ -1,5 +1,9 @@
 # Yii Proxy Change Log
 
+## 1.2.2 under development
+
+- no changes in this release.
+
 ## 1.2.1 November 25, 2026
 
 - Chg #92: Replace Psalm with PHPStan (@vjik)
