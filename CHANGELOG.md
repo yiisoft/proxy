@@ -1,12 +1,12 @@
 # Yii Proxy Change Log
 
-## 1.2.1 under development
+## 1.2.1 November 25, 2026
 
 - Chg #92: Replace Psalm with PHPStan (@vjik)
-- Enh #94: Add PHP 8.6 support (@vjik)
+- Enh #85: Explicitly import functions and constants in "use" section (@vjik)
 - Enh #92: Remove redundant `method_exists()` check for `ReflectionMethod::getTentativeReturnType()` (@vjik)
 - Enh #92: Remove unreachable union type handling in intersection type rendering (@vjik)
-- Enh #85: Explicitly import functions and constants in "use" section (@vjik)
+- Enh #94: Add PHP 8.6 support (@vjik)
 
 ## 1.2.0 April 02, 2026
 
